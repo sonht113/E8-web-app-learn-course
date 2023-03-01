@@ -96,6 +96,8 @@ type INavbarMobileProps = {
 
 type ISubMenuSettingsProps = {
   items: SubMenuItem[];
+  activeMenu: number;
+  setActiveMenu: (v: number) => void;
 };
 
 const NavbarMobile: React.FC<INavbarMobileProps> = ({
@@ -118,7 +120,8 @@ const NavbarMobile: React.FC<INavbarMobileProps> = ({
         w={'80%'}
         h={'100vh'}
         bg={'white'}
-        zIndex={9999999}
+        zIndex={99999}
+        overflow={'scroll'}
       >
         <Center
           bg={'gray.200'}
@@ -153,7 +156,7 @@ const Menu: React.FC = () => {
       overflowY={'scroll'}
     >
       {menuNavbarMobileItems.map((item) => (
-        <React.Fragment>
+        <React.Fragment key={item.id}>
           {item.id === 9 && (
             <>
               <MenuItem
@@ -164,7 +167,11 @@ const Menu: React.FC = () => {
                 setIsOpenSubMenuSettings={setIsOpenSubMenuSettings}
               />
               {item.id === 9 && isOpenSubMenuSettings && (
-                <SubMenuSettings items={item.subMenu} />
+                <SubMenuSettings
+                  items={item.subMenu}
+                  activeMenu={activeMenu}
+                  setActiveMenu={setActiveMenu}
+                />
               )}
             </>
           )}
@@ -178,7 +185,11 @@ const Menu: React.FC = () => {
                 setIsOpenSubMenuSettings={setIsOpenSubMenuSettings}
               />
               {item.id === 9 && isOpenSubMenuSettings && (
-                <SubMenuSettings items={item.subMenu} />
+                <SubMenuSettings
+                  items={item.subMenu}
+                  activeMenu={activeMenu}
+                  setActiveMenu={setActiveMenu}
+                />
               )}
             </Link>
           )}
@@ -235,7 +246,11 @@ const MenuItem: React.FC<IMenuItem> = ({
   );
 };
 
-const SubMenuSettings: React.FC<ISubMenuSettingsProps> = ({ items }) => {
+const SubMenuSettings: React.FC<ISubMenuSettingsProps> = ({
+  items,
+  activeMenu,
+  setActiveMenu,
+}) => {
   return (
     <VStack
       w={'90%'}
@@ -248,13 +263,17 @@ const SubMenuSettings: React.FC<ISubMenuSettingsProps> = ({ items }) => {
         <Link key={item.id} href={item.link}>
           <Text
             color={'#4c4c4c'}
-            bg={'gray.200'}
+            bg={item.id === activeMenu && 'gray.200'}
             py={2}
             pl={2}
             roundedBottomLeft={10}
             roundedTopLeft={10}
             borderBottom={'inset'}
             borderBottomColor={'red.200'}
+            onClick={() => {
+              setActiveMenu(item.id);
+              localStorage.setItem('active_menu', JSON.stringify(item.id));
+            }}
           >
             {item.name}
           </Text>

@@ -11,8 +11,6 @@ const DefaultLayout = ({ children }) => {
   const { openNavbarMobile, setOpenNavbarMobile } =
     useContext(NavbarMobileContext);
 
-  console.log(openNavbarMobile);
-
   return (
     <React.Fragment>
       <Navbar />
