@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Box,
   Flex,
@@ -13,10 +13,12 @@ import Link from 'next/link';
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
 import ButtonFC from '../Button/Button';
 import Search from '../Search';
+import { NavbarMobileContext } from 'context/NavbarMobileContext';
 
 const Navbar = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
-
+  const { openNavbarMobile, setOpenNavbarMobile } =
+    useContext(NavbarMobileContext);
   return (
     <Grid
       position={'fixed'}
@@ -32,12 +34,17 @@ const Navbar = () => {
     >
       <GridItem>
         <Logo />
-        <HamburgerIcon display={['block', 'none']} fontSize={25} />
+        <HamburgerIcon
+          display={['block', 'none']}
+          fontSize={25}
+          cursor="pointer"
+          onClick={() => setOpenNavbarMobile(!openNavbarMobile)}
+        />
       </GridItem>
       <GridItem>
         <Search
           display={['none', 'block']}
-          radius="full"
+          radius={'full'}
           width={['full']}
           placeholder="Tìm kiếm khoá học, bài viết, video, ..."
           value={keywordSearch}

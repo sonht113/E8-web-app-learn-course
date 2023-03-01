@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { Flex, Text, Center, Container, Box } from '@chakra-ui/react';
 import { AddIcon, CloseIcon } from '@chakra-ui/icons';
 import { AiFillHome } from 'react-icons/ai';
@@ -11,8 +11,9 @@ import {
 
 import SubMenu from '../SubMenu';
 import Link from 'next/link';
+import { ActiveMenuContext } from 'context/ActiveMenuContext';
 
-const sidebarItems = [
+export const sidebarItems = [
   {
     icon: <AiFillHome size={'23px'} />,
     name: 'Home',
@@ -57,18 +58,10 @@ type ISidebarItemProps = {
   click: () => void;
 };
 
-const ACTIVE_DEFAULT = 1;
-
 const Sidebar = () => {
-  const [activeSidebarItem, setActiceSidebarItem] = useState<number>(0);
   const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
 
-  useEffect(() => {
-    const active = Number(localStorage.getItem('activeSidebarItem'));
-    active
-      ? setActiceSidebarItem(active)
-      : setActiceSidebarItem(ACTIVE_DEFAULT);
-  }, []);
+  const { activeMenu, setActiveMenu } = useContext(ActiveMenuContext);
 
   return (
     <Box display={['none', 'block']} position={'sticky'} top={0} left={0}>
@@ -107,13 +100,10 @@ const Sidebar = () => {
                 key={item.name}
                 icon={item.icon}
                 name={item.name}
-                itemActive={activeSidebarItem === item.id}
+                itemActive={activeMenu === item.id}
                 click={() => {
-                  setActiceSidebarItem(item.id);
-                  localStorage.setItem(
-                    'activeSidebarItem',
-                    JSON.stringify(item.id)
-                  );
+                  setActiveMenu(item.id);
+                  localStorage.setItem('active_menu', JSON.stringify(item.id));
                 }}
               />
             </Link>

@@ -31,7 +31,7 @@ const SubMenu = () => {
     >
       <Flex flexDirection={'column'} gap={5} mt={3} alignItems={'start'} ml={3}>
         {subMenuItem.map((item) => (
-          <Link href={item.link}>
+          <Link key={item.title} href={item.link}>
             <Box
               display={'flex'}
               alignItems={'center'}

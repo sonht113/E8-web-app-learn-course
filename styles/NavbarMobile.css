@@ -1,0 +1,39 @@
+:root {
+  --default-position: -100%;
+}
+
+@keyframes Navbar_Mobile_Slide_In {
+  from {
+    left: var(--default-position);
+    opacity: 0;
+  }
+  to {
+    left: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes Navbar_Mobile_Slide_Out {
+  from {
+    left: 0;
+    opacity: 1;
+  }
+  to {
+    left: var(--default-position);
+    opacity: 0;
+  }
+}
+
+.navbarMobileOpen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: Navbar_Mobile_Slide_In 0.5s linear;
+  animation-fill-mode: forwards;
+}
+
+.navbarMobileClose {
+  left: var(--default-position);
+  animation: Navbar_Mobile_Slide_Out 0.5s linear;
+  animation-fill-mode: forwards;
+}
