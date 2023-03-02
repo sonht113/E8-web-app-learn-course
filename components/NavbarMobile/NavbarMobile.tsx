@@ -5,7 +5,16 @@ import {
   InfoIcon,
   ChevronDownIcon,
 } from '@chakra-ui/icons';
-import { Container, Flex, Center, Box, VStack, Text } from '@chakra-ui/react';
+import {
+  Flex,
+  Center,
+  Box,
+  VStack,
+  Text,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+} from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { CgLogIn } from 'react-icons/cg';
 import { HiUserGroup } from 'react-icons/hi';
@@ -17,8 +26,10 @@ import {
   FaBloggerB,
 } from 'react-icons/fa';
 import Link from 'next/link';
+
 import { ActiveMenuContext } from 'context/ActiveMenuContext';
 import { MenuItemType, SubMenuItem } from 'types/menuItem.type';
+import { NavbarMobileContext } from 'context/NavbarMobileContext';
 
 const menuNavbarMobileItems = [
   {
@@ -90,8 +101,7 @@ const menuNavbarMobileItems = [
 ];
 
 type INavbarMobileProps = {
-  setOpenNavbarMobile: (v: boolean) => void;
-  className: string;
+  title?: any;
 };
 
 type ISubMenuSettingsProps = {
@@ -100,44 +110,39 @@ type ISubMenuSettingsProps = {
   setActiveMenu: (v: number) => void;
 };
 
-const NavbarMobile: React.FC<INavbarMobileProps> = ({
-  setOpenNavbarMobile,
-  className,
-}) => {
+type IMenuItem = {
+  menuItem: MenuItemType;
+  activeMenu: number;
+  isOpenSubMenuSettings: boolean;
+  setIsOpenSubMenuSettings: (v: boolean) => void;
+  setActiveMenu: (v: number) => void;
+};
+
+const NavbarMobile: React.FC<INavbarMobileProps> = () => {
+  const { isOpen, onClose } = useContext(NavbarMobileContext);
   return (
-    <Box className={className} zIndex={9999} w={'full'}>
-      <Container
-        w={'full'}
-        h={'100vh'}
-        bg={'gray.100'}
-        opacity={0.5}
-        onClick={() => setOpenNavbarMobile(false)}
-      ></Container>
-      <Flex
-        position={'absolute'}
-        top={0}
-        left={0}
-        w={'80%'}
-        h={'100vh'}
-        bg={'white'}
-        zIndex={99999}
-        overflow={'scroll'}
-      >
-        <Center
-          bg={'gray.200'}
-          position={'absolute'}
-          top={3}
-          right={2}
-          w={8}
-          h={8}
-          rounded={'full'}
-          onClick={() => setOpenNavbarMobile(false)}
-        >
-          <CloseIcon />
-        </Center>
-        <Menu />
-      </Flex>
-    </Box>
+    <Drawer placement={'left'} onClose={onClose} isOpen={isOpen}>
+      <DrawerOverlay />
+      <DrawerContent>
+        <Box w={'full'}>
+          <Flex overflow={'scroll'}>
+            <Center
+              bg={'gray.200'}
+              position={'absolute'}
+              top={3}
+              right={2}
+              w={8}
+              h={8}
+              rounded={'full'}
+              onClick={onClose}
+            >
+              <CloseIcon />
+            </Center>
+            <Menu />
+          </Flex>
+        </Box>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
@@ -199,14 +204,6 @@ const Menu: React.FC = () => {
   );
 };
 
-interface IMenuItem {
-  menuItem: MenuItemType;
-  activeMenu: number;
-  isOpenSubMenuSettings: boolean;
-  setIsOpenSubMenuSettings: (v: boolean) => void;
-  setActiveMenu: (v: number) => void;
-}
-
 const MenuItem: React.FC<IMenuItem> = ({
   menuItem,
   activeMenu,
@@ -214,6 +211,7 @@ const MenuItem: React.FC<IMenuItem> = ({
   setActiveMenu,
   setIsOpenSubMenuSettings,
 }) => {
+  const { onClose } = useContext(NavbarMobileContext);
   return (
     <Flex
       justifyContent={'space-between'}
@@ -223,10 +221,9 @@ const MenuItem: React.FC<IMenuItem> = ({
       px={3}
       roundedBottomLeft={10}
       roundedTopLeft={10}
-      borderBottom={'inset'}
-      borderBottomColor={'red.200'}
       alignItems={'center'}
       onClick={() => {
+        menuItem.id !== 9 && onClose();
         menuItem.id === 9 && setIsOpenSubMenuSettings(!isOpenSubMenuSettings);
         setActiveMenu(menuItem.id);
         localStorage.setItem('active_menu', JSON.stringify(menuItem.id));
@@ -268,8 +265,6 @@ const SubMenuSettings: React.FC<ISubMenuSettingsProps> = ({
             pl={2}
             roundedBottomLeft={10}
             roundedTopLeft={10}
-            borderBottom={'inset'}
-            borderBottomColor={'red.200'}
             onClick={() => {
               setActiveMenu(item.id);
               localStorage.setItem('active_menu', JSON.stringify(item.id));

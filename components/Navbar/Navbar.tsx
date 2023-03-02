@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Box,
   Flex,
@@ -15,10 +15,14 @@ import ButtonFC from '../Button/Button';
 import Search from '../Search';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
 
-const Navbar = () => {
+interface INavbarProps {
+  onOpen?: () => void;
+}
+
+const Navbar: React.FC<INavbarProps> = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
-  const { openNavbarMobile, setOpenNavbarMobile } =
-    useContext(NavbarMobileContext);
+  const { onOpen } = useContext(NavbarMobileContext);
+
   return (
     <Grid
       position={'fixed'}
@@ -38,7 +42,7 @@ const Navbar = () => {
           display={['block', 'none']}
           fontSize={25}
           cursor="pointer"
-          onClick={() => setOpenNavbarMobile(!openNavbarMobile)}
+          onClick={onOpen}
         />
       </GridItem>
       <GridItem>

@@ -1,23 +1,24 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import { useDisclosure } from '@chakra-ui/react';
+import React from 'react';
 
 interface NabarMobileContextProp {
-  openNavbarMobile: boolean;
-  setOpenNavbarMobile: (v: boolean) => void;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 export const NavbarMobileContext = React.createContext<NabarMobileContextProp>({
-  openNavbarMobile: false,
-  setOpenNavbarMobile: (v: boolean) => {},
+  isOpen: false,
+  onOpen: () => {},
+  onClose: () => {},
 });
 
 export const NavbarMobileContextProvider = ({ children }) => {
-  const [openNavbarMobile, setOpenNavbarMobile] = useState<boolean>(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <NavbarMobileContext.Provider
-      value={{ openNavbarMobile, setOpenNavbarMobile }}
-    >
+    <NavbarMobileContext.Provider value={{ isOpen, onClose, onOpen }}>
       {children}
     </NavbarMobileContext.Provider>
   );
