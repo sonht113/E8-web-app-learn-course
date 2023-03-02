@@ -95,9 +95,8 @@ const Sidebar = () => {
 
         <Container>
           {sidebarItems.map((item) => (
-            <Link href={item.link}>
+            <Link href={item.link} key={item.id}>
               <SidebarItem
-                key={item.id}
                 icon={item.icon}
                 name={item.name}
                 itemActive={activeMenu === item.id}

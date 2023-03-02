@@ -26,6 +26,7 @@ const Navbar: React.FC<INavbarProps> = () => {
   return (
     <Grid
       position={'fixed'}
+      zIndex={99}
       templateColumns="repeat(3, 1fr)"
       borderBottom={'solid'}
       borderBottomColor={'#e8e8e8'}
