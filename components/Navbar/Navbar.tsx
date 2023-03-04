@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useContext } from 'react';
 import {
   Box,
@@ -12,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
-import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
 // import ButtonFC from '../Button/Button';
 import Search from '../Search';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
@@ -25,6 +26,7 @@ import {
   PopupMyCourse,
   PopupNotification,
 } from './components/NavbarItem';
+import { ActiveMenuContext } from 'context/ActiveMenuContext';
 
 interface INavbarProps {
   onOpen?: () => void;
@@ -48,6 +50,7 @@ const navbarItems = [
 const Navbar: React.FC<INavbarProps> = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
   const { onOpen } = useContext(NavbarMobileContext);
+  const { setActiveMenu } = useContext(ActiveMenuContext);
 
   return (
     <Grid
@@ -64,13 +67,16 @@ const Navbar: React.FC<INavbarProps> = () => {
       bg={'white'}
     >
       <GridItem>
-        <Logo />
-        <HamburgerIcon
-          display={['block', 'none']}
-          fontSize={25}
-          cursor="pointer"
-          onClick={onOpen}
-        />
+        <Flex alignItems={'center'} gap={2}>
+          <Logo />
+          <HamburgerIcon
+            display={['block', 'block', 'none']}
+            fontSize={25}
+            cursor="pointer"
+            onClick={onOpen}
+          />
+          <Back setActiveMenu={setActiveMenu} />
+        </Flex>
       </GridItem>
       <GridItem>
         <Search
@@ -116,7 +122,7 @@ const Navbar: React.FC<INavbarProps> = () => {
 
 const Logo = () => {
   return (
-    <Container display={['none', 'block']}>
+    <Container display={['none', 'none', 'block']}>
       <Flex alignItems={'center'} gap={4}>
         <Box>
           <Image
@@ -132,6 +138,42 @@ const Logo = () => {
         </Box>
       </Flex>
     </Container>
+  );
+};
+
+interface IBackProps {
+  setActiveMenu: (_v: number) => void;
+}
+
+const Back: React.FC<IBackProps> = ({ setActiveMenu }) => {
+  return (
+    <Link href={'/'}>
+      <Box
+        display={['black', 'block', 'none']}
+        onClick={() => {
+          const DEFAULT_ACTIVE = 1;
+          setActiveMenu(DEFAULT_ACTIVE);
+          localStorage.setItem('active_menu', JSON.stringify(DEFAULT_ACTIVE));
+        }}
+      >
+        <Flex
+          alignItems={'center'}
+          _hover={{ bg: 'gray.100', transition: 'linear 0.2s' }}
+          px={2}
+          py={1}
+        >
+          <ArrowBackIcon color={'gray.400'} />
+          <Text
+            fontSize={'xs'}
+            casing={'uppercase'}
+            fontWeight={'bold'}
+            color={'gray.400'}
+          >
+            quay lại
+          </Text>
+        </Flex>
+      </Box>
+    </Link>
   );
 };
 

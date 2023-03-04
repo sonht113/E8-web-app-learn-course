@@ -78,8 +78,8 @@ const Footer = () => {
           <Text fontSize={'lg'} color={'white'} fontWeight={'bold'} mb={4}>
             CÔNG TY CỔ PHẦN CÔNG NGHỆ GIÁO DỤC E8
           </Text>
-          {infoCompany.map((item: string) => (
-            <Text color={'gray.300'} mb={2} fontSize={'sm'}>
+          {infoCompany.map((item: string, index: number) => (
+            <Text key={index} color={'gray.300'} mb={2} fontSize={'sm'}>
               {item}
             </Text>
           ))}
