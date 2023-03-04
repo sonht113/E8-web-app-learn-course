@@ -7,17 +7,43 @@ import {
   Text,
   Image,
   Container,
+  Popover,
+  PopoverTrigger,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
-import ButtonFC from '../Button/Button';
+// import ButtonFC from '../Button/Button';
 import Search from '../Search';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
+import Popup from '../Popup';
+import {
+  UserAvatar,
+  MyCourse,
+  Notification,
+  PopupAvatar,
+  PopupMyCourse,
+  PopupNotification,
+} from './components/NavbarItem';
 
 interface INavbarProps {
   onOpen?: () => void;
 }
+
+const navbarItems = [
+  {
+    trigger: <MyCourse />,
+    content: <PopupMyCourse />,
+  },
+  {
+    trigger: <Notification />,
+    content: <PopupNotification />,
+  },
+  {
+    trigger: <UserAvatar />,
+    content: <PopupAvatar />,
+  },
+];
 
 const Navbar: React.FC<INavbarProps> = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
@@ -64,7 +90,7 @@ const Navbar: React.FC<INavbarProps> = () => {
         </Link>
       </GridItem>
       <GridItem float={'left'}>
-        <Link href={'/login'}>
+        {/* <Link href={'/login'}>
           <ButtonFC
             float={'right'}
             title="Đăng nhập"
@@ -72,7 +98,17 @@ const Navbar: React.FC<INavbarProps> = () => {
             radius="full"
             size={['sm', 'md']}
           />
-        </Link>
+        </Link> */}
+        <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
+          {navbarItems.map((item: any, index: number) => (
+            <Popover key={index} closeOnBlur={true}>
+              <PopoverTrigger>
+                <Box>{item.trigger}</Box>
+              </PopoverTrigger>
+              <Popup width={250}>{item.content}</Popup>
+            </Popover>
+          ))}
+        </Flex>
       </GridItem>
     </Grid>
   );

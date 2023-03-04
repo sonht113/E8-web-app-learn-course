@@ -67,6 +67,7 @@ const Search: React.FC<ISearchProps> = ({
         focusBorderColor={colorFocusBorder}
         onChange={(e) => setValue(e.target.value)}
         value={value}
+        _placeholder={{ fontSize: 'sm' }}
       />
       {value && (
         <InputRightElement

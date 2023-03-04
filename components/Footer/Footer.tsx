@@ -39,8 +39,8 @@ const Footer = () => {
       <Grid
         templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']}
         w={'full'}
-        gap={[6, 6, 14]}
-        px={[4, 8, 16, 24]}
+        gap={[6, 6]}
+        px={[4, 8, 14, 20]}
         alignItems={'center'}
       >
         <GridItem>

@@ -11,7 +11,7 @@ const DefaultLayout = ({ children }) => {
     <React.Fragment>
       <Navbar />
       <NavbarMobile />
-      <Flex pt={'84px'} px={6}>
+      <Flex pt={'84px'} px={1}>
         <Sidebar />
         {children}
       </Flex>
