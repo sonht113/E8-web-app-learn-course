@@ -1,0 +1,9 @@
+.home {
+  max-width: 90% !important;
+}
+
+@media screen and (max-width: 991px) {
+  .home {
+    max-width: 100% !important;
+  }
+}
