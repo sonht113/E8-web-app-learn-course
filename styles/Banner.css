@@ -4,12 +4,6 @@
   height: 100%;
 }
 
-@media screen and (max-width: 991px) {
-  .swiper {
-    width: 95%;
-  }
-}
-
 .swiper-slide {
   font-size: 18px;
   background: #fff;

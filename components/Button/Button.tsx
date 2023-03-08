@@ -7,6 +7,7 @@ interface IButtonProps extends ButtonOptions {
   title: string;
   float?: any;
   onClick?: () => void;
+  cursor?: string;
 }
 
 const ButtonFC: React.FC<IButtonProps> = ({
@@ -25,6 +26,7 @@ const ButtonFC: React.FC<IButtonProps> = ({
   radius,
   size,
   float,
+  cursor,
   onClick,
 }) => {
   return (
@@ -44,6 +46,7 @@ const ButtonFC: React.FC<IButtonProps> = ({
       size={size}
       float={float}
       onClick={onClick}
+      cursor={cursor}
     >
       {title}
     </Button>
