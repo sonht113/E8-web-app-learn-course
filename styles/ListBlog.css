@@ -1,0 +1,8 @@
+.linkSeeMoreBlog:hover .textSeeMoreBlog {
+  text-decoration: underline;
+}
+
+.linkSeeMoreBlog:hover .iconSeeMoreBlog {
+  transform: translate(5px, 0px);
+  transition: linear 0.2s;
+}

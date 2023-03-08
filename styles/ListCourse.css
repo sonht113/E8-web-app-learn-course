@@ -1,0 +1,8 @@
+.linkLearningPath:hover .textLearningPath {
+  text-decoration: underline;
+}
+
+.linkLearningPath:hover .iconLearningPath {
+  transform: translate(5px, 0px);
+  transition: linear 0.2s;
+}
