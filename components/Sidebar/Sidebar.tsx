@@ -64,7 +64,13 @@ const Sidebar = () => {
   const { activeMenu, setActiveMenu } = useContext(ActiveMenuContext);
 
   return (
-    <Box display={['none', 'block']} position={'sticky'} top={0} left={0}>
+    <Box
+      width={'10%'}
+      display={['none', 'none', 'none', 'block']}
+      position={'sticky'}
+      top={0}
+      left={0}
+    >
       <Flex flexDirection={'column'} alignItems={'center'}>
         <Center
           mb={5}

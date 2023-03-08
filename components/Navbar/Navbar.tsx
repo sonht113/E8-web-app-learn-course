@@ -70,7 +70,7 @@ const Navbar: React.FC<INavbarProps> = () => {
         <Flex alignItems={'center'} gap={2}>
           <Logo />
           <HamburgerIcon
-            display={['block', 'block', 'none']}
+            display={['block', 'block', 'block', 'none']}
             fontSize={25}
             cursor="pointer"
             onClick={onOpen}
@@ -122,7 +122,7 @@ const Navbar: React.FC<INavbarProps> = () => {
 
 const Logo = () => {
   return (
-    <Container display={['none', 'none', 'block']}>
+    <Container display={['none', 'none', 'none', 'block']}>
       <Flex alignItems={'center'} gap={4}>
         <Box>
           <Image
@@ -133,7 +133,7 @@ const Logo = () => {
             alt="E8 logo"
           />
         </Box>
-        <Box display={['none', 'none', 'block']}>
+        <Box>
           <Text fontWeight={'bold'}>Học tiếng anh để đi làm</Text>
         </Box>
       </Flex>
@@ -149,7 +149,7 @@ const Back: React.FC<IBackProps> = ({ setActiveMenu }) => {
   return (
     <Link href={'/'}>
       <Box
-        display={['black', 'block', 'none']}
+        display={['block', 'block', 'none']}
         onClick={() => {
           const DEFAULT_ACTIVE = 1;
           setActiveMenu(DEFAULT_ACTIVE);
