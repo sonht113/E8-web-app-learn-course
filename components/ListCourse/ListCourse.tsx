@@ -35,7 +35,6 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         )}
       </Flex>
       <Grid
-        overflowX={'scroll'}
         templateColumns={[
           'repeat(5, 1fr)',
           'repeat(5, 1fr)',
@@ -44,6 +43,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         ]}
         gap={5}
         pb={5}
+        overflowX={['scroll', 'scroll', 'scroll', 'hidden']}
       >
         {courses.map((course: CourseViewHome, index: number) => (
           <Course

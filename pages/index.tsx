@@ -7,6 +7,8 @@ import Banner from '@/components/Banner';
 import { BannerType } from 'types/banner.type';
 import ListCourse from '@/components/ListCourse';
 import { CourseViewHome } from 'types/course.type';
+import ListBlog from '@/components/ListBlog';
+import { BlogViewHome } from 'types/blog.type';
 
 const coursesPro: CourseViewHome[] = [
   {
@@ -84,6 +86,36 @@ const coursesFree: CourseViewHome[] = [
   },
 ];
 
+const blogs: BlogViewHome[] = [
+  {
+    title: 'Tổng hợp các skill Toeic',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png',
+    author: {
+      avatar: 'https://bit.ly/dan-abramov',
+      name: 'Trọng Sơn',
+    },
+  },
+  {
+    title: 'Tổng hợp các skill Toeic',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png',
+    author: {
+      avatar: 'https://bit.ly/dan-abramov',
+      name: 'Trọng Sơn',
+    },
+  },
+  {
+    title: 'Tổng hợp các skill Toeic',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png',
+    author: {
+      avatar: 'https://bit.ly/dan-abramov',
+      name: 'Trọng Sơn',
+    },
+  },
+];
+
 const bannerItems: BannerType[] = [
   {
     id: 1,
@@ -126,6 +158,7 @@ const Home: NextPageWithLayout = () => {
       <Banner items={bannerItems} />
       <ListCourse isPro={true} title={'Khoá học Pro'} courses={coursesPro} />
       <ListCourse isPro={false} title={'Khoá học Free'} courses={coursesFree} />
+      <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
     </Container>
   );
 };

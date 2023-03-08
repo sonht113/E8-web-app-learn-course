@@ -19,7 +19,7 @@ const Course: React.FC<ICourseProps> = ({
   totalViews,
 }) => {
   return (
-    <Box position={'relative'} w={['60vw', '60vw', '40vw', 'full']}>
+    <Box position={'relative'} w={['60vw', '30vw', '30vw', 'full']}>
       <Box position={'relative'} cursor={'pointer'} className="thumbnailCourse">
         <Image
           src={thumbnail}
@@ -70,7 +70,7 @@ const Course: React.FC<ICourseProps> = ({
         fontWeight={'medium'}
         color={'#3e3e3e'}
         whiteSpace={'nowrap'}
-        width={'full'}
+        width={'180px'}
         overflow={'hidden'}
         textOverflow={'ellipsis'}
       >

@@ -1,7 +1,73 @@
+import { Box, Image, Flex, Text, Avatar } from '@chakra-ui/react';
 import React from 'react';
+import ButtonFC from '../Button';
 
-const Blog = () => {
-  return <div>Blog</div>;
+type IBlogProps = {
+  title: string;
+  name: string;
+  avatar?: string;
+  thumbnail: string;
+};
+
+const Blog: React.FC<IBlogProps> = ({ title, name, avatar, thumbnail }) => {
+  return (
+    <Box position={'relative'} w={['60vw', '30vw', '30vw', 'full']}>
+      <Box position={'relative'} cursor={'pointer'} className="thumbnailCourse">
+        <Image
+          src={thumbnail}
+          alt={'blog'}
+          objectFit={'cover'}
+          rounded={'xl'}
+        />
+        <Box
+          className="detailCourse"
+          width={'100%'}
+          height={'100%'}
+          position={'absolute'}
+          top={0}
+          left={0}
+          bg={'rgba(75, 75, 75, 0.5)'}
+          zIndex={4}
+          rounded={'xl'}
+        >
+          <Box
+            height={'100%'}
+            display={'flex'}
+            justifyContent={'center'}
+            alignItems={'center'}
+          >
+            <ButtonFC
+              title="Xem bài viết"
+              color="cyan"
+              radius={'full'}
+              size={'sm'}
+              cursor={'pointer'}
+            />
+          </Box>
+        </Box>
+      </Box>
+      <Text
+        my={2}
+        fontSize={['md', 'lg']}
+        fontWeight={'medium'}
+        color={'#3e3e3e'}
+        whiteSpace={'nowrap'}
+        width={'180px'}
+        overflow={'hidden'}
+        textOverflow={'ellipsis'}
+      >
+        {title}
+      </Text>
+      <Box display={['none', 'none', 'block']}>
+        <Flex alignItems={'center'} gap={2}>
+          <Avatar size={'xs'} name="trong son" src={avatar} />
+          <Text fontSize={['sm']} fontWeight={'medium'} color={'#3f3f3f'}>
+            {name}
+          </Text>
+        </Flex>
+      </Box>
+    </Box>
+  );
 };
 
 export default Blog;
