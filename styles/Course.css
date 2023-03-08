@@ -1,0 +1,7 @@
+.detailCourse {
+  display: none;
+}
+
+.thumbnailCourse:hover .detailCourse {
+  display: block;
+}

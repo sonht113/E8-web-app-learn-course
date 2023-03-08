@@ -1,11 +1,88 @@
 import React, { ReactElement } from 'react';
+import { Container } from '@chakra-ui/react';
 
 import { NextPageWithLayout } from '../types/layout.type';
 import DefaultLayout from 'layouts/defaultLayout';
 import Banner from '@/components/Banner';
 import { BannerType } from 'types/banner.type';
-import Course from '@/components/Course';
-import { Container, Flex } from '@chakra-ui/react';
+import ListCourse from '@/components/ListCourse';
+import { CourseViewHome } from 'types/course.type';
+
+const coursesPro: CourseViewHome[] = [
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    price: '1.223.534',
+    isFree: true,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    price: '1.223.534',
+    isFree: true,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    price: '1.223.534',
+    isFree: true,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    price: '1.223.534',
+    isFree: true,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    price: '1.223.534',
+    isFree: true,
+  },
+];
+
+const coursesFree: CourseViewHome[] = [
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    totalViews: '1.223.534',
+    isFree: false,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    totalViews: '1.223.534',
+    isFree: false,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    totalViews: '1.223.534',
+    isFree: false,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    totalViews: '1.223.534',
+    isFree: false,
+  },
+  {
+    title: 'Learn speaking EL',
+    thumbnail:
+      'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
+    totalViews: '1.223.534',
+    isFree: false,
+  },
+];
 
 const bannerItems: BannerType[] = [
   {
@@ -47,11 +124,8 @@ const Home: NextPageWithLayout = () => {
   return (
     <Container className="home">
       <Banner items={bannerItems} />
-      <Flex alignItems={'center'} gap={5}>
-        {[1, 2, 3, 5].map(() => (
-          <Course />
-        ))}
-      </Flex>
+      <ListCourse isPro={true} title={'Khoá học Pro'} courses={coursesPro} />
+      <ListCourse isPro={false} title={'Khoá học Free'} courses={coursesFree} />
     </Container>
   );
 };

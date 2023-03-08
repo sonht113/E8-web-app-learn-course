@@ -2,6 +2,17 @@
   max-width: 90% !important;
 }
 
+.home::-webkit-scrollbar {
+  display: none;
+}
+
+@media screen and (min-width: 992px) {
+  .home {
+    height: 100vh;
+    overflow-y: scroll;
+  }
+}
+
 @media screen and (max-width: 991px) {
   .home {
     max-width: 100% !important;
