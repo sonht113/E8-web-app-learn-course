@@ -70,6 +70,7 @@ const Sidebar = () => {
       position={'sticky'}
       top={0}
       left={0}
+      zIndex={2}
     >
       <Flex flexDirection={'column'} alignItems={'center'}>
         <Center

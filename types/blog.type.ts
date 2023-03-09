@@ -1,4 +1,5 @@
 export type Blog = {
+  id?: string;
   author: Author;
   title?: string;
   content?: string;
@@ -9,7 +10,7 @@ export type Blog = {
   likes: string[]; // [idUsers]
 };
 
-export type BlogViewHome = Pick<Blog, 'author' | 'title' | 'thumbnail'>;
+export type BlogViewHome = Pick<Blog, 'id' | 'author' | 'title' | 'thumbnail'>;
 
 type Author = {
   avatar: string;

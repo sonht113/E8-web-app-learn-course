@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Container } from '@chakra-ui/react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { NextPageWithLayout } from '../types/layout.type';
 import DefaultLayout from 'layouts/defaultLayout';
@@ -9,9 +10,12 @@ import ListCourse from '@/components/ListCourse';
 import { CourseViewHome } from 'types/course.type';
 import ListBlog from '@/components/ListBlog';
 import { BlogViewHome } from 'types/blog.type';
+import ListTeacher from '@/components/ListTeacher';
+import { TeacherViewHome } from 'types/teacher.type';
 
-const coursesPro: CourseViewHome[] = [
+export const coursesPro: CourseViewHome[] = [
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -19,6 +23,7 @@ const coursesPro: CourseViewHome[] = [
     isFree: true,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -26,6 +31,7 @@ const coursesPro: CourseViewHome[] = [
     isFree: true,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -33,6 +39,7 @@ const coursesPro: CourseViewHome[] = [
     isFree: true,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -40,6 +47,7 @@ const coursesPro: CourseViewHome[] = [
     isFree: true,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -48,8 +56,9 @@ const coursesPro: CourseViewHome[] = [
   },
 ];
 
-const coursesFree: CourseViewHome[] = [
+export const coursesFree: CourseViewHome[] = [
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -57,6 +66,7 @@ const coursesFree: CourseViewHome[] = [
     isFree: false,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -64,6 +74,7 @@ const coursesFree: CourseViewHome[] = [
     isFree: false,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -71,6 +82,7 @@ const coursesFree: CourseViewHome[] = [
     isFree: false,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -78,6 +90,7 @@ const coursesFree: CourseViewHome[] = [
     isFree: false,
   },
   {
+    id: uuidv4(),
     title: 'Learn speaking EL',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
@@ -88,6 +101,7 @@ const coursesFree: CourseViewHome[] = [
 
 const blogs: BlogViewHome[] = [
   {
+    id: uuidv4(),
     title: 'Tổng hợp các skill Toeic',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png',
@@ -97,6 +111,7 @@ const blogs: BlogViewHome[] = [
     },
   },
   {
+    id: uuidv4(),
     title: 'Tổng hợp các skill Toeic',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png',
@@ -106,6 +121,7 @@ const blogs: BlogViewHome[] = [
     },
   },
   {
+    id: uuidv4(),
     title: 'Tổng hợp các skill Toeic',
     thumbnail:
       'https://files.fullstack.edu.vn/f8-prod/blog_posts/65/6139fe28a9844.png',
@@ -113,6 +129,37 @@ const blogs: BlogViewHome[] = [
       avatar: 'https://bit.ly/dan-abramov',
       name: 'Trọng Sơn',
     },
+  },
+];
+
+const teachers: TeacherViewHome[] = [
+  {
+    idUserDetail: uuidv4(),
+    fullName: 'Jason coder',
+    email: 'hotrongsonit@gmail.com',
+    phone: '0399187817',
+    profilePicture: 'https://bit.ly/dan-abramov',
+  },
+  {
+    idUserDetail: uuidv4(),
+    fullName: 'Jason coder',
+    email: 'hotrongsonit@gmail.com',
+    phone: '0399187817',
+    profilePicture: 'https://bit.ly/dan-abramov',
+  },
+  {
+    idUserDetail: uuidv4(),
+    fullName: 'Jason coder',
+    email: 'hotrongsonit@gmail.com',
+    phone: '0399187817',
+    profilePicture: 'https://bit.ly/dan-abramov',
+  },
+  {
+    idUserDetail: uuidv4(),
+    fullName: 'Jason coder',
+    email: 'hotrongsonit@gmail.com',
+    phone: '0399187817',
+    profilePicture: 'https://bit.ly/dan-abramov',
   },
 ];
 
@@ -159,6 +206,7 @@ const Home: NextPageWithLayout = () => {
       <ListCourse isPro={true} title={'Khoá học Pro'} courses={coursesPro} />
       <ListCourse isPro={false} title={'Khoá học Free'} courses={coursesFree} />
       <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
+      <ListTeacher teachers={teachers} />
     </Container>
   );
 };
