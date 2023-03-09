@@ -1,5 +1,7 @@
 import type { AppProps } from 'next/app';
+import React from 'react';
 import { ChakraProvider } from '@chakra-ui/react';
+import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { NextPageWithLayout } from 'types/layout.type';
 import '../styles/index.css';
@@ -21,7 +23,20 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <ActiveMenuContextProvider>
           <NavbarMobileContextProvider>
-            {getLayout(<Component {...pageProps} />)}
+            {getLayout(
+              <React.Fragment>
+                <Head>
+                  <title>E8 Learn EL to work</title>
+                  <link rel="shortcut icon" href="/static/images/icon.png" />
+                  <meta
+                    property="og:title"
+                    content="E8 Learn EL to work"
+                    key="title"
+                  />
+                </Head>
+                <Component {...pageProps} />{' '}
+              </React.Fragment>
+            )}
           </NavbarMobileContextProvider>
         </ActiveMenuContextProvider>
       </QueryClientProvider>
