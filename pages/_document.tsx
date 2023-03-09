@@ -5,7 +5,11 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head />
+        <Head>
+          <title>E8 Learn EL to work</title>
+          <link rel="shortcut icon" href="/static/images/icon.png" />
+          <meta property="og:title" content="E8 Learn EL to work" key="title" />
+        </Head>
 
         <body>
           <Main />
