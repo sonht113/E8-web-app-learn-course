@@ -74,6 +74,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         {courses.map((course: CourseViewHome, index: number) => (
           <Course
             key={index}
+            id={course.id}
             title={course.title}
             price={course.price}
             isFree={course.isFree}

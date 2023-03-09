@@ -1,15 +1,14 @@
 import { ArrowForwardIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Flex, Grid, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, Grid } from '@chakra-ui/react';
 import React from 'react';
-import { BlogViewHome } from 'types/blog.type';
-import Blog from '../Blog';
+import { TeacherViewHome } from 'types/teacher.type';
+import Teacher from '../Teacher';
 
-type IListBlogProps = {
-  blogs?: BlogViewHome[];
-  title: string;
+type IListTeacherProps = {
+  teachers: TeacherViewHome[];
 };
 
-const ListBlog: React.FC<IListBlogProps> = ({ blogs, title }) => {
+const ListTeacher: React.FC<IListTeacherProps> = ({ teachers }) => {
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box
@@ -21,7 +20,7 @@ const ListBlog: React.FC<IListBlogProps> = ({ blogs, title }) => {
         <Flex gap={1} alignItems={'center'}>
           <Box>
             <Text fontSize={'xl'} fontWeight={'bold'}>
-              {title}
+              Giảng viên nổi bật
             </Text>
           </Box>
           <Box
@@ -61,20 +60,20 @@ const ListBlog: React.FC<IListBlogProps> = ({ blogs, title }) => {
         templateColumns={[
           'repeat(5, 1fr)',
           'repeat(5, 1fr)',
-          'repeat(5, 1fr)',
+          'repeat(4, 1fr)',
           'repeat(4, 1fr)',
         ]}
-        gap={[5, 10]}
+        gap={[5]}
         pb={5}
       >
-        {blogs.map((blog: BlogViewHome, index: number) => (
-          <Blog
-            key={index}
-            id={blog.id}
-            title={blog.title}
-            thumbnail={blog.thumbnail}
-            avatar={blog.author?.avatar}
-            name={blog.author.name}
+        {teachers.map((teacher: TeacherViewHome) => (
+          <Teacher
+            key={teacher.idUserDetail}
+            idUserDetail={teacher.idUserDetail}
+            profilePicture={teacher.profilePicture}
+            fullName={teacher.fullName}
+            phone={teacher.phone}
+            email={teacher.email}
           />
         ))}
       </Grid>
@@ -82,4 +81,4 @@ const ListBlog: React.FC<IListBlogProps> = ({ blogs, title }) => {
   );
 };
 
-export default ListBlog;
+export default ListTeacher;
