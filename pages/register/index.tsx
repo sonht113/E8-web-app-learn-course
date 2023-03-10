@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box } from '@chakra-ui/react';
+import React from 'react';
 import { AiOutlineUser, AiFillFacebook, AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 
@@ -7,10 +7,10 @@ import FormAuthen from '@/components/FormAuthen';
 
 const dataForm = {
   logo: '/static/images/icon.png',
-  title: 'Đăng nhập vào E8',
-  action: 'Đăng ký',
-  question: 'Bạn chưa có tài khoản?',
-  link: '/register',
+  title: 'Đăng ký vào E8',
+  action: 'Đăng nhập',
+  question: 'Bạn đã có tài khoản?',
+  link: '/login',
   buttons: [
     {
       id: 1,
@@ -34,8 +34,7 @@ const dataForm = {
     },
   ],
 };
-
-const Login = () => {
+const Register = () => {
   return (
     <Box
       bg={'#002a42'}
@@ -50,4 +49,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
