@@ -8,6 +8,7 @@ interface IButtonProps extends ButtonOptions {
   float?: any;
   onClick?: () => void;
   cursor?: string;
+  bgGradient?: string;
 }
 
 const ButtonFC: React.FC<IButtonProps> = ({
@@ -26,6 +27,7 @@ const ButtonFC: React.FC<IButtonProps> = ({
   radius,
   size,
   float,
+  bgGradient,
   cursor,
   onClick,
 }) => {
@@ -47,6 +49,8 @@ const ButtonFC: React.FC<IButtonProps> = ({
       float={float}
       onClick={onClick}
       cursor={cursor}
+      w={'full'}
+      bgGradient={bgGradient}
     >
       {title}
     </Button>

@@ -8,13 +8,11 @@ import {
   Text,
   Image,
   Container,
-  Popover,
-  PopoverTrigger,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
 import { ArrowBackIcon, HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
-// import ButtonFC from '../Button/Button';
+import ButtonFC from '../Button/Button';
 import Search from '../Search';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
 import Popup from '../Popup';
@@ -95,17 +93,17 @@ const Navbar: React.FC<INavbarProps> = () => {
           />
         </Link>
       </GridItem>
-      <GridItem float={'left'}>
-        {/* <Link href={'/login'}>
+      <GridItem w={['90%', '70%', '50%', '40%']} ml={'auto'}>
+        <Link href={'/login'}>
           <ButtonFC
             float={'right'}
             title="Đăng nhập"
             color="teal"
             radius="full"
-            size={['sm', 'md']}
+            size={'sm'}
           />
-        </Link> */}
-        <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
+        </Link>
+        {/* <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
           {navbarItems.map((item: any, index: number) => (
             <Popover key={index} closeOnBlur={true}>
               <PopoverTrigger>
@@ -114,7 +112,7 @@ const Navbar: React.FC<INavbarProps> = () => {
               <Popup width={250}>{item.content}</Popup>
             </Popover>
           ))}
-        </Flex>
+        </Flex> */}
       </GridItem>
     </Grid>
   );

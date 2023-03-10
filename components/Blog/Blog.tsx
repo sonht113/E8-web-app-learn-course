@@ -42,6 +42,8 @@ const Blog: React.FC<IBlogProps> = ({ id, title, name, avatar, thumbnail }) => {
               display={'flex'}
               justifyContent={'center'}
               alignItems={'center'}
+              mx={'auto'}
+              width={['70%', '70%', '70%', '50%']}
             >
               <ButtonFC
                 title="Xem bài viết"
