@@ -51,6 +51,8 @@ const Course: React.FC<ICourseProps> = ({
               display={'flex'}
               justifyContent={'center'}
               alignItems={'center'}
+              mx={'auto'}
+              width={['70%', '70%', '70%', '50%']}
             >
               <ButtonFC
                 title="Xem khoá học"
