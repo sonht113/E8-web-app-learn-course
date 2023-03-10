@@ -8,6 +8,7 @@ import '../styles/index.css';
 import { NavbarMobileContextProvider } from 'context/NavbarMobileContext';
 import { theme } from '../config/theme.config';
 import { ActiveMenuContextProvider } from 'context/ActiveMenuContext';
+import { AuthenContextProvider } from 'context/AuthenContext';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -21,24 +22,26 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <ActiveMenuContextProvider>
-          <NavbarMobileContextProvider>
-            {getLayout(
-              <React.Fragment>
-                <Head>
-                  <title>E8 Learn EL to work</title>
-                  <link rel="shortcut icon" href="/static/images/icon.png" />
-                  <meta
-                    property="og:title"
-                    content="E8 Learn EL to work"
-                    key="title"
-                  />
-                </Head>
-                <Component {...pageProps} />{' '}
-              </React.Fragment>
-            )}
-          </NavbarMobileContextProvider>
-        </ActiveMenuContextProvider>
+        <AuthenContextProvider>
+          <ActiveMenuContextProvider>
+            <NavbarMobileContextProvider>
+              {getLayout(
+                <React.Fragment>
+                  <Head>
+                    <title>E8 Learn EL to work</title>
+                    <link rel="shortcut icon" href="/static/images/icon.png" />
+                    <meta
+                      property="og:title"
+                      content="E8 Learn EL to work"
+                      key="title"
+                    />
+                  </Head>
+                  <Component {...pageProps} />{' '}
+                </React.Fragment>
+              )}
+            </NavbarMobileContextProvider>
+          </ActiveMenuContextProvider>
+        </AuthenContextProvider>
       </QueryClientProvider>
     </ChakraProvider>
   );
