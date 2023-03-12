@@ -1,23 +1,25 @@
 .home,
-.course {
+.course,
+.blog {
   max-width: 90% !important;
 }
 
 @media screen and (min-width: 992px) {
   .home,
-  .course {
+  .course,
+  .blog {
     height: 100vh;
     overflow-y: scroll;
   }
   .home::-webkit-scrollbar,
-  .course::-webkit-scrollbar {
+  .course::-webkit-scrollbar, .blog::-webkit-scrollbar {
     display: none;
   }
 }
 
 @media screen and (max-width: 991px) {
   .home,
-  .course {
+  .course, .blog {
     max-width: 100% !important;
   }
 }
