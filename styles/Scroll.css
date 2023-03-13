@@ -1,0 +1,23 @@
+body {
+  overflow: hidden;
+}
+
+.scroll-custom::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.scroll-custom::-webkit-scrollbar {
+  width: 8px;
+  background-color: #ffffff;
+}
+
+.scroll-custom::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgb(176, 176, 176))
+  );
+}
