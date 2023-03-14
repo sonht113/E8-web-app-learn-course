@@ -56,6 +56,7 @@ const Search: React.FC<ISearchProps> = ({
   return (
     <InputGroup display={display} width={width}>
       <InputLeftElement
+        height={'full'}
         children={<SearchIcon fontSize={sizeIcon} color={colorIcon} />}
       />
       <Input

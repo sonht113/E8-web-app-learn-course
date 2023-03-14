@@ -1,6 +1,6 @@
 import React, { ReactElement, useContext, useState } from 'react';
 import { Flex, Text, Center, Container, Box } from '@chakra-ui/react';
-import { AddIcon, CloseIcon } from '@chakra-ui/icons';
+import { AddIcon, ChatIcon, CloseIcon } from '@chakra-ui/icons';
 import { AiFillHome } from 'react-icons/ai';
 import {
   FaRoad,
@@ -43,6 +43,12 @@ export const sidebarItems = [
     name: 'Blog',
     id: 5,
     link: '/blog',
+  },
+  {
+    icon: <ChatIcon fontSize={'23px'} />,
+    name: 'Chat',
+    id: 10,
+    link: '/chat',
   },
 ];
 
