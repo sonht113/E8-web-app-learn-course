@@ -12,19 +12,30 @@
 @media screen and (min-width: 992px) {
   .home,
   .course,
-  .blog, .chat {
+  .blog,
+  .chat {
     height: calc(100vh - 64px);
     overflow-y: scroll;
   }
   .home::-webkit-scrollbar,
-  .course::-webkit-scrollbar, .blog::-webkit-scrollbar, .chat::-webkit-scrollbar {
+  .course::-webkit-scrollbar,
+  .blog::-webkit-scrollbar,
+  .chat::-webkit-scrollbar {
     display: none;
   }
 }
 
 @media screen and (max-width: 991px) {
   .home,
-  .course, .blog {
+  .course,
+  .blog {
     max-width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .chat {
+    width: 100% !important;
+    height: 100vh;
   }
 }
