@@ -1,4 +1,4 @@
-import { BellIcon } from '@chakra-ui/icons';
+import { BellIcon, ChatIcon } from '@chakra-ui/icons';
 import { Avatar, Text, Box, Flex, Heading } from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
@@ -39,7 +39,6 @@ const popupAvatarItems = [
 const UserAvatar = () => {
   return (
     <Avatar
-      display={['none', 'none', 'block']}
       size={['sm']}
       name="Dan Abrahmov"
       src="https://bit.ly/dan-abramov"
@@ -53,6 +52,7 @@ const MyCourse = () => {
     <Text
       display={['none', 'none', 'block']}
       fontWeight={'medium'}
+      fontSize={['sm', 'sm', 'sm', 'md']}
       cursor={'pointer'}
     >
       Khoá học của tôi
@@ -68,6 +68,19 @@ const Notification = () => {
       color={['gray.600', 'gray.400']}
       _hover={{ color: 'gray', transition: 'linear 0.2s' }}
     />
+  );
+};
+
+const Chat = () => {
+  return (
+    <Link href={'/chat'}>
+      <ChatIcon
+        display={['block', 'block', 'block', 'none']}
+        fontSize={'xl'}
+        cursor={'pointer'}
+        color={['gray.600', 'gray.400']}
+      />
+    </Link>
   );
 };
 
@@ -159,6 +172,7 @@ export {
   UserAvatar,
   MyCourse,
   Notification,
+  Chat,
   PopupAvatar,
   PopupMyCourse,
   PopupNotification,

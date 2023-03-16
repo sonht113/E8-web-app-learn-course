@@ -8,6 +8,8 @@ import {
   Text,
   Image,
   Container,
+  Popover,
+  PopoverTrigger,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -23,6 +25,7 @@ import {
   PopupAvatar,
   PopupMyCourse,
   PopupNotification,
+  Chat,
 } from './components/NavbarItem';
 import { ActiveMenuContext } from 'context/ActiveMenuContext';
 
@@ -38,6 +41,10 @@ const navbarItems = [
   {
     trigger: <Notification />,
     content: <PopupNotification />,
+  },
+  {
+    trigger: <Chat />,
+    content: null,
   },
   {
     trigger: <UserAvatar />,
@@ -58,14 +65,14 @@ const Navbar: React.FC<INavbarProps> = () => {
       borderBottom={'solid'}
       borderBottomColor={'#e8e8e8'}
       alignItems="center"
-      gap={6}
-      px={4}
+      gap={[2, 6]}
+      px={2}
       h={'64px'}
       w={'full'}
       bg={'white'}
     >
       <GridItem>
-        <Flex alignItems={'center'} gap={2}>
+        <Flex alignItems={'center'} gap={1}>
           <Logo />
           <HamburgerIcon
             display={['block', 'block', 'block', 'none']}
@@ -93,8 +100,8 @@ const Navbar: React.FC<INavbarProps> = () => {
           />
         </Link>
       </GridItem>
-      <GridItem w={['90%', '70%', '50%', '40%']} ml={'auto'}>
-        <Link href={'/login'}>
+      <GridItem w={['90%', 'full']} ml={'auto'}>
+        {/* <Link href={'/login'}>
           <ButtonFC
             float={'right'}
             title="Đăng nhập"
@@ -102,8 +109,8 @@ const Navbar: React.FC<INavbarProps> = () => {
             radius="full"
             size={'sm'}
           />
-        </Link>
-        {/* <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
+        </Link> */}
+        <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
           {navbarItems.map((item: any, index: number) => (
             <Popover key={index} closeOnBlur={true}>
               <PopoverTrigger>
@@ -112,7 +119,7 @@ const Navbar: React.FC<INavbarProps> = () => {
               <Popup width={250}>{item.content}</Popup>
             </Popover>
           ))}
-        </Flex> */}
+        </Flex>
       </GridItem>
     </Grid>
   );
@@ -153,6 +160,8 @@ const Back: React.FC<IBackProps> = ({ setActiveMenu }) => {
           setActiveMenu(DEFAULT_ACTIVE);
           localStorage.setItem('active_menu', JSON.stringify(DEFAULT_ACTIVE));
         }}
+        bg={'gray.100'}
+        rounded={'sm'}
       >
         <Flex
           alignItems={'center'}
@@ -162,7 +171,7 @@ const Back: React.FC<IBackProps> = ({ setActiveMenu }) => {
         >
           <ArrowBackIcon color={'gray.400'} />
           <Text
-            fontSize={'xs'}
+            fontSize={'8px'}
             casing={'uppercase'}
             fontWeight={'bold'}
             color={'gray.400'}
