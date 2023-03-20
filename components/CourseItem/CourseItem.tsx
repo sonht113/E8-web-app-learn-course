@@ -1,10 +1,16 @@
+import React from 'react';
+
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { AiFillPlayCircle } from 'react-icons/ai';
 
-const CourseItem = () => {
+type ICourseItemProps = {
+  isOpen: boolean;
+};
+
+const CourseItem: React.FC<ICourseItemProps> = ({ isOpen }) => {
   const [isShowing, setIsShowing] = useState(false);
 
   const handleShow = () => {
@@ -15,7 +21,7 @@ const CourseItem = () => {
       <Flex
         alignItems="center"
         justifyContent="space-between"
-        width="400px"
+        width={isOpen ? '100%' : '400px'}
         paddingX="20px"
         paddingY="8px"
         bg="#f7f8fa"
@@ -44,7 +50,7 @@ const CourseItem = () => {
         <Box>
           <Box
             paddingX="32px"
-            width="400px"
+            width="100%"
             cursor="pointer"
             _hover={{ bg: 'gray.200' }}
           >
@@ -66,7 +72,7 @@ const CourseItem = () => {
           </Box>
           <Box
             paddingX="32px"
-            width="400px"
+            width="100%"
             cursor="pointer"
             _hover={{ bg: 'gray.200' }}
           >
@@ -88,7 +94,7 @@ const CourseItem = () => {
           </Box>
           <Box
             paddingX="32px"
-            width="400px"
+            width="100%"
             cursor="pointer"
             _hover={{ bg: 'gray.200' }}
           >
