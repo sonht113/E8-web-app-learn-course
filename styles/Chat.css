@@ -1,3 +1,13 @@
 .show {
   display: block !important;
 }
+
+.back-icon-chat {
+  display: none !important;
+}
+
+@media screen and (max-width: 480px) {
+  .back-icon-chat {
+    display: block !important;
+  }
+}

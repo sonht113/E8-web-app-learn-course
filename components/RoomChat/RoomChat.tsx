@@ -5,9 +5,10 @@ import { Box, Text, Flex, Avatar, Center } from '@chakra-ui/react';
 type IRoomChatProps = {
   showMessage?: boolean;
   setShowMessage?: (v: boolean) => void;
+  isMobile?: boolean;
 };
 
-const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage }) => {
+const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage, isMobile }) => {
   return (
     <Box
       position={'relative'}
@@ -16,12 +17,16 @@ const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage }) => {
       alignItems={'center'}
       px={2}
       mb={3}
-      py={5}
+      py={3}
       boxShadow={'lg'}
       cursor={'pointer'}
       _hover={{ bg: 'gray.100' }}
       onClick={() => {
-        setShowMessage(true);
+        if (isMobile) {
+          setShowMessage(true);
+        } else {
+          return;
+        }
       }}
     >
       <Flex alignItems={'center'} gap={3}>
@@ -34,7 +39,7 @@ const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage }) => {
         </Box>
         <Box>
           <Text
-            w={['220px', '100px']}
+            w={['220px', '100px', '100px', '100px', '200px']}
             fontWeight={'bold'}
             fontSize={['15px', '15px', '16px', 'md']}
             overflow={'hidden'}
@@ -44,7 +49,7 @@ const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage }) => {
             Name room
           </Text>
           <Text
-            w={['220px', '100px']}
+            w={['220px', '100px', '100px', '100px', '200px']}
             fontSize={['sm', 'sm', 'sm', 'md']}
             overflow={'hidden'}
             whiteSpace={'nowrap'}
