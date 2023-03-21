@@ -1,7 +1,6 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/react';
 
-import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import NavbarMobile from '@/components/NavbarMobile';
 import SidebarChat from '@/components/SidebarChat';
@@ -13,11 +12,10 @@ const DefaultLayout = ({ children }) => {
       <ChatContextProvider>
         <Navbar />
         <NavbarMobile />
-        <Flex w={'full'} pt={'64px'} px={1}>
+        <Flex w={'full'} pt={'64px'}>
           <SidebarChat />
           {children}
         </Flex>
-        <Footer />
       </ChatContextProvider>
     </React.Fragment>
   );

@@ -3,19 +3,24 @@ import React, { ReactElement, useContext } from 'react';
 import { Box } from '@chakra-ui/react';
 import { NextPageWithLayout } from 'types/layout.type';
 import { ChatContext } from 'context/ChatContext';
-import { ArrowBackIcon } from '@chakra-ui/icons';
+import HeaderChat from '@/components/HeaderChat';
+import InputChat from '@/components/InputChat';
 
 const Chat: NextPageWithLayout = () => {
-  const { showMessage, setShowMessage } = useContext(ChatContext);
-  console.log(showMessage);
+  const { showMessage, setShowMessage, isMobile } = useContext(ChatContext);
 
   return (
     <Box
+      position={'relative'}
       className={`chat ${showMessage && 'show'}`}
       display={['none', 'block']}
     >
-      <ArrowBackIcon onClick={() => setShowMessage(!showMessage)} />
-      Chat message
+      <HeaderChat
+        showMessage={showMessage}
+        isMobile={isMobile}
+        setShowMessage={setShowMessage}
+      />
+      <InputChat isMobile={isMobile} />
     </Box>
   );
 };
