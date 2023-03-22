@@ -60,14 +60,14 @@ const buttonHover = {
 type ISidebarItemProps = {
   icon: ReactElement;
   name: string;
-  itemActive: boolean;
-  click: () => void;
+  itemActive?: boolean;
+  click?: () => void;
 };
 
 const Sidebar = () => {
   const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
 
-  const { activeMenu, setActiveMenu } = useContext(ActiveMenuContext);
+  const { activeMenu } = useContext(ActiveMenuContext);
 
   return (
     <Box
@@ -112,11 +112,10 @@ const Sidebar = () => {
               <SidebarItem
                 icon={item.icon}
                 name={item.name}
-                itemActive={activeMenu === item.id}
-                click={() => {
-                  setActiveMenu(item.id);
-                  localStorage.setItem('active_menu', JSON.stringify(item.id));
-                }}
+                itemActive={
+                  activeMenu === item.link ||
+                  activeMenu.includes(`${item.link}/`)
+                }
               />
             </Link>
           ))}

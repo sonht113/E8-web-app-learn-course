@@ -1,27 +1,28 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-const ACTIVE_DEFAULT = 1;
+const ACTIVE_DEFAULT = '/';
 
 type IActiveMenuContext = {
-  activeMenu: number;
-  setActiveMenu: (v: number) => void;
+  activeMenu: string;
+  setActiveMenu: (v: string) => void;
 };
 
 export const ActiveMenuContext = React.createContext<IActiveMenuContext>({
-  activeMenu: 0,
+  activeMenu: ACTIVE_DEFAULT,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setActiveMenu: (v: number) => {},
+  setActiveMenu: (v: string) => {},
 });
 
 export const ActiveMenuContextProvider = ({ children }) => {
-  const [activeMenu, setActiveMenu] = useState<number>(ACTIVE_DEFAULT);
+  const [activeMenu, setActiveMenu] = useState<string>(ACTIVE_DEFAULT);
+  const router = useRouter();
 
   useEffect(() => {
-    const active = Number(localStorage.getItem('active_menu'));
-    active ? setActiveMenu(active) : setActiveMenu(ACTIVE_DEFAULT);
-  }, []);
+    setActiveMenu(router.pathname);
+  }, [router.pathname]);
 
   return (
     <ActiveMenuContext.Provider value={{ activeMenu, setActiveMenu }}>

@@ -106,16 +106,14 @@ type INavbarMobileProps = {
 
 type ISubMenuSettingsProps = {
   items: SubMenuItem[];
-  activeMenu: number;
-  setActiveMenu: (v: number) => void;
+  activeMenu?: string;
 };
 
 type IMenuItem = {
   menuItem: MenuItemType;
-  activeMenu: number;
+  activeMenu?: string;
   isOpenSubMenuSettings: boolean;
   setIsOpenSubMenuSettings: (v: boolean) => void;
-  setActiveMenu: (v: number) => void;
 };
 
 const NavbarMobile: React.FC<INavbarMobileProps> = () => {
@@ -150,7 +148,7 @@ const Menu: React.FC = () => {
   const [isOpenSubMenuSettings, setIsOpenSubMenuSettings] =
     useState<boolean>(false);
 
-  const { activeMenu, setActiveMenu } = useContext(ActiveMenuContext);
+  const { activeMenu } = useContext(ActiveMenuContext);
   return (
     <VStack
       w={'full'}
@@ -167,16 +165,11 @@ const Menu: React.FC = () => {
               <MenuItem
                 menuItem={item}
                 activeMenu={activeMenu}
-                setActiveMenu={setActiveMenu}
                 isOpenSubMenuSettings={isOpenSubMenuSettings}
                 setIsOpenSubMenuSettings={setIsOpenSubMenuSettings}
               />
               {item.id === 9 && isOpenSubMenuSettings && (
-                <SubMenuSettings
-                  items={item.subMenu}
-                  activeMenu={activeMenu}
-                  setActiveMenu={setActiveMenu}
-                />
+                <SubMenuSettings items={item.subMenu} activeMenu={activeMenu} />
               )}
             </>
           )}
@@ -185,16 +178,11 @@ const Menu: React.FC = () => {
               <MenuItem
                 menuItem={item}
                 activeMenu={activeMenu}
-                setActiveMenu={setActiveMenu}
                 isOpenSubMenuSettings={isOpenSubMenuSettings}
                 setIsOpenSubMenuSettings={setIsOpenSubMenuSettings}
               />
               {item.id === 9 && isOpenSubMenuSettings && (
-                <SubMenuSettings
-                  items={item.subMenu}
-                  activeMenu={activeMenu}
-                  setActiveMenu={setActiveMenu}
-                />
+                <SubMenuSettings items={item.subMenu} activeMenu={activeMenu} />
               )}
             </Link>
           )}
@@ -208,7 +196,6 @@ const MenuItem: React.FC<IMenuItem> = ({
   menuItem,
   activeMenu,
   isOpenSubMenuSettings,
-  setActiveMenu,
   setIsOpenSubMenuSettings,
 }) => {
   const { onClose } = useContext(NavbarMobileContext);
@@ -216,7 +203,7 @@ const MenuItem: React.FC<IMenuItem> = ({
     <Flex
       justifyContent={'space-between'}
       w={'full'}
-      bg={menuItem.id !== 6 && menuItem.id === activeMenu && 'gray.200'}
+      bg={menuItem.id !== 6 && menuItem.link === activeMenu && 'gray.200'}
       py={2}
       px={3}
       roundedBottomLeft={10}
@@ -225,8 +212,6 @@ const MenuItem: React.FC<IMenuItem> = ({
       onClick={() => {
         menuItem.id !== 9 && onClose();
         menuItem.id === 9 && setIsOpenSubMenuSettings(!isOpenSubMenuSettings);
-        setActiveMenu(menuItem.id);
-        localStorage.setItem('active_menu', JSON.stringify(menuItem.id));
       }}
     >
       <Flex alignItems={'center'} gap={3}>
@@ -246,7 +231,6 @@ const MenuItem: React.FC<IMenuItem> = ({
 const SubMenuSettings: React.FC<ISubMenuSettingsProps> = ({
   items,
   activeMenu,
-  setActiveMenu,
 }) => {
   return (
     <VStack
@@ -260,15 +244,11 @@ const SubMenuSettings: React.FC<ISubMenuSettingsProps> = ({
         <Link key={item.id} href={item.link}>
           <Text
             color={'#4c4c4c'}
-            bg={item.id === activeMenu && 'gray.200'}
+            bg={item.link === activeMenu && 'gray.200'}
             py={2}
             pl={2}
             roundedBottomLeft={10}
             roundedTopLeft={10}
-            onClick={() => {
-              setActiveMenu(item.id);
-              localStorage.setItem('active_menu', JSON.stringify(item.id));
-            }}
           >
             {item.name}
           </Text>

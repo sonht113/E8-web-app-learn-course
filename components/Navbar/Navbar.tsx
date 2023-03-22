@@ -80,7 +80,7 @@ const Navbar: React.FC<INavbarProps> = () => {
             cursor="pointer"
             onClick={onOpen}
           />
-          <Back setActiveMenu={setActiveMenu} />
+          <Back />
         </Flex>
       </GridItem>
       <GridItem>
@@ -146,23 +146,10 @@ const Logo = () => {
   );
 };
 
-interface IBackProps {
-  setActiveMenu: (_v: number) => void;
-}
-
-const Back: React.FC<IBackProps> = ({ setActiveMenu }) => {
+const Back = () => {
   return (
     <Link href={'/'}>
-      <Box
-        display={['block', 'block', 'none']}
-        onClick={() => {
-          const DEFAULT_ACTIVE = 1;
-          setActiveMenu(DEFAULT_ACTIVE);
-          localStorage.setItem('active_menu', JSON.stringify(DEFAULT_ACTIVE));
-        }}
-        bg={'gray.100'}
-        rounded={'sm'}
-      >
+      <Box display={['block', 'block', 'none']} bg={'gray.100'} rounded={'sm'}>
         <Flex
           alignItems={'center'}
           _hover={{ bg: 'gray.100', transition: 'linear 0.2s' }}
