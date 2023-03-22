@@ -6,6 +6,10 @@
   display: none !important;
 }
 
+.message-chat-area::-webkit-scrollbar {
+  display: none;
+}
+
 @media screen and (max-width: 480px) {
   .back-icon-chat {
     display: block !important;

@@ -21,8 +21,10 @@ const InputChat: React.FC<IInputChatProps> = ({ isMobile }) => {
       px={5}
       display={'flex'}
       alignItems={'center'}
-      bg={'gray.100'}
       justifyContent={'space-between'}
+      borderTop={'1px'}
+      borderTopColor={'gray.300'}
+      bg={'white'}
     >
       <Input
         placeholder="Enter the messages"

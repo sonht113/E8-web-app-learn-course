@@ -47,6 +47,8 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
       h={'61px'}
       w={'full'}
       boxShadow={'lg'}
+      bg={'white'}
+      zIndex={12}
     >
       <Box display={'flex'} alignItems={'center'}>
         <ArrowBackIcon
