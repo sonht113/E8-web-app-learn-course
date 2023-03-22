@@ -146,15 +146,10 @@ const Logo = () => {
   );
 };
 
-
 const Back = () => {
   return (
     <Link href={'/'}>
-      <Box
-        display={['block', 'block', 'none']}
-        bg={'gray.100'}
-        rounded={'sm'}
-      >
+      <Box display={['block', 'block', 'none']} bg={'gray.100'} rounded={'sm'}>
         <Flex
           alignItems={'center'}
           _hover={{ bg: 'gray.100', transition: 'linear 0.2s' }}
