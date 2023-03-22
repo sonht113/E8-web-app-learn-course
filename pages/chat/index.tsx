@@ -5,6 +5,9 @@ import { NextPageWithLayout } from 'types/layout.type';
 import { ChatContext } from 'context/ChatContext';
 import HeaderChat from '@/components/HeaderChat';
 import InputChat from '@/components/InputChat';
+import MessageChat from '@/components/MessageChat';
+
+const messages = [1, 3, 4, 4, 4, 4, 4];
 
 const Chat: NextPageWithLayout = () => {
   const { showMessage, setShowMessage, isMobile } = useContext(ChatContext);
@@ -20,6 +23,21 @@ const Chat: NextPageWithLayout = () => {
         isMobile={isMobile}
         setShowMessage={setShowMessage}
       />
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        gap={7}
+        className="message-chat-area"
+        p={2}
+        w={'full'}
+        h={'calc(100% - 61px - 64px)'}
+        overflowY={'scroll'}
+        mt={'61px'}
+      >
+        {messages.map((_item, index) => (
+          <MessageChat key={index} />
+        ))}
+      </Box>
       <InputChat isMobile={isMobile} />
     </Box>
   );
