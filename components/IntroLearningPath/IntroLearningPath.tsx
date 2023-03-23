@@ -28,7 +28,7 @@ const IntroLearningPath: React.FC<IIntroLearningPath> = ({ data }) => {
         <Text fontSize={'sm'} fontWeight={'medium'}>
           {data.description}
         </Text>
-        <Link href={'/learning-path'}>
+        <Link href={'/learning-paths'}>
           <Center
             border={'2px'}
             borderColor={'black'}
