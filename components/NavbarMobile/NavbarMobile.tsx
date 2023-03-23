@@ -48,7 +48,7 @@ const menuNavbarMobileItems = [
     icon: <FaRoad size={'18px'} color={'#6d6d6d'} />,
     name: 'Lộ trình',
     id: 2,
-    link: '/learning-path',
+    link: '/learning-paths',
   },
   {
     icon: <FaLightbulb size={'18px'} color={'#6d6d6d'} />,

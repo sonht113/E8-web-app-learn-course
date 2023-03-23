@@ -24,7 +24,7 @@ export const sidebarItems = [
     icon: <FaRoad size={'23px'} />,
     name: 'Lộ trình',
     id: 2,
-    link: '/learning-path',
+    link: '/learning-paths',
   },
   {
     icon: <FaLightbulb size={'23px'} />,
