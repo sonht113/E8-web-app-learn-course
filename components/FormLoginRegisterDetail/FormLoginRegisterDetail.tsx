@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -8,6 +8,8 @@ import InputField from '../InputField';
 import InputFieldSwitch from '../InputFieldSwitch';
 import OTPInput from '../OTPInput';
 import ButtonFC from '../Button';
+import { IFormAuthen } from '../FormAuthen';
+import { AuthenContext } from 'context/AuthenContext';
 
 export type FormData = {
   fullName?: string;
@@ -17,7 +19,11 @@ export type FormData = {
   otp?: string;
 };
 
-const FormLoginRegisterDetail = () => {
+type IFormLoginRegisterDetail = Pick<IFormAuthen, 'onSubmit'>;
+
+const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
+  onSubmit,
+}) => {
   const router = useRouter();
   const pathName = router.pathname;
   const {
@@ -26,6 +32,8 @@ const FormLoginRegisterDetail = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
+  const { isAuthenticated } = useContext(AuthenContext);
 
   const defaultInput = {
     label: 'Số điện thoại',
@@ -46,12 +54,16 @@ const FormLoginRegisterDetail = () => {
     type: 'text',
   };
 
+  console.log(isAuthenticated);
+
   const submit = (data: FormData) => {
-    console.log('errors', errors, data);
+    onSubmit(data);
     reset();
   };
 
-  console.log('errrors', errors);
+  useEffect(() => {
+    isAuthenticated && router.push('/');
+  }, [isAuthenticated]);
 
   return (
     <form onSubmit={handleSubmit(submit)}>
