@@ -27,7 +27,7 @@ import {
   PopupNotification,
   Chat,
 } from './components/NavbarItem';
-import { ActiveMenuContext } from 'context/ActiveMenuContext';
+import { AuthenContext } from 'context/AuthenContext';
 
 interface INavbarProps {
   onOpen?: () => void;
@@ -55,7 +55,7 @@ const navbarItems = [
 const Navbar: React.FC<INavbarProps> = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
   const { onOpen } = useContext(NavbarMobileContext);
-  const { setActiveMenu } = useContext(ActiveMenuContext);
+  const { user, isAuthenticated } = useContext(AuthenContext);
 
   return (
     <Grid
@@ -101,25 +101,30 @@ const Navbar: React.FC<INavbarProps> = () => {
         </Link>
       </GridItem>
       <GridItem w={['90%', 'full']} ml={'auto'}>
-        {/* <Link href={'/login'}>
-          <ButtonFC
-            float={'right'}
-            title="Đăng nhập"
-            color="teal"
-            radius="full"
-            size={'sm'}
-          />
-        </Link> */}
-        <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
-          {navbarItems.map((item: any, index: number) => (
-            <Popover key={index} closeOnBlur={true}>
-              <PopoverTrigger>
-                <Box>{item.trigger}</Box>
-              </PopoverTrigger>
-              <Popup width={250}>{item.content}</Popup>
-            </Popover>
-          ))}
-        </Flex>
+        {!isAuthenticated ? (
+          <Box w={['80%', '70%', '50%', '30%']} ml={'auto'}>
+            <Link href={'/login'}>
+              <ButtonFC
+                float={'right'}
+                title="Đăng nhập"
+                color="teal"
+                radius="full"
+                size={'sm'}
+              />
+            </Link>
+          </Box>
+        ) : (
+          <Flex alignItems={'center'} justifyContent={'flex-end'} gap={5}>
+            {navbarItems.map((item: any, index: number) => (
+              <Popover key={index} closeOnBlur={true}>
+                <PopoverTrigger>
+                  <Box>{item.trigger}</Box>
+                </PopoverTrigger>
+                <Popup width={250}>{item.content}</Popup>
+              </Popover>
+            ))}
+          </Flex>
+        )}
       </GridItem>
     </Grid>
   );

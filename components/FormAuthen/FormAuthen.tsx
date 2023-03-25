@@ -1,11 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { Box, Center, Flex, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import React, { ReactElement, useState } from 'react';
+import { DataLoginRegister } from 'types/auth.type';
 import ButtonOutline from '../ButtonOutline';
 import FormLoginRegisterDetail from '../FormLoginRegisterDetail';
 
-type IFormAuthen = {
+export type IFormAuthen = {
   dataForm: {
     logo: string;
     title: string;
@@ -14,9 +16,10 @@ type IFormAuthen = {
     question: string;
     link: string;
   };
+  onSubmit?: (body: DataLoginRegister) => void;
 };
 
-const FormAuthen: React.FC<IFormAuthen> = ({ dataForm }) => {
+const FormAuthen: React.FC<IFormAuthen> = ({ dataForm, onSubmit }) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <Box
@@ -44,7 +47,7 @@ const FormAuthen: React.FC<IFormAuthen> = ({ dataForm }) => {
         </Text>
       </Center>
       {open ? (
-        <FormLoginRegisterDetail />
+        <FormLoginRegisterDetail onSubmit={onSubmit} />
       ) : (
         <Flex
           flexDirection={'column'}

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box } from '@chakra-ui/react';
 import { AiOutlineUser, AiFillFacebook, AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 
 import FormAuthen from '@/components/FormAuthen';
+import { AuthenContext } from 'context/AuthenContext';
 
 const dataForm = {
   logo: '/static/images/icon.png',
@@ -35,7 +36,9 @@ const dataForm = {
   ],
 };
 
-const Login = () => {
+const Login: React.FC = () => {
+  const { loginUser } = useContext(AuthenContext);
+
   return (
     <Box
       bg={'#002a42'}
@@ -45,7 +48,7 @@ const Login = () => {
       justifyContent={'center'}
       alignItems={'center'}
     >
-      <FormAuthen dataForm={dataForm} />
+      <FormAuthen dataForm={dataForm} onSubmit={loginUser} />
     </Box>
   );
 };
