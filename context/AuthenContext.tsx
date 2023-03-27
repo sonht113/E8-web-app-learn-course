@@ -5,8 +5,15 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 import Cookies from 'js-cookie';
 
-import { DataLoginRegister } from 'types/auth.type';
-import { login } from 'api/auth.api';
+import { DataLoginRegister, DataVerify } from 'types/auth.type';
+import {
+  login,
+  sendOtpEmail,
+  sendOtpPhone,
+  signUp,
+  verifyOtpEmail,
+  verifyOtpPhone,
+} from 'api/auth.api';
 import { User } from 'types/user.type';
 
 type IAuthenContext = {
@@ -17,6 +24,12 @@ type IAuthenContext = {
   setError?: (_v: string) => void;
   isAuthenticated: boolean;
   setIsAuthenticated?: (_v: boolean) => void;
+  signUpUser: (body: DataLoginRegister) => void;
+  sendOTPEmail: (email: string) => void;
+  sendOTPPhone: (phone: string) => void;
+  otp: string;
+  verifyOTPEmail: (body: DataVerify) => void;
+  verifyOTPPhone: (body: DataVerify) => void;
 };
 
 export const AuthenContext = React.createContext<IAuthenContext>({
@@ -29,11 +42,17 @@ export const AuthenContext = React.createContext<IAuthenContext>({
     id: '',
   },
   setUser: (_v: any) => {},
-  loginUser: (body: DataLoginRegister) => {},
   error: '',
   setError: (_v: string) => {},
   isAuthenticated: false,
   setIsAuthenticated: (_v: boolean) => {},
+  loginUser: (body: DataLoginRegister) => {},
+  signUpUser: (body: DataLoginRegister) => {},
+  sendOTPEmail: (email: string) => {},
+  sendOTPPhone: (phone: string) => {},
+  otp: '',
+  verifyOTPEmail: (body: DataVerify) => {},
+  verifyOTPPhone: (body: DataVerify) => {},
 });
 
 export const AuthenContextProvider = ({ children }) => {
@@ -45,11 +64,32 @@ export const AuthenContextProvider = ({ children }) => {
     myCourses: [],
     id: '',
   });
-  const [error, setError] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [otp, setOtp] = useState<string>('');
 
   const loginMutate = useMutation({
     mutationFn: (body: DataLoginRegister) => login(body),
+  });
+
+  const signUpMutate = useMutation({
+    mutationFn: (body: DataLoginRegister) => signUp(body),
+  });
+
+  const sendOTPEmailMutate = useMutation({
+    mutationFn: (email: string) => sendOtpEmail(email),
+  });
+
+  const sendOTPPhoneMutate = useMutation({
+    mutationFn: (phone: string) => sendOtpPhone(phone),
+  });
+
+  const verifyOTPEmailMutate = useMutation({
+    mutationFn: (body: DataVerify) => verifyOtpEmail(body),
+  });
+
+  const verifyOTPPhoneMutate = useMutation({
+    mutationFn: (body: DataVerify) => verifyOtpPhone(body),
   });
 
   const loginUser = (body: DataLoginRegister) => {
@@ -64,6 +104,61 @@ export const AuthenContextProvider = ({ children }) => {
       onError(error: any) {
         setError(error.response.data.errors[0].detail);
         setIsAuthenticated(false);
+      },
+    });
+  };
+
+  const signUpUser = (body: DataLoginRegister) => {
+    signUpMutate.mutate(body, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+      onError: (error: any) => {
+        console.log(error);
+      },
+    });
+  };
+
+  const sendOTPEmail = (email: string) => {
+    sendOTPEmailMutate.mutate(email, {
+      onSuccess: (res) => {
+        setOtp(res.data);
+      },
+      onError: (error: any) => {
+        console.log(error);
+      },
+    });
+  };
+
+  const sendOTPPhone = (phone: string) => {
+    sendOTPPhoneMutate.mutate(phone, {
+      onSuccess: (res) => {
+        setOtp(res.data);
+      },
+      onError: (error: any) => {
+        console.log(error);
+      },
+    });
+  };
+
+  const verifyOTPEmail = (body: DataVerify) => {
+    verifyOTPEmailMutate.mutate(body, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+      onError: (error: any) => {
+        console.log(error);
+      },
+    });
+  };
+
+  const verifyOTPPhone = (body: DataVerify) => {
+    verifyOTPPhoneMutate.mutate(body, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+      onError: (error: any) => {
+        console.log(error);
       },
     });
   };
@@ -97,6 +192,12 @@ export const AuthenContextProvider = ({ children }) => {
         error,
         isAuthenticated,
         setIsAuthenticated,
+        signUpUser,
+        sendOTPEmail,
+        sendOTPPhone,
+        otp,
+        verifyOTPEmail,
+        verifyOTPPhone,
       }}
     >
       {children}

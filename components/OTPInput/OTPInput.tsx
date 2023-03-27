@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+
 import { Box, Input, Button } from '@chakra-ui/react';
 import React from 'react';
 import validator from 'validator';
@@ -6,22 +9,34 @@ type IOTPInputProps = {
   enableSendOTP: boolean;
   addressSendOTP: string;
   isSwitch?: boolean;
+  setErrorValidateOTP?: (_v: string) => void;
+  sendOTP: () => void;
+  otp?: string;
 };
 
 const OTPInput: React.FC<IOTPInputProps> = ({
   enableSendOTP,
   addressSendOTP,
   isSwitch,
+  setErrorValidateOTP,
+  sendOTP,
+  otp,
 }) => {
   const onSubmit = () => {
     if (!isSwitch) {
-      !validator.isEmail(addressSendOTP)
-        ? console.log('Email không hợp lệ')
-        : true;
+      if (!validator.isEmail(addressSendOTP)) {
+        setErrorValidateOTP('Email không hợp lệ');
+      } else {
+        sendOTP();
+        setErrorValidateOTP('');
+      }
     } else {
-      addressSendOTP.toString().trim().length !== 10
-        ? console.log('Số điện thoại không hợp lệ')
-        : true;
+      if (addressSendOTP.toString().trim().length !== 10) {
+        setErrorValidateOTP('Số điện thoại không hợp lệ');
+      } else {
+        setErrorValidateOTP('');
+        sendOTP();
+      }
     }
   };
 
@@ -31,6 +46,7 @@ const OTPInput: React.FC<IOTPInputProps> = ({
         _placeholder={{ fontSize: 'sm' }}
         placeholder="Nhập mã xác nhận"
         rounded={'full'}
+        value={otp}
         bg={'gray.100'}
         disabled={!enableSendOTP}
       />
@@ -47,7 +63,7 @@ const OTPInput: React.FC<IOTPInputProps> = ({
         isDisabled={!enableSendOTP}
         _hover={{ color: 'black', bg: 'gray.300' }}
       >
-        Gửi mã
+        {otp ? 'Verify' : 'Gửi mã'}
       </Button>
     </Box>
   );

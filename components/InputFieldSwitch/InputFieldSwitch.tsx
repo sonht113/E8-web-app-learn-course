@@ -28,6 +28,7 @@ type IInputFieldSwitchProps = {
   reset?: any;
   isSwitch: boolean;
   setIsSwitch: (_v: boolean) => void;
+  errorValidateOTP?: string;
 };
 
 const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
@@ -38,6 +39,7 @@ const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
   reset,
   isSwitch,
   setIsSwitch,
+  errorValidateOTP,
 }) => {
   return (
     <Box my={10}>
@@ -116,6 +118,11 @@ const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
         {errors.phone && isSwitch && (
           <Text fontSize="xs" px={2} color={'red'}>
             {errors.phone?.message}
+          </Text>
+        )}
+        {!errors.email && !errors.phone && errorValidateOTP && (
+          <Text fontSize="xs" px={2} color={'red'}>
+            {errorValidateOTP}
           </Text>
         )}
       </Box>
