@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Box, Text } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -24,10 +24,14 @@ type IFormLoginRegisterDetail = Pick<IFormAuthen, 'onSubmit'>;
 const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
   onSubmit,
 }) => {
+  const [enableSendOTP, setEnableSendOTP] = useState<boolean>(false);
+  const [addressSendOTP, setAddressSendOTP] = useState<string>('');
+  const [isSwitch, setIsSwitch] = useState<boolean>(false);
   const router = useRouter();
   const pathName = router.pathname;
   const {
     register,
+    watch,
     reset,
     handleSubmit,
     formState: { errors },
@@ -35,26 +39,28 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
 
   const { isAuthenticated } = useContext(AuthenContext);
 
-  const defaultInput = {
-    label: 'Số điện thoại',
-    name: 'phone',
-    labelAction:
-      pathName === '/register' ? 'Đăng ký với SĐT' : 'Đăng nhập với SĐT',
-    icon: <PhoneIcon color="gray.300" />,
-    placeholder: 'Số điện thoại',
-    type: 'tel',
-  };
+  const defaultInput = useMemo(() => {
+    return {
+      label: 'Số điện thoại',
+      name: 'phone',
+      labelAction:
+        pathName === '/register' ? 'Đăng ký với SĐT' : 'Đăng nhập với SĐT',
+      icon: <PhoneIcon color="gray.300" />,
+      placeholder: 'Số điện thoại',
+      type: 'tel',
+    };
+  }, []);
 
-  const switchInput = {
-    label: 'Email',
-    name: 'email',
-    labelAction:
-      pathName === '/register' ? 'Đăng ký với email' : 'Đăng nhập với email',
-    placeholder: 'Địa chỉ email',
-    type: 'text',
-  };
-
-  console.log(isAuthenticated);
+  const switchInput = useMemo(() => {
+    return {
+      label: 'Email',
+      name: 'email',
+      labelAction:
+        pathName === '/register' ? 'Đăng ký với email' : 'Đăng nhập với email',
+      placeholder: 'Địa chỉ email',
+      type: 'text',
+    };
+  }, []);
 
   const submit = (data: FormData) => {
     onSubmit(data);
@@ -64,6 +70,17 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
   useEffect(() => {
     isAuthenticated && router.push('/');
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (watch('email') || watch('phone')) {
+      setEnableSendOTP(true);
+      watch('email')
+        ? setAddressSendOTP(watch('email'))
+        : setAddressSendOTP(watch('phone'));
+    } else {
+      setEnableSendOTP(false);
+    }
+  }, [watch('email'), watch('phone')]);
 
   return (
     <form onSubmit={handleSubmit(submit)}>
@@ -94,8 +111,16 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
           errors={errors}
           switchInput={switchInput}
           reset={reset}
+          isSwitch={isSwitch}
+          setIsSwitch={setIsSwitch}
         />
-        {router.pathname === '/register' && <OTPInput />}
+        {router.pathname === '/register' && (
+          <OTPInput
+            isSwitch={isSwitch}
+            addressSendOTP={addressSendOTP}
+            enableSendOTP={enableSendOTP}
+          />
+        )}
         <Box mt={5} w={['100%']} mx={'auto'}>
           <ButtonFC
             type="submit"
