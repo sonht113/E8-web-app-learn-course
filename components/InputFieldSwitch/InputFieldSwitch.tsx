@@ -1,4 +1,6 @@
-import React, { ReactElement, useState } from 'react';
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+import React, { ReactElement } from 'react';
 import {
   Flex,
   FormLabel,
@@ -24,6 +26,8 @@ type IInputFieldSwitchProps = {
   validate?: any;
   errors?: any;
   reset?: any;
+  isSwitch: boolean;
+  setIsSwitch: (_v: boolean) => void;
 };
 
 const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
@@ -32,8 +36,9 @@ const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
   validate,
   errors,
   reset,
+  isSwitch,
+  setIsSwitch,
 }) => {
-  const [isSwitch, setIsSwitch] = useState<boolean>(false);
   return (
     <Box my={10}>
       <Flex justifyContent={'space-between'}>
@@ -63,12 +68,13 @@ const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
             <Input
               placeholder={switchInput.placeholder}
               _placeholder={{ fontSize: 'sm' }}
+              onChange={(e) => console.log(e.target.value)}
               bg={'gray.100'}
               rounded={'full'}
               type={switchInput.type}
               name={switchInput.name}
               {...validate(switchInput.name, {
-                required: 'Vui lòng nhập email!',
+                required: 'Vui lòng nhập email',
                 pattern: {
                   value: /[^\s]*@[a-z0-9.-]*/i,
                   message: 'Email không hợp lệ',
@@ -85,7 +91,7 @@ const InputFieldSwitch: React.FC<IInputFieldSwitchProps> = ({
               type={defaultInput.type}
               name={defaultInput.name}
               {...validate(defaultInput.name, {
-                required: 'Vui lòng nhập số điện thoại!',
+                required: 'Vui lòng nhập số điện thoại',
                 pattern: {
                   value: /^[0-9]+$/,
                   message: 'Số điện thoại không hợp lệ',

@@ -55,7 +55,6 @@ export const AuthenContextProvider = ({ children }) => {
   const loginUser = (body: DataLoginRegister) => {
     loginMutate.mutate(body, {
       onSuccess: (res) => {
-        console.log(res.data);
         localStorage.setItem('access_token', res.data.accessToken);
         Cookies.set('refresh_token', res.data.refreshToken);
         localStorage.setItem('user_data', JSON.stringify(res.data.user));
