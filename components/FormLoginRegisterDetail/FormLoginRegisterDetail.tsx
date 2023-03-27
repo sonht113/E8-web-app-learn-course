@@ -27,6 +27,7 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
   const [enableSendOTP, setEnableSendOTP] = useState<boolean>(false);
   const [addressSendOTP, setAddressSendOTP] = useState<string>('');
   const [isSwitch, setIsSwitch] = useState<boolean>(false);
+  const [errorValidateOTP, setErrorValidateOTP] = useState<string>('');
   const router = useRouter();
   const pathName = router.pathname;
   const {
@@ -37,7 +38,8 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
     formState: { errors },
   } = useForm<FormData>();
 
-  const { isAuthenticated } = useContext(AuthenContext);
+  const { isAuthenticated, sendOTPEmail, sendOTPPhone, otp } =
+    useContext(AuthenContext);
 
   const defaultInput = useMemo(() => {
     return {
@@ -67,6 +69,10 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
     reset();
   };
 
+  const sendOTP = () => {
+    isSwitch ? sendOTPPhone(addressSendOTP) : sendOTPEmail(addressSendOTP);
+  };
+
   useEffect(() => {
     isAuthenticated && router.push('/');
   }, [isAuthenticated]);
@@ -79,6 +85,7 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
         : setAddressSendOTP(watch('phone'));
     } else {
       setEnableSendOTP(false);
+      setErrorValidateOTP('');
     }
   }, [watch('email'), watch('phone')]);
 
@@ -106,6 +113,7 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
           </Box>
         )}
         <InputFieldSwitch
+          errorValidateOTP={errorValidateOTP}
           validate={register}
           defaultInput={defaultInput}
           errors={errors}
@@ -116,9 +124,12 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
         />
         {router.pathname === '/register' && (
           <OTPInput
+            setErrorValidateOTP={setErrorValidateOTP}
             isSwitch={isSwitch}
             addressSendOTP={addressSendOTP}
+            sendOTP={sendOTP}
             enableSendOTP={enableSendOTP}
+            otp={otp}
           />
         )}
         <Box mt={5} w={['100%']} mx={'auto'}>
