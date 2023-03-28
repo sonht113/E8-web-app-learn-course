@@ -15,6 +15,7 @@ import {
   verifyOtpPhone,
 } from 'api/auth.api';
 import { User } from 'types/user.type';
+import { useRouter } from 'next/router';
 
 type IAuthenContext = {
   user: User;
@@ -28,8 +29,10 @@ type IAuthenContext = {
   sendOTPEmail: (email: string) => void;
   sendOTPPhone: (phone: string) => void;
   otp: string;
+  setOtp: (_v: string) => void;
   verifyOTPEmail: (body: DataVerify) => void;
   verifyOTPPhone: (body: DataVerify) => void;
+  isVerifySuccessfully: { success: boolean; error: string };
 };
 
 export const AuthenContext = React.createContext<IAuthenContext>({
@@ -51,8 +54,10 @@ export const AuthenContext = React.createContext<IAuthenContext>({
   sendOTPEmail: (email: string) => {},
   sendOTPPhone: (phone: string) => {},
   otp: '',
+  setOtp: (otp: string) => {},
   verifyOTPEmail: (body: DataVerify) => {},
   verifyOTPPhone: (body: DataVerify) => {},
+  isVerifySuccessfully: { success: false, error: '' },
 });
 
 export const AuthenContextProvider = ({ children }) => {
@@ -67,6 +72,12 @@ export const AuthenContextProvider = ({ children }) => {
   const [error, setError] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [otp, setOtp] = useState<string>('');
+  const [isVerifySuccessfully, setIsVerifySuccessfully] = useState<{
+    success: boolean;
+    error: string;
+  }>({ success: false, error: '' });
+
+  const router = useRouter();
 
   const loginMutate = useMutation({
     mutationFn: (body: DataLoginRegister) => login(body),
@@ -112,6 +123,7 @@ export const AuthenContextProvider = ({ children }) => {
     signUpMutate.mutate(body, {
       onSuccess: (res) => {
         console.log(res);
+        router.push('/login');
       },
       onError: (error: any) => {
         console.log(error);
@@ -143,25 +155,35 @@ export const AuthenContextProvider = ({ children }) => {
 
   const verifyOTPEmail = (body: DataVerify) => {
     verifyOTPEmailMutate.mutate(body, {
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: () => {
+        setIsVerifySuccessfully({ success: true, error: '' });
       },
       onError: (error: any) => {
-        console.log(error);
+        setIsVerifySuccessfully({
+          success: false,
+          error: error?.response.data.errors[0].detail,
+        });
       },
     });
   };
 
   const verifyOTPPhone = (body: DataVerify) => {
     verifyOTPPhoneMutate.mutate(body, {
-      onSuccess: (res) => {
-        console.log(res);
+      onSuccess: () => {
+        setIsVerifySuccessfully({ success: true, error: '' });
       },
       onError: (error: any) => {
-        console.log(error);
+        setIsVerifySuccessfully({
+          success: false,
+          error: error?.response.data.errors[0].detail,
+        });
       },
     });
   };
+
+  useEffect(() => {
+    otp === '' && setIsVerifySuccessfully({ success: false, error: '' });
+  }, [otp]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('access_token');
@@ -196,8 +218,10 @@ export const AuthenContextProvider = ({ children }) => {
         sendOTPEmail,
         sendOTPPhone,
         otp,
+        setOtp,
         verifyOTPEmail,
         verifyOTPPhone,
+        isVerifySuccessfully,
       }}
     >
       {children}

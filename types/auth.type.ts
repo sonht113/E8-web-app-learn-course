@@ -4,7 +4,7 @@ export type DataLoginRegister = {
   fullName?: string;
   email?: string;
   phone?: string;
-  otp?: string | number;
+  otpCode?: string | number;
   password?: string;
 };
 
@@ -17,5 +17,5 @@ export type Auth = {
 export type DataVerify = {
   email?: string;
   phone?: string;
-  otp: string;
+  otpCode: string;
 };

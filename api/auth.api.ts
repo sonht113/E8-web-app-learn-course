@@ -23,15 +23,15 @@ export const sendOtpPhone = (phone: string) => {
 };
 
 export const verifyOtpEmail = (body: DataVerify) => {
-  return http.post('/otps/verify-otp-email', {
+  return http.put('/otps/verify-otp-email', {
     email: body.email,
-    otp: body.otp,
+    otpCode: body.otpCode,
   });
 };
 
 export const verifyOtpPhone = (body: DataVerify) => {
-  return http.post('/otps/verify-otp-phone', {
+  return http.put('/otps/verify-otp-phone', {
     phone: body.phone,
-    otp: body.otp,
+    otpCode: body.otpCode,
   });
 };

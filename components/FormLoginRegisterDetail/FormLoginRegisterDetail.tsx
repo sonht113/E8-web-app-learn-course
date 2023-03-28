@@ -19,10 +19,11 @@ export type FormData = {
   otp?: string;
 };
 
-type IFormLoginRegisterDetail = Pick<IFormAuthen, 'onSubmit'>;
+type IFormLoginRegisterDetail = Pick<IFormAuthen, 'loginUser' | 'signUpUser'>;
 
 const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
-  onSubmit,
+  loginUser,
+  signUpUser,
 }) => {
   const [enableSendOTP, setEnableSendOTP] = useState<boolean>(false);
   const [addressSendOTP, setAddressSendOTP] = useState<string>('');
@@ -38,8 +39,16 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
     formState: { errors },
   } = useForm<FormData>();
 
-  const { isAuthenticated, sendOTPEmail, sendOTPPhone, otp } =
-    useContext(AuthenContext);
+  const {
+    isAuthenticated,
+    sendOTPEmail,
+    sendOTPPhone,
+    otp,
+    setOtp,
+    verifyOTPEmail,
+    verifyOTPPhone,
+    isVerifySuccessfully,
+  } = useContext(AuthenContext);
 
   const defaultInput = useMemo(() => {
     return {
@@ -65,12 +74,22 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
   }, []);
 
   const submit = (data: FormData) => {
-    onSubmit(data);
+    if (router.pathname === '/register' && isVerifySuccessfully.success) {
+      signUpUser({ ...data, otpCode: JSON.stringify(otp) });
+    } else {
+      loginUser(data);
+    }
     reset();
   };
 
   const sendOTP = () => {
     isSwitch ? sendOTPPhone(addressSendOTP) : sendOTPEmail(addressSendOTP);
+  };
+
+  const verifyOTP = () => {
+    isSwitch
+      ? verifyOTPPhone({ phone: addressSendOTP, otpCode: JSON.stringify(otp) })
+      : verifyOTPEmail({ email: addressSendOTP, otpCode: JSON.stringify(otp) });
   };
 
   useEffect(() => {
@@ -86,6 +105,7 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
     } else {
       setEnableSendOTP(false);
       setErrorValidateOTP('');
+      setOtp('');
     }
   }, [watch('email'), watch('phone')]);
 
@@ -130,6 +150,9 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
             sendOTP={sendOTP}
             enableSendOTP={enableSendOTP}
             otp={otp}
+            setOtp={setOtp}
+            verifyOTP={verifyOTP}
+            isVerifySuccessfully={isVerifySuccessfully}
           />
         )}
         <Box mt={5} w={['100%']} mx={'auto'}>
