@@ -16,10 +16,15 @@ export type IFormAuthen = {
     question: string;
     link: string;
   };
-  onSubmit?: (body: DataLoginRegister) => void;
+  loginUser?: (body: DataLoginRegister) => void;
+  signUpUser?: (body: DataLoginRegister) => void;
 };
 
-const FormAuthen: React.FC<IFormAuthen> = ({ dataForm, onSubmit }) => {
+const FormAuthen: React.FC<IFormAuthen> = ({
+  dataForm,
+  loginUser,
+  signUpUser,
+}) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <Box
@@ -47,7 +52,10 @@ const FormAuthen: React.FC<IFormAuthen> = ({ dataForm, onSubmit }) => {
         </Text>
       </Center>
       {open ? (
-        <FormLoginRegisterDetail onSubmit={onSubmit} />
+        <FormLoginRegisterDetail
+          loginUser={loginUser}
+          signUpUser={signUpUser}
+        />
       ) : (
         <Flex
           flexDirection={'column'}

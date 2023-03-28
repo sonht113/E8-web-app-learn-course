@@ -48,7 +48,7 @@ const Login: React.FC = () => {
       justifyContent={'center'}
       alignItems={'center'}
     >
-      <FormAuthen dataForm={dataForm} onSubmit={loginUser} />
+      <FormAuthen dataForm={dataForm} loginUser={loginUser} />
     </Box>
   );
 };
