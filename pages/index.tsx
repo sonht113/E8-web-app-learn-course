@@ -7,11 +7,14 @@ import DefaultLayout from 'layouts/defaultLayout';
 import Banner from '@/components/Banner';
 import { BannerType } from 'types/banner.type';
 import ListCourse from '@/components/ListCourse';
-import { CourseViewHome } from 'types/course.type';
+import { Course, CourseViewHome } from 'types/course.type';
 import ListBlog from '@/components/ListBlog';
 import { BlogViewHome } from 'types/blog.type';
 import ListTeacher from '@/components/ListTeacher';
 import { TeacherViewHome } from 'types/teacher.type';
+import { useQuery } from 'react-query';
+import { getBanners } from 'api/banner.api';
+import { getCourses } from 'api/course.api';
 
 export const coursesPro: CourseViewHome[] = [
   {
@@ -200,11 +203,39 @@ const bannerItems: BannerType[] = [
 ];
 
 const Home: NextPageWithLayout = () => {
+  const queryBanners = useQuery({
+    queryKey: ['banners'],
+    queryFn: () => getBanners(),
+    keepPreviousData: true,
+  });
+
+  console.log(queryBanners);
+
+  const queryCourses = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => getCourses(),
+    keepPreviousData: true,
+  });
+
+  console.log();
+
   return (
     <Container className="home">
       <Banner items={bannerItems} />
-      <ListCourse isPro={true} title={'Khoá học Pro'} courses={coursesPro} />
-      <ListCourse isPro={false} title={'Khoá học Free'} courses={coursesFree} />
+      <ListCourse
+        isPro={true}
+        title={'Khoá học Pro'}
+        courses={queryCourses.data?.data.filter(
+          (course: Course) => !course.isFree
+        )}
+      />
+      <ListCourse
+        isPro={false}
+        title={'Khoá học Free'}
+        courses={queryCourses.data?.data.filter(
+          (course: Course) => course.isFree
+        )}
+      />
       <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
       <ListTeacher teachers={teachers} />
     </Container>
