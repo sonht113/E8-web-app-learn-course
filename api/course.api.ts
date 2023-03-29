@@ -1,5 +1,5 @@
 import http from 'utils/http';
 
-export const gerCourses = () => {
+export const getCourses = () => {
   return http.get('/courses');
 };

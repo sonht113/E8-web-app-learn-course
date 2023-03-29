@@ -71,7 +71,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         pb={5}
         overflowX={['scroll', 'scroll', 'scroll', 'hidden']}
       >
-        {courses.map((course: CourseViewHome, index: number) => (
+        {courses?.map((course: CourseViewHome, index: number) => (
           <Course
             key={index}
             id={course.id}
