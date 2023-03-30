@@ -1,10 +1,12 @@
 import { Container } from '@chakra-ui/react';
 import React, { ReactElement } from 'react';
+import { useQuery } from 'react-query';
 
 import DefaultLayout from 'layouts/defaultLayout';
 import { NextPageWithLayout } from 'types/layout.type';
 import ListCourse from '@/components/ListCourse';
-import { coursesFree, coursesPro } from 'pages';
+import { CourseType } from 'types/course.type';
+import { getCourses } from 'api/course.api';
 import IntroLearningPath from '@/components/IntroLearningPath';
 import TitlePage from '@/components/TitlePage';
 
@@ -17,6 +19,12 @@ const introLearningPath = {
 };
 
 const Course: NextPageWithLayout = () => {
+  const queryCourses = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => getCourses(),
+    keepPreviousData: true,
+  });
+
   return (
     <Container className="course">
       <TitlePage
@@ -25,8 +33,20 @@ const Course: NextPageWithLayout = () => {
           'Các khóa học được thiết kế phù hợp cho cả người mới, nhiều khóa học miễn phí, chất lượng, nội dung dễ hiểu.'
         }
       />
-      <ListCourse isPro={true} title={'Khoá học Pro'} courses={coursesPro} />
-      <ListCourse isPro={false} title={'Khoá học Free'} courses={coursesFree} />
+      <ListCourse
+        isPro={true}
+        title={'Khoá học Pro'}
+        courses={queryCourses.data?.data.filter(
+          (course: CourseType) => !course.isFree
+        )}
+      />
+      <ListCourse
+        isPro={false}
+        title={'Khoá học Free'}
+        courses={queryCourses.data?.data.filter(
+          (course: CourseType) => course.isFree
+        )}
+      />
       <IntroLearningPath data={introLearningPath} />
     </Container>
   );

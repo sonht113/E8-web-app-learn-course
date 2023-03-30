@@ -1,4 +1,4 @@
-import { Course } from './course.type';
+import { CourseType } from './course.type';
 
 type Notification = {
   content: string;
@@ -24,8 +24,8 @@ type GroupDetail = {
 };
 
 export type User = {
-  favoriteCourses: Course[];
-  myCourses: Course[];
+  favoriteCourses: CourseType[];
+  myCourses: CourseType[];
   receivedNotificationTypes?: Notification[];
   isDeleted?: boolean;
   deviceID?: string;
@@ -43,7 +43,7 @@ export type User = {
   groups?: Group[];
   id: string;
   groupDetails?: GroupDetail[];
-  myLearningCourses?: Course[];
+  myLearningCourses?: CourseType[];
   createdAt?: string;
   updatedAt?: string;
 };

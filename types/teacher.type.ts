@@ -1,4 +1,4 @@
-import { Course } from './course.type';
+import { CourseType } from './course.type';
 
 export type Teacher = {
   idUserDetail?: string;
@@ -20,9 +20,9 @@ export type Teacher = {
   dateOfBirth?: string;
   slug?: string;
   deleted?: boolean;
-  myCourses: Pick<Course, 'id'>[];
+  myCourses: Pick<CourseType, 'id'>[];
   myLearningCourses: MyLearningCourse[];
-  favoriteCourses: Pick<Course, 'id'>[];
+  favoriteCourses: Pick<CourseType, 'id'>[];
 };
 
 export type TeacherViewHome = Pick<
@@ -31,6 +31,6 @@ export type TeacherViewHome = Pick<
 >;
 
 type MyLearningCourse = {
-  idCourse: Pick<Course, 'id'>;
+  idCourse: Pick<CourseType, 'id'>;
   currentLesson: string;
 };
