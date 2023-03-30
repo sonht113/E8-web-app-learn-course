@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type Course = {
+export type CourseType = {
   id?: string;
   idCategories?: string;
   instructor?: Instructor[];
@@ -25,7 +25,7 @@ export type Course = {
 };
 
 export type CourseViewHome = Pick<
-  Course,
+  CourseType,
   'id' | 'title' | 'thumbnail' | 'isFree' | 'price' | 'totalViews'
 >;
 
