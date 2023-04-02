@@ -9,42 +9,43 @@ import {
   Text,
   Image,
 } from '@chakra-ui/react';
+import { getLearningPaths } from 'api/learningPaths.api';
 import DefaultLayout from 'layouts/defaultLayout';
 import { ReactElement } from 'react';
+import { useQuery } from 'react-query';
 import { NextPageWithLayout } from 'types/layout.type';
 
 const LearningPaths: NextPageWithLayout = () => {
+  const queryLearningPaths = useQuery({
+    queryKey: ['learning-paths'],
+    queryFn: () => getLearningPaths(),
+    keepPreviousData: true,
+  });
+
+  const learningPathsData = queryLearningPaths.data?.data[0];
+
   return (
     <Container paddingX={2} maxW="100%">
       <Box marginBottom={4}>
         <Heading as="h5" size="xl">
-          Lộ trình học
+          {learningPathsData?.title}
         </Heading>
-        <Text paddingY={4}>
-          Để bắt đầu một cách thuận lợi, bạn nên tập trung vào một lộ trình học.
-          Ví dụ: Để đi làm với trình độ tiếng anh cao bạn nên tập trung vào lộ
-          trình "TOEIC" và "IELTS".
-        </Text>
+        <Text paddingY={4}>{learningPathsData?.desc}</Text>
       </Box>
       <Grid
         templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
         gap={4}
         width={{ base: '100%', lg: '90%' }}
       >
-        <LearningPathsBox
-          title="Lộ trình học TOEIC"
-          description='Để bắt đầu một cách thuận lợi, bạn nên tập trung vào một lộ trình
-            học. Ví dụ: Để đi làm với trình độ tiếng anh cao bạn nên tập trung
-            vào lộ trình "TOEIC" và "IELTS".'
-          href="/learning-paths/toeic"
-        />
-        <LearningPathsBox
-          title="Lộ trình học IELTS"
-          description='Để bắt đầu một cách thuận lợi, bạn nên tập trung vào một lộ trình
-            học. Ví dụ: Để đi làm với trình độ tiếng anh cao bạn nên tập trung
-            vào lộ trình "TOEIC" và "IELTS".'
-          href="/learning-paths/ielts"
-        />
+        {learningPathsData?.learningPathGroups.map((item) => {
+          return (
+            <LearningPathsBox
+              title={item.title}
+              description={item.desc}
+              href="/learning-paths/toeic"
+            />
+          );
+        })}
       </Grid>
       <Grid
         templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
