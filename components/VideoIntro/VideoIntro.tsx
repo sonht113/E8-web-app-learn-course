@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-import { SiOpslevel } from 'react-icons/si';
+import { GiLevelEndFlag } from 'react-icons/gi';
 import { FaPhotoVideo } from 'react-icons/fa';
 import { MdOutlineWatchLater } from 'react-icons/md';
 import { BsBatteryFull } from 'react-icons/bs';
@@ -51,7 +51,7 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({ linkVideo }) => {
         </Center>
         <Box paddingTop={2}>
           <Flex alignItems={'center'} marginY={2}>
-            <SiOpslevel size={'14px'} />
+            <GiLevelEndFlag size={'14px'} />
             <Text paddingLeft={2}>Trình độ cơ bản</Text>
           </Flex>
           <Flex alignItems={'center'} marginY={2}>
