@@ -7,12 +7,14 @@ type IRoomChatProps = {
   setShowMessage?: (v: boolean) => void;
   isMobile?: boolean;
   onSelect?: () => void;
+  isActive?: boolean;
 };
 
 const RoomChat: React.FC<IRoomChatProps> = ({
   setShowMessage,
   isMobile,
   onSelect,
+  isActive,
 }) => {
   return (
     <Box
@@ -25,7 +27,8 @@ const RoomChat: React.FC<IRoomChatProps> = ({
       py={3}
       boxShadow={'lg'}
       cursor={'pointer'}
-      _hover={{ bg: 'gray.100' }}
+      bg={isActive && 'gray.300'}
+      _hover={!isActive && { bg: 'gray.100' }}
       onClick={() => {
         onSelect();
         if (isMobile) {
@@ -59,7 +62,7 @@ const RoomChat: React.FC<IRoomChatProps> = ({
             fontSize={['sm', 'sm', 'sm', 'md']}
             overflow={'hidden'}
             whiteSpace={'nowrap'}
-            color={'gray.400'}
+            color={isActive ? 'gray.500' : 'gray.400'}
           >
             What are you doing?
           </Text>
