@@ -31,10 +31,12 @@ export const ChatContextProvider = ({ children }) => {
   const router = useRouter();
 
   const selectRoom = (roomId: string) => {
+    setRoomActive(roomId);
     router.push(`/chat?room=${roomId}`);
   };
 
   useEffect(() => {
+    router.push(`/chat?room=1`);
     const width = window.innerWidth;
     if (width <= 480) {
       setIsMobile(true);

@@ -7,7 +7,7 @@ import RoomChat from '../RoomChat/RoomChat';
 import { ChatContext } from 'context/ChatContext';
 
 const SidebarChat = () => {
-  const { showMessage, setShowMessage, isMobile, selectRoom } =
+  const { showMessage, setShowMessage, isMobile, selectRoom, roomActive } =
     useContext(ChatContext);
 
   const arr = [1, 2, 3];
@@ -33,6 +33,7 @@ const SidebarChat = () => {
             showMessage={showMessage}
             setShowMessage={setShowMessage}
             isMobile={isMobile}
+            isActive={roomActive === item.id}
           />
         ))}
       </Box>
