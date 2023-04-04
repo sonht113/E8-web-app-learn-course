@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import Cookies from 'js-cookie';
 
 const http = axios.create({
   baseURL: process.env.NEXT_PUBLIC_DB,
@@ -11,7 +12,7 @@ const http = axios.create({
 // Add a request interceptor
 http.interceptors.request.use(
   function (config: InternalAxiosRequestConfig<any>) {
-    const token = localStorage.getItem('access_token');
+    const token = Cookies.get('access_token');
     const clonedConfig = { ...config };
     clonedConfig.headers['Content-Type'] = 'application/json';
     if (token) {

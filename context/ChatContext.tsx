@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 type IChatContext = {
@@ -8,22 +11,28 @@ type IChatContext = {
   roomActive: string;
   setShowMessage: (v: boolean) => void;
   setRoomActive: (v: string) => void;
+  selectRoom: (idRoom: string) => void;
 };
 
 export const ChatContext = React.createContext<IChatContext>({
   showMessage: false,
   roomActive: '',
   isMobile: false,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setShowMessage: (v: boolean) => {},
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setRoomActive: (v: string) => {},
+  setShowMessage: (_v: boolean) => {},
+  setRoomActive: (_v: string) => {},
+  selectRoom: (_idRoom: string) => {},
 });
 
 export const ChatContextProvider = ({ children }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [roomActive, setRoomActive] = useState('');
   const [isMobile, setIsMobile] = useState(false);
+
+  const router = useRouter();
+
+  const selectRoom = (roomId: string) => {
+    router.push(`/chat?room=${roomId}`);
+  };
 
   useEffect(() => {
     const width = window.innerWidth;
@@ -42,6 +51,7 @@ export const ChatContextProvider = ({ children }) => {
         roomActive,
         setRoomActive,
         isMobile,
+        selectRoom,
       }}
     >
       {children}

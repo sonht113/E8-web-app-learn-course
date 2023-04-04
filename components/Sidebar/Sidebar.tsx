@@ -12,6 +12,7 @@ import {
 import SubMenu from '../SubMenu';
 import Link from 'next/link';
 import { ActiveMenuContext } from 'context/ActiveMenuContext';
+import { AuthenContext } from 'context/AuthenContext';
 
 export const sidebarItems = [
   {
@@ -68,6 +69,7 @@ const Sidebar = () => {
   const [openSubMenu, setOpenSubMenu] = useState<boolean>(false);
 
   const { activeMenu } = useContext(ActiveMenuContext);
+  const { isAuthenticated } = useContext(AuthenContext);
 
   return (
     <Box
@@ -108,16 +110,32 @@ const Sidebar = () => {
 
         <Container>
           {sidebarItems.map((item) => (
-            <Link href={item.link} key={item.id}>
-              <SidebarItem
-                icon={item.icon}
-                name={item.name}
-                itemActive={
-                  activeMenu === item.link ||
-                  activeMenu.includes(`${item.link}/`)
-                }
-              />
-            </Link>
+            <>
+              {item.id !== 10 && (
+                <Link href={item.link} key={item.id}>
+                  <SidebarItem
+                    icon={item.icon}
+                    name={item.name}
+                    itemActive={
+                      activeMenu === item.link ||
+                      activeMenu.includes(`${item.link}/`)
+                    }
+                  />
+                </Link>
+              )}
+              {item.id === 10 && isAuthenticated && (
+                <Link href={item.link} key={item.id}>
+                  <SidebarItem
+                    icon={item.icon}
+                    name={item.name}
+                    itemActive={
+                      activeMenu === item.link ||
+                      activeMenu.includes(`${item.link}/`)
+                    }
+                  />
+                </Link>
+              )}
+            </>
           ))}
         </Container>
       </Flex>

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 
 import { DataLoginRegister, DataVerify } from 'types/auth.type';
@@ -16,15 +17,16 @@ import {
 } from 'api/auth.api';
 import { User } from 'types/user.type';
 import { useRouter } from 'next/router';
+import { getMe } from 'api/user.api';
 
 type IAuthenContext = {
-  user: User;
+  user: User | null;
   setUser: (_v: any) => void;
   loginUser: (body: DataLoginRegister) => void;
   error: string;
+  loading: boolean;
   setError?: (_v: string) => void;
   isAuthenticated: boolean;
-  setIsAuthenticated?: (_v: boolean) => void;
   signUpUser: (body: DataLoginRegister) => void;
   sendOTPEmail: (email: string) => void;
   sendOTPPhone: (phone: string) => void;
@@ -36,24 +38,17 @@ type IAuthenContext = {
 };
 
 export const AuthenContext = React.createContext<IAuthenContext>({
-  user: {
-    fullName: '',
-    gender: '',
-    role: '',
-    favoriteCourses: [],
-    myCourses: [],
-    id: '',
-  },
+  user: null,
   setUser: (_v: any) => {},
   error: '',
   setError: (_v: string) => {},
   isAuthenticated: false,
-  setIsAuthenticated: (_v: boolean) => {},
   loginUser: (body: DataLoginRegister) => {},
   signUpUser: (body: DataLoginRegister) => {},
   sendOTPEmail: (email: string) => {},
   sendOTPPhone: (phone: string) => {},
   otp: '',
+  loading: true,
   setOtp: (otp: string) => {},
   verifyOTPEmail: (body: DataVerify) => {},
   verifyOTPPhone: (body: DataVerify) => {},
@@ -61,16 +56,9 @@ export const AuthenContext = React.createContext<IAuthenContext>({
 });
 
 export const AuthenContextProvider = ({ children }) => {
-  const [user, setUser] = useState<User>({
-    fullName: '',
-    gender: '',
-    role: '',
-    favoriteCourses: [],
-    myCourses: [],
-    id: '',
-  });
+  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>('');
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [otp, setOtp] = useState<string>('');
   const [isVerifySuccessfully, setIsVerifySuccessfully] = useState<{
     success: boolean;
@@ -106,15 +94,13 @@ export const AuthenContextProvider = ({ children }) => {
   const loginUser = (body: DataLoginRegister) => {
     loginMutate.mutate(body, {
       onSuccess: (res) => {
-        localStorage.setItem('access_token', res.data.accessToken);
+        Cookies.set('access_token', res.data.accessToken);
         Cookies.set('refresh_token', res.data.refreshToken);
         localStorage.setItem('user_data', JSON.stringify(res.data.user));
         setUser(res.data.user);
-        setIsAuthenticated(true);
       },
       onError(error: any) {
         setError(error.response.data.errors[0].detail);
-        setIsAuthenticated(false);
       },
     });
   };
@@ -186,34 +172,26 @@ export const AuthenContextProvider = ({ children }) => {
   }, [otp]);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token');
-    if (accessToken) {
-      setIsAuthenticated(true);
-      const user = JSON.parse(localStorage.getItem('user_data'));
-      setUser(user);
-    } else {
-      localStorage.removeItem('user_data');
-      setIsAuthenticated(false);
-      setUser({
-        fullName: '',
-        gender: '',
-        role: '',
-        favoriteCourses: [],
-        myCourses: [],
-        id: '',
-      });
+    async function loadUserFromCookies() {
+      const accessToken = Cookies.get('access_token');
+      if (accessToken) {
+        const res = await getMe('groups', 'groups.name');
+        if (res) setUser(res?.data);
+      }
+      setLoading(false);
     }
+    loadUserFromCookies();
   }, []);
 
   return (
     <AuthenContext.Provider
       value={{
         user,
+        isAuthenticated: !!user,
+        loading,
         setUser,
         loginUser,
         error,
-        isAuthenticated,
-        setIsAuthenticated,
         signUpUser,
         sendOTPEmail,
         sendOTPPhone,
