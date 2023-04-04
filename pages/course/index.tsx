@@ -1,6 +1,6 @@
 import { Container } from '@chakra-ui/react';
 import React, { ReactElement } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import DefaultLayout from 'layouts/defaultLayout';
 import { NextPageWithLayout } from 'types/layout.type';

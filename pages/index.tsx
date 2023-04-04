@@ -8,7 +8,7 @@ import { CourseType } from 'types/course.type';
 import ListCourse from '@/components/ListCourse';
 import ListBlog from '@/components/ListBlog';
 import ListTeacher from '@/components/ListTeacher';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getBanners } from 'api/banner.api';
 import { getCourses } from 'api/course.api';
 

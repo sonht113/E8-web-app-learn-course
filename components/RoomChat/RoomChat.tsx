@@ -6,9 +6,14 @@ type IRoomChatProps = {
   showMessage?: boolean;
   setShowMessage?: (v: boolean) => void;
   isMobile?: boolean;
+  onSelect?: () => void;
 };
 
-const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage, isMobile }) => {
+const RoomChat: React.FC<IRoomChatProps> = ({
+  setShowMessage,
+  isMobile,
+  onSelect,
+}) => {
   return (
     <Box
       position={'relative'}
@@ -22,6 +27,7 @@ const RoomChat: React.FC<IRoomChatProps> = ({ setShowMessage, isMobile }) => {
       cursor={'pointer'}
       _hover={{ bg: 'gray.100' }}
       onClick={() => {
+        onSelect();
         if (isMobile) {
           setShowMessage(true);
         } else {

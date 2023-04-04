@@ -55,7 +55,7 @@ const navbarItems = [
 const Navbar: React.FC<INavbarProps> = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
   const { onOpen } = useContext(NavbarMobileContext);
-  const { user, isAuthenticated } = useContext(AuthenContext);
+  const { isAuthenticated } = useContext(AuthenContext);
 
   return (
     <Grid

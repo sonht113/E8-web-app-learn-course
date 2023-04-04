@@ -13,33 +13,35 @@ const Chat: NextPageWithLayout = () => {
   const { showMessage, setShowMessage, isMobile } = useContext(ChatContext);
 
   return (
-    <Box
-      position={'relative'}
-      className={`chat ${showMessage && 'show'}`}
-      display={['none', 'block']}
-    >
-      <HeaderChat
-        showMessage={showMessage}
-        isMobile={isMobile}
-        setShowMessage={setShowMessage}
-      />
+    <React.Fragment>
       <Box
-        display={'flex'}
-        flexDirection={'column'}
-        gap={7}
-        className="message-chat-area"
-        p={2}
-        w={'full'}
-        h={'calc(100% - 61px - 64px)'}
-        overflowY={'scroll'}
-        mt={'61px'}
+        position={'relative'}
+        className={`chat ${showMessage && 'show'}`}
+        display={['none', 'block']}
       >
-        {messages.map((_item, index) => (
-          <MessageChat key={index} />
-        ))}
+        <HeaderChat
+          showMessage={showMessage}
+          isMobile={isMobile}
+          setShowMessage={setShowMessage}
+        />
+        <Box
+          display={'flex'}
+          flexDirection={'column'}
+          gap={7}
+          className="message-chat-area"
+          p={2}
+          w={'full'}
+          h={'calc(100vh - 61px - 64px)'}
+          overflowY={'scroll'}
+          mt={'61px'}
+        >
+          {messages.map((_item, index) => (
+            <MessageChat key={index} />
+          ))}
+        </Box>
+        <InputChat isMobile={isMobile} />
       </Box>
-      <InputChat isMobile={isMobile} />
-    </Box>
+    </React.Fragment>
   );
 };
 

@@ -2,24 +2,24 @@ import { AxiosResponse } from 'axios';
 import { Auth, DataLoginRegister, DataVerify } from 'types/auth.type';
 import http from 'utils/http';
 
-export const login = (
+export const login = async (
   body: DataLoginRegister
 ): Promise<AxiosResponse<Auth, any>> => {
-  return http.post<Auth>('/auth/signin', body);
+  return await http.post<Auth>('/auth/signin', body);
 };
 
-export const signUp = (
+export const signUp = async (
   body: DataLoginRegister
 ): Promise<AxiosResponse<any, any>> => {
-  return http.post('/auth/signup', body);
+  return await http.post('/auth/signup', body);
 };
 
-export const sendOtpEmail = (email: string) => {
-  return http.post('/otps/send-otp-email', { email: email });
+export const sendOtpEmail = async (email: string) => {
+  return await http.post('/otps/send-otp-email', { email: email });
 };
 
-export const sendOtpPhone = (phone: string) => {
-  return http.post('/otps/send-otp-phone', { phone: phone });
+export const sendOtpPhone = async (phone: string) => {
+  return await http.post('/otps/send-otp-phone', { phone: phone });
 };
 
 export const verifyOtpEmail = (body: DataVerify) => {

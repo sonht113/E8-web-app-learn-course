@@ -12,7 +12,7 @@ import {
 import { getLearningPaths } from 'api/learningPaths.api';
 import DefaultLayout from 'layouts/defaultLayout';
 import { ReactElement } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { NextPageWithLayout } from 'types/layout.type';
 
 const LearningPaths: NextPageWithLayout = () => {

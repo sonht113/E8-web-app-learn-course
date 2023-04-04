@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
+import { useRouter } from 'next/router';
 import {
   useDisclosure,
   Avatar,
@@ -22,6 +23,7 @@ import {
 import { ArrowBackIcon, DragHandleIcon } from '@chakra-ui/icons';
 import { AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
 import { BsCameraVideo } from 'react-icons/bs';
+import Link from 'next/link';
 
 type IHeaderChatProps = {
   showMessage?: boolean;
@@ -36,6 +38,9 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
+
+  const router = useRouter();
+
   return (
     <Flex
       position={isMobile ? 'fixed' : 'absolute'}
@@ -84,9 +89,11 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
           </Box>
         </Tooltip>
         <Tooltip label={'Cuộc gọi video'} hasArrow placement="bottom-start">
-          <Box>
-            <BsCameraVideo fontSize={'30px'} cursor={'pointer'} />
-          </Box>
+          <Link href={`/video-call/${router.query.room}`}>
+            <Box>
+              <BsCameraVideo fontSize={'30px'} cursor={'pointer'} />
+            </Box>
+          </Link>
         </Tooltip>
         <Tooltip label={'Tuỳ chọn'} hasArrow placement="bottom-start">
           <Box>

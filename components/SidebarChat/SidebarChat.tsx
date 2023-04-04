@@ -7,11 +7,10 @@ import RoomChat from '../RoomChat/RoomChat';
 import { ChatContext } from 'context/ChatContext';
 
 const SidebarChat = () => {
-  const { showMessage, setShowMessage, isMobile } = useContext(ChatContext);
+  const { showMessage, setShowMessage, isMobile, selectRoom } =
+    useContext(ChatContext);
 
   const arr = [1, 2, 3];
-
-  console.log(isMobile);
 
   return (
     <Box
@@ -27,8 +26,10 @@ const SidebarChat = () => {
         h={'calc(100vh - 126px)'}
         overflowY={arr.length > 5 ? 'scroll' : 'hidden'}
       >
-        {[1, 2, 6, 7].map(() => (
+        {[{ id: 1 }, { id: 2 }, { id: 3 }].map((item: any, index: number) => (
           <RoomChat
+            key={index}
+            onSelect={() => selectRoom(item.id)}
             showMessage={showMessage}
             setShowMessage={setShowMessage}
             isMobile={isMobile}
