@@ -58,7 +58,7 @@ const Course: React.FC<ICourseProps> = ({
                 title="Xem khoá học"
                 color="cyan"
                 radius={'full'}
-                size={'sm'}
+                size={'xs'}
                 cursor={'pointer'}
               />
             </Box>

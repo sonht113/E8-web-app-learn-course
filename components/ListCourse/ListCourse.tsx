@@ -11,6 +11,7 @@ type IListCourseProps = {
 };
 
 const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
+  console.log(courses);
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box
@@ -74,7 +75,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         {courses?.map((course: CourseViewHome, index: number) => (
           <Course
             key={index}
-            id={course.id}
+            id={course._id}
             title={course.title}
             price={course.price}
             isFree={course.isFree}

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type CourseType = {
-  id?: string;
+  _id?: string;
   idCategories?: string;
   instructor?: Instructor[];
   title?: string;
@@ -26,7 +26,7 @@ export type CourseType = {
 
 export type CourseViewHome = Pick<
   CourseType,
-  'id' | 'title' | 'thumbnail' | 'isFree' | 'price' | 'totalViews'
+  '_id' | 'title' | 'thumbnail' | 'isFree' | 'price' | 'totalViews'
 >;
 
 type Instructor = {

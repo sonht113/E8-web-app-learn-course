@@ -20,9 +20,9 @@ export type Teacher = {
   dateOfBirth?: string;
   slug?: string;
   deleted?: boolean;
-  myCourses: Pick<CourseType, 'id'>[];
+  myCourses: Pick<CourseType, '_id'>[];
   myLearningCourses: MyLearningCourse[];
-  favoriteCourses: Pick<CourseType, 'id'>[];
+  favoriteCourses: Pick<CourseType, '_id'>[];
 };
 
 export type TeacherViewHome = Pick<
@@ -31,6 +31,6 @@ export type TeacherViewHome = Pick<
 >;
 
 type MyLearningCourse = {
-  idCourse: Pick<CourseType, 'id'>;
+  idCourse: Pick<CourseType, '_id'>;
   currentLesson: string;
 };
