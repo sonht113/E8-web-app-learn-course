@@ -24,6 +24,9 @@ const MessageChat: React.FC<IMessageChatProps> = ({
             rounded={'lg'}
             maxW={['200px', '300px', '300px', '400px']}
           >
+            <Text fontSize={'sm'} fontWeight={'medium'} color={'gray'}>
+              User name
+            </Text>
             <Text whiteSpace={'normal'}>
               What are you doing? sdf ds fdsakfdjsk fdksl jfkldsjf klsdjalkf
               jdlksjf ldsj f
@@ -39,14 +42,19 @@ const MessageChat: React.FC<IMessageChatProps> = ({
       </Flex>
       <Flex gap={3} justifyContent={'flex-start'} flexDirection={'row-reverse'}>
         <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
-        <Box
-          bg={'gray.300'}
-          px={5}
-          py={2}
-          rounded={'lg'}
-          maxW={['200px', '300px', '300px', '400px']}
-        >
-          <Text whiteSpace={'normal'}>What are you doing?</Text>
+        <Box>
+          <Box
+            bg={'gray.300'}
+            px={5}
+            py={2}
+            rounded={'lg'}
+            maxW={['200px', '300px', '300px', '400px']}
+          >
+            <Text whiteSpace={'normal'}>What are you doing?</Text>
+          </Box>
+          <Text fontSize={'sm'} color={'gray.400'}>
+            Đã xem...
+          </Text>
         </Box>
       </Flex>
     </React.Fragment>

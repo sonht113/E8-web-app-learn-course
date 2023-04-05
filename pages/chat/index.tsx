@@ -58,6 +58,7 @@ const Chat: NextPageWithLayout = () => {
           gap={7}
           className="message-chat-area"
           p={2}
+          pb={'80px'}
           w={'full'}
           h={'calc(100vh - 61px - 64px)'}
           overflowY={'scroll'}
