@@ -36,7 +36,6 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    router.push(`/chat?room=1`);
     const width = window.innerWidth;
     if (width <= 480) {
       setIsMobile(true);

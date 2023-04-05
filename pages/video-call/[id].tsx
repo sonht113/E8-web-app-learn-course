@@ -2,10 +2,12 @@ import React, { useContext, ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { Box } from '@chakra-ui/react';
 import { AuthenContext } from 'context/AuthenContext';
+import { ChatContext, ChatContextProvider } from 'context/ChatContext';
 
 const VideoCall = () => {
   const { user } = useContext(AuthenContext);
   const router = useRouter();
+  const { isMobile } = useContext(ChatContext);
 
   const roomId = String(router.query.id);
 
@@ -52,11 +54,17 @@ const VideoCall = () => {
     });
   };
 
-  return <Box w={'full'} h={'100vh'} ref={myMeeting}></Box>;
+  return (
+    <Box w={'full'} h={'100vh'} pt={isMobile && '250px'} ref={myMeeting}></Box>
+  );
 };
 
 VideoCall.getLayout = function getLayout(page: ReactElement) {
-  return <React.Fragment>{page}</React.Fragment>;
+  return (
+    <React.Fragment>
+      <ChatContextProvider>{page}</ChatContextProvider>
+    </React.Fragment>
+  );
 };
 
 export default VideoCall;
