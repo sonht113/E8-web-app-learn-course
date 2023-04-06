@@ -44,7 +44,10 @@ const IntroLearningPath: React.FC<IIntroLearningPath> = ({ data }) => {
           </Center>
         </Link>
       </Flex>
-      <Box w={'40%'} display={['none', 'none', 'block']}>
+      <Box
+        w={['80%', '80%', '80%', '80%', '50%']}
+        display={['none', 'none', 'block']}
+      >
         <Image src={data.thumbnail} objectFit={'cover'} />
       </Box>
     </Box>

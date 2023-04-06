@@ -5,10 +5,16 @@ import { TeacherViewHome } from 'types/teacher.type';
 import Teacher from '../Teacher';
 
 type IListTeacherProps = {
+  title?: string;
+  isSeemore?: boolean;
   teachers: TeacherViewHome[];
 };
 
-const ListTeacher: React.FC<IListTeacherProps> = ({ teachers }) => {
+const ListTeacher: React.FC<IListTeacherProps> = ({
+  teachers,
+  title,
+  isSeemore,
+}) => {
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box
@@ -20,7 +26,7 @@ const ListTeacher: React.FC<IListTeacherProps> = ({ teachers }) => {
         <Flex gap={1} alignItems={'center'}>
           <Box>
             <Text fontSize={'xl'} fontWeight={'bold'}>
-              Giảng viên nổi bật
+              {title}
             </Text>
           </Box>
           <Box
@@ -36,23 +42,25 @@ const ListTeacher: React.FC<IListTeacherProps> = ({ teachers }) => {
             <ArrowForwardIcon fontSize={'sm'} />
           </Box>
         </Flex>
-        <Flex
-          className="linkSeeMoreBlog"
-          alignItems={'center'}
-          cursor={'pointer'}
-        >
-          <Box>
-            <Text
-              className="textSeeMoreBlog"
-              fontSize={'sm'}
-              fontWeight={'bold'}
-              color={'#09b166'}
-            >
-              Xem chi tiết
-            </Text>
-          </Box>
-          <ChevronRightIcon className="iconSeeMoreBlog" color={'#09b166'} />
-        </Flex>
+        {isSeemore && (
+          <Flex
+            className="linkSeeMoreBlog"
+            alignItems={'center'}
+            cursor={'pointer'}
+          >
+            <Box>
+              <Text
+                className="textSeeMoreBlog"
+                fontSize={'sm'}
+                fontWeight={'bold'}
+                color={'#09b166'}
+              >
+                Xem chi tiết
+              </Text>
+            </Box>
+            <ChevronRightIcon className="iconSeeMoreBlog" color={'#09b166'} />
+          </Flex>
+        )}
       </Box>
 
       <Grid
