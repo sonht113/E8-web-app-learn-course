@@ -1,5 +1,6 @@
 .home,
 .course,
+.teacher,
 .blog {
   width: 90% !important;
   max-width: 90% !important;
@@ -12,13 +13,14 @@
 @media screen and (min-width: 992px) {
   .home,
   .course,
-  .blog,
+  .teacher .blog,
   .chat {
     height: calc(100vh - 64px);
     overflow-y: scroll;
   }
   .home::-webkit-scrollbar,
   .course::-webkit-scrollbar,
+  .teacher::-webkit-scrollbar,
   .blog::-webkit-scrollbar,
   .chat::-webkit-scrollbar {
     display: none;
@@ -28,6 +30,7 @@
 @media screen and (max-width: 991px) {
   .home,
   .course,
+  .teacher,
   .blog {
     max-width: 100% !important;
   }
