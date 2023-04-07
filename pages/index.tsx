@@ -49,7 +49,7 @@ const Home: NextPageWithLayout = () => {
         )}
       />
       <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
-      <ListTeacher teachers={teachers} />
+      <ListTeacher title={'Giảng viên nổi bật'} teachers={teachers} />
     </Container>
   );
 };
