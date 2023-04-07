@@ -1,3 +1,12 @@
+@media (min-width: 639px) and (max-width: 991px) {
+  .Course {
+    display: flex;
+    gap: 20px;
+  }
+  .contentCourse {
+    width: 90%;
+  }
+}
 .detailCourse {
   display: none;
 }
