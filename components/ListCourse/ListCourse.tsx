@@ -78,7 +78,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
             id={course._id}
             title={course.title}
             price={course.price}
-            isFree={course.isFree}
+            isFree={course.isPrivate}
             thumbnail={course.thumbnail}
             totalViews={course.totalViews}
           />

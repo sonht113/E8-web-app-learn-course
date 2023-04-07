@@ -26,7 +26,7 @@ export type CourseType = {
 
 export type CourseViewHome = Pick<
   CourseType,
-  '_id' | 'title' | 'thumbnail' | 'isFree' | 'price' | 'totalViews'
+  '_id' | 'title' | 'thumbnail' | 'isPrivate' | 'price' | 'totalViews'
 >;
 
 type Instructor = {

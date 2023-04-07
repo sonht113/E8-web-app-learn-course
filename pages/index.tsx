@@ -29,6 +29,8 @@ const Home: NextPageWithLayout = () => {
     keepPreviousData: true,
   });
 
+  console.log('course', queryCourses);
+
   return (
     <Container className="home">
       <Banner items={bannerItems} />
@@ -36,14 +38,14 @@ const Home: NextPageWithLayout = () => {
         isPro={true}
         title={'Khoá học Pro'}
         courses={queryCourses.data?.data.filter(
-          (course: CourseType) => !course.isFree
+          (course: CourseType) => course.isPrivate
         )}
       />
       <ListCourse
         isPro={false}
         title={'Khoá học Free'}
         courses={queryCourses.data?.data.filter(
-          (course: CourseType) => course.isFree
+          (course: CourseType) => !course.isPrivate
         )}
       />
       <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
