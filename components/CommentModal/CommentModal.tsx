@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import {
   Modal,
   ModalBody,
@@ -16,6 +14,11 @@ import {
   Button,
 } from '@chakra-ui/react';
 import classNames from 'classnames';
+import dynamic from 'next/dynamic';
+
+const QuillEditor = dynamic(() => import('./ReactQuill'), {
+  ssr: false,
+});
 
 type ICommentModalProps = {
   onClose: () => void;
@@ -23,44 +26,8 @@ type ICommentModalProps = {
 };
 const CommentModal: React.FC<ICommentModalProps> = ({ onClose, isOpen }) => {
   const [isShowing, setIsShowing] = useState(false);
-  const [content, setContent] = useState('');
 
   const toggleShowing = () => setIsShowing(!isShowing);
-
-  const modules = {
-    toolbar: {
-      toolbar: true,
-      container: [
-        [{ header: [1, 2, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ color: [] }, { background: [] }],
-        [{ font: [] }],
-        [{ align: [] }],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean'],
-      ],
-    },
-  };
-
-  const formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'color',
-    'background',
-    'font',
-    'align',
-    'list',
-    'bullet',
-    'blockquote',
-    'code-block',
-    'link',
-    'image',
-  ];
 
   return (
     <Modal
@@ -93,11 +60,11 @@ const CommentModal: React.FC<ICommentModalProps> = ({ onClose, isOpen }) => {
           <Flex gap={3} alignItems="start" my={20}>
             <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
             <Box
-              borderBottom={classNames({ '1px': isShowing })}
-              borderColor={classNames({ 'gray.300': isShowing })}
+              borderBottom={classNames({ '1px': !isShowing })}
+              borderColor={classNames({ 'gray.300': !isShowing })}
               width="100%"
             >
-              {isShowing ? (
+              {!isShowing ? (
                 <Input
                   placeholder="Bạn có thắc mắc gì trong bài học này?"
                   size="md"
@@ -107,12 +74,7 @@ const CommentModal: React.FC<ICommentModalProps> = ({ onClose, isOpen }) => {
               ) : (
                 <Box>
                   <div className="editor-container">
-                    <ReactQuill
-                      value={content}
-                      onChange={setContent}
-                      modules={modules}
-                      formats={formats}
-                    />
+                    <QuillEditor />
                   </div>
                   <Flex mt={2} float="right">
                     <Button
