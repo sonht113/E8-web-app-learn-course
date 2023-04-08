@@ -13,13 +13,19 @@ import { GiLevelEndFlag } from 'react-icons/gi';
 import { FaPhotoVideo } from 'react-icons/fa';
 import { MdOutlineWatchLater } from 'react-icons/md';
 import { BsBatteryFull } from 'react-icons/bs';
+import { ChapterType } from 'types/chapter.type';
+import { CourseType } from 'types/course.type';
 
 type IVideoIntroProps = {
-  linkVideo: string;
+  chapters: ChapterType[];
+  courseData: CourseType;
 };
 
-const VideoIntro: React.FC<IVideoIntroProps> = ({ linkVideo }) => {
-  console.log(`Video`, linkVideo);
+const VideoIntro: React.FC<IVideoIntroProps> = ({ chapters, courseData }) => {
+  const chapter = chapters?.map((chapter) => chapter.lectures);
+  const lecture = chapter?.map((lecture) => lecture?.[0]);
+  const urlVideo = lecture?.find((lecture) => lecture?.[0])?.url;
+
   return (
     <Box>
       <Box
@@ -32,7 +38,7 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({ linkVideo }) => {
         <AspectRatio width="100%" height="100%" ratio={1} borderRadius={8}>
           <iframe
             title="naruto"
-            src={linkVideo}
+            src={urlVideo}
             allowFullScreen
             style={{ borderRadius: 'inherit' }}
           />
@@ -56,11 +62,13 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({ linkVideo }) => {
           </Flex>
           <Flex alignItems={'center'} marginY={2}>
             <FaPhotoVideo size={'14px'} />
-            <Text paddingLeft={2}>Tổng số 56 bài học</Text>
+            <Text paddingLeft={2}>
+              Tổng số {courseData?.totalLectures} bài học
+            </Text>
           </Flex>
           <Flex alignItems={'center'} marginY={2}>
             <MdOutlineWatchLater size={'14px'} />
-            <Text paddingLeft={2}>Thời lượng 10 giờ 19 phút</Text>
+            <Text paddingLeft={2}>Thời lượng {courseData?.totalTime} giờ</Text>
           </Flex>
           <Flex alignItems={'center'} marginY={2}>
             <BsBatteryFull size={'14px'} />

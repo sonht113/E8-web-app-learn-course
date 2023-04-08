@@ -1,16 +1,23 @@
+/* eslint-disable no-unused-vars */
+
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
 import React from 'react';
+import { ChapterType, LectureType } from 'types/chapter.type';
 import CourseItem from '../CourseItem';
 
 type IListLearningCourseProps = {
   isOpen?: boolean;
   onClose?: () => void;
+  chapters: ChapterType[];
+  setLecture: (lecture: LectureType) => void;
 };
 
 const ListLearningCourse: React.FC<IListLearningCourseProps> = ({
   isOpen,
   onClose,
+  chapters,
+  setLecture,
 }) => {
   return (
     <Box
@@ -30,13 +37,9 @@ const ListLearningCourse: React.FC<IListLearningCourseProps> = ({
         </Button>
       </Flex>
       <Box height="100%" overflowY="scroll" className="scroll-custom">
-        <CourseItem isOpen={isOpen} />
-        <CourseItem isOpen={isOpen} />
-        <CourseItem isOpen={isOpen} />
-        <CourseItem isOpen={isOpen} />
-        <CourseItem isOpen={isOpen} />
-        <CourseItem isOpen={isOpen} />
-        <CourseItem isOpen={isOpen} />
+        {chapters?.map((chapter) => (
+          <CourseItem key={chapter?._id} {...{ isOpen, chapter, setLecture }} />
+        ))}
       </Box>
     </Box>
   );

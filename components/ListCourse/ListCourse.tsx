@@ -11,7 +11,6 @@ type IListCourseProps = {
 };
 
 const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
-  console.log(courses);
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box

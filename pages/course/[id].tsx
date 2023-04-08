@@ -1,21 +1,32 @@
-import {
-  Button,
-  Container,
-  Grid,
-  GridItem,
-  useDisclosure,
-  Text,
-} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { Container, Grid, GridItem } from '@chakra-ui/react';
 import DefaultLayout from 'layouts/defaultLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from 'types/layout.type';
 import CourseInfo from '@/components/CourseInfo';
 import VideoIntro from '@/components/VideoIntro';
-import { BsFillChatDotsFill } from 'react-icons/bs';
-import CommentModal from '@/components/CommentModal';
+import { useQuery } from '@tanstack/react-query';
+import { getCourse } from 'api/course.api';
+import { getChapters } from 'api/chapter.api';
 
 const CourseDetail: NextPageWithLayout = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+  const { id } = router.query;
+
+  const queryCourse = useQuery({
+    queryKey: ['course'],
+    queryFn: () => getCourse(id),
+    keepPreviousData: true,
+  });
+
+  const queryChapters = useQuery({
+    queryKey: ['chapters'],
+    queryFn: () => getChapters(id),
+    keepPreviousData: true,
+  });
+
+  const courseData = queryCourse.data?.data;
+  const chapters = queryChapters?.data?.data.results;
   return (
     <>
       <Container maxW="100%" paddingY={4}>
@@ -27,26 +38,17 @@ const CourseDetail: NextPageWithLayout = () => {
           paddingX={10}
         >
           <GridItem colSpan={{ base: 1, md: 2 }}>
-            <CourseInfo title={'Lập trình C++ cơ bản, nâng cao'} />
+            <CourseInfo
+              title={courseData?.title}
+              description={courseData?.desc}
+              chapters={chapters}
+              courseData={courseData}
+            />
           </GridItem>
           <GridItem colSpan={{ base: 1, md: 1 }}>
-            <VideoIntro linkVideo="https://www.youtube.com/embed/QhBnZ6NPOY0" />
+            <VideoIntro chapters={chapters} courseData={courseData} />
           </GridItem>
         </Grid>
-
-        <Button
-          onClick={onOpen}
-          rounded="3xl"
-          p="6"
-          bg="white"
-          boxShadow="dark-lg"
-          color="green"
-        >
-          <BsFillChatDotsFill fontSize={32} />{' '}
-          <Text marginLeft={2}>Hỏi đáp</Text>
-        </Button>
-
-        <CommentModal isOpen={isOpen} onClose={onClose} />
       </Container>
     </>
   );

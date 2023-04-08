@@ -2,13 +2,19 @@ import { AddIcon } from '@chakra-ui/icons';
 import { Box, Flex, Text, Spacer } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { AiFillPlayCircle, AiOutlineMinus } from 'react-icons/ai';
+import { ChapterType } from 'types/chapter.type';
 
-const CourseContent = () => {
+type ICourseContentProps = {
+  chapter: ChapterType;
+};
+
+const CourseContent: React.FC<ICourseContentProps> = ({ chapter }) => {
   const [isShowing, setIsShowing] = useState(false);
 
   const handleShow = () => {
     setIsShowing(!isShowing);
   };
+
   return (
     <Box paddingY={2}>
       <Flex
@@ -26,41 +32,29 @@ const CourseContent = () => {
             <AiOutlineMinus size={'14px'} color={'#f05123'} />
           )}
 
-          <Text paddingLeft={3}>1. Giới thiệu</Text>
+          <Text paddingLeft={3}>
+            {chapter?.position}. {chapter?.title}
+          </Text>
         </Flex>
         <Spacer />
-        <Box>3 bài học</Box>
+        <Box>{chapter?.lectures.length} bài học</Box>
       </Flex>
-      {/* Course content detail */}
-      {isShowing ? (
+
+      {isShowing && (
         <Box>
-          <Flex paddingX={30} paddingY={3} borderRadius={7}>
-            <Flex alignItems={'center'}>
-              <AiFillPlayCircle size={'14px'} color={'#f05123'} />
-              <Text paddingLeft={3}>1. Giới thiệu khóa học</Text>
+          {chapter?.lectures.map((lecture) => (
+            <Flex paddingX={30} paddingY={3} borderRadius={7}>
+              <Flex alignItems={'center'}>
+                <AiFillPlayCircle size={'14px'} color={'#f05123'} />
+                <Text paddingLeft={3}>
+                  {lecture.position}. {lecture.title}
+                </Text>
+              </Flex>
+              <Spacer />
+              <Box>{lecture.totalTimes}</Box>
             </Flex>
-            <Spacer />
-            <Box>02:03</Box>
-          </Flex>
-          <Flex paddingX={30} paddingY={3} borderRadius={7}>
-            <Flex alignItems={'center'}>
-              <AiFillPlayCircle size={'14px'} color={'#f05123'} />
-              <Text paddingLeft={3}>1. Giới thiệu khóa học</Text>
-            </Flex>
-            <Spacer />
-            <Box>02:03</Box>
-          </Flex>
-          <Flex paddingX={30} paddingY={3} borderRadius={7}>
-            <Flex alignItems={'center'}>
-              <AiFillPlayCircle size={'14px'} color={'#f05123'} />
-              <Text paddingLeft={3}>1. Giới thiệu khóa học</Text>
-            </Flex>
-            <Spacer />
-            <Box>02:03</Box>
-          </Flex>
+          ))}
         </Box>
-      ) : (
-        ''
       )}
     </Box>
   );

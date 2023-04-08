@@ -1,11 +1,16 @@
 import { AspectRatio, Box, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
+import { LectureType } from 'types/chapter.type';
 
 type ILearningVideoProps = {
   linkVideo: string;
+  lecture: LectureType;
 };
 
-const LearningVideo: React.FC<ILearningVideoProps> = ({ linkVideo }) => {
+const LearningVideo: React.FC<ILearningVideoProps> = ({
+  linkVideo,
+  lecture,
+}) => {
   return (
     <Box overflowY="scroll" height="100vh" className="scroll-custom">
       <Box
@@ -20,7 +25,7 @@ const LearningVideo: React.FC<ILearningVideoProps> = ({ linkVideo }) => {
       <Box paddingX={{ base: 5, md: 20 }}>
         <Box marginY={{ base: '24px', md: '48px' }}>
           <Heading as="h2" fontSize="28px" fontWeight={600} marginBottom="8px">
-            CSS form đăng nhập
+            {lecture.title}
           </Heading>
           <Text fontSize="14px">Cập nhật tháng 2 năm 2022</Text>
         </Box>
