@@ -19,6 +19,10 @@ import { User } from 'types/user.type';
 import { useRouter } from 'next/router';
 import { getMe } from 'api/user.api';
 
+declare global {
+  type unknow = any;
+}
+
 type IAuthenContext = {
   user: User | null;
   setUser: (_v: any) => void;
@@ -28,6 +32,7 @@ type IAuthenContext = {
   setError?: (_v: string) => void;
   isAuthenticated: boolean;
   signUpUser: (body: DataLoginRegister) => void;
+  signOutUser: () => void;
   sendOTPEmail: (email: string) => void;
   sendOTPPhone: (phone: string) => void;
   otp: string;
@@ -45,6 +50,7 @@ export const AuthenContext = React.createContext<IAuthenContext>({
   isAuthenticated: false,
   loginUser: (body: DataLoginRegister) => {},
   signUpUser: (body: DataLoginRegister) => {},
+  signOutUser: () => {},
   sendOTPEmail: (email: string) => {},
   sendOTPPhone: (phone: string) => {},
   otp: '',
@@ -115,6 +121,13 @@ export const AuthenContextProvider = ({ children }) => {
         console.log(error);
       },
     });
+  };
+
+  const signOutUser = () => {
+    Cookies.remove('access_token');
+    Cookies.remove('refresh_token');
+    localStorage.removeItem('user_data');
+    window.location.replace('/');
   };
 
   const sendOTPEmail = (email: string) => {
@@ -193,6 +206,7 @@ export const AuthenContextProvider = ({ children }) => {
         loginUser,
         error,
         signUpUser,
+        signOutUser,
         sendOTPEmail,
         sendOTPPhone,
         otp,

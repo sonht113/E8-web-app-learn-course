@@ -30,6 +30,7 @@ import Link from 'next/link';
 import { ActiveMenuContext } from 'context/ActiveMenuContext';
 import { MenuItemType, SubMenuItem } from 'types/menuItem.type';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
+import { AuthenContext } from 'context/AuthenContext';
 
 const menuNavbarMobileItems = [
   {
@@ -112,12 +113,15 @@ type ISubMenuSettingsProps = {
 type IMenuItem = {
   menuItem: MenuItemType;
   activeMenu?: string;
-  isOpenSubMenuSettings: boolean;
-  setIsOpenSubMenuSettings: (v: boolean) => void;
+  isOpenSubMenuSettings?: boolean;
+  setIsOpenSubMenuSettings?: (v: boolean) => void;
+  onLogout?: () => void;
+  isAuthenticated?: boolean;
 };
 
 const NavbarMobile: React.FC<INavbarMobileProps> = () => {
   const { isOpen, onClose } = useContext(NavbarMobileContext);
+  const { isAuthenticated, signOutUser } = useContext(AuthenContext);
   return (
     <Drawer placement={'left'} onClose={onClose} isOpen={isOpen}>
       <DrawerOverlay />
@@ -136,7 +140,7 @@ const NavbarMobile: React.FC<INavbarMobileProps> = () => {
             >
               <CloseIcon />
             </Center>
-            <Menu />
+            <Menu isAuthenticated={isAuthenticated} signOutUser={signOutUser} />
           </Flex>
         </Box>
       </DrawerContent>
@@ -144,7 +148,12 @@ const NavbarMobile: React.FC<INavbarMobileProps> = () => {
   );
 };
 
-const Menu: React.FC = () => {
+type IMenuProps = {
+  isAuthenticated?: boolean;
+  signOutUser?: () => void;
+};
+
+const Menu: React.FC<IMenuProps> = ({ isAuthenticated, signOutUser }) => {
   const [isOpenSubMenuSettings, setIsOpenSubMenuSettings] =
     useState<boolean>(false);
 
@@ -160,7 +169,7 @@ const Menu: React.FC = () => {
     >
       {menuNavbarMobileItems.map((item) => (
         <React.Fragment key={item.id}>
-          {item.id === 9 && (
+          {item.id === 9 && isAuthenticated && (
             <>
               <MenuItem
                 menuItem={item}
@@ -173,18 +182,26 @@ const Menu: React.FC = () => {
               )}
             </>
           )}
-          {item.id !== 9 && (
+          {item.id !== 9 && item.id !== 6 && (
             <Link href={item.link} key={item.id}>
-              <MenuItem
-                menuItem={item}
-                activeMenu={activeMenu}
-                isOpenSubMenuSettings={isOpenSubMenuSettings}
-                setIsOpenSubMenuSettings={setIsOpenSubMenuSettings}
-              />
-              {item.id === 9 && isOpenSubMenuSettings && (
-                <SubMenuSettings items={item.subMenu} activeMenu={activeMenu} />
-              )}
+              <MenuItem menuItem={item} activeMenu={activeMenu} />
             </Link>
+          )}
+          {item.id === 6 && !isAuthenticated && (
+            <Link href={item.link} key={item.id}>
+              <MenuItem menuItem={item} activeMenu={activeMenu} />
+            </Link>
+          )}
+          {item.id === 6 && isAuthenticated && (
+            <MenuItem
+              menuItem={{
+                id: 6,
+                name: 'Đăng xuất',
+                icon: <CgLogIn size={'18px'} color={'#6d6d6d'} />,
+              }}
+              isAuthenticated={isAuthenticated}
+              onLogout={() => signOutUser()}
+            />
           )}
         </React.Fragment>
       ))}
@@ -197,6 +214,8 @@ const MenuItem: React.FC<IMenuItem> = ({
   activeMenu,
   isOpenSubMenuSettings,
   setIsOpenSubMenuSettings,
+  onLogout,
+  isAuthenticated,
 }) => {
   const { onClose } = useContext(NavbarMobileContext);
   return (
@@ -210,6 +229,7 @@ const MenuItem: React.FC<IMenuItem> = ({
       roundedTopLeft={10}
       alignItems={'center'}
       onClick={() => {
+        menuItem.id === 6 && isAuthenticated && onLogout();
         menuItem.id !== 9 && onClose();
         menuItem.id === 9 && setIsOpenSubMenuSettings(!isOpenSubMenuSettings);
       }}
