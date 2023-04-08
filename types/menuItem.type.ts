@@ -3,8 +3,8 @@ import React from 'react';
 export type MenuItemType = {
   id: number;
   name: string;
-  link: string;
-  icon: React.ReactElement;
+  link?: string;
+  icon?: React.ReactElement;
   subMenu?: SubMenuItem[];
 };
 

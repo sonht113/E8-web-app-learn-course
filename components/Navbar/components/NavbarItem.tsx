@@ -1,7 +1,8 @@
 import { BellIcon, ChatIcon } from '@chakra-ui/icons';
 import { Avatar, Text, Box, Flex, Heading } from '@chakra-ui/react';
+import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 
 const popupAvatarItems = [
   {
@@ -31,7 +32,6 @@ const popupAvatarItems = [
   },
   {
     title: 'Đăng xuất',
-    link: '/login',
     border: false,
   },
 ];
@@ -85,6 +85,7 @@ const Chat = () => {
 };
 
 const PopupAvatar = () => {
+  const { signOutUser } = useContext(AuthenContext);
   return (
     <Box>
       <Flex
@@ -111,20 +112,40 @@ const PopupAvatar = () => {
       </Flex>
       <Box>
         {popupAvatarItems.map((item, index) => (
-          <Link key={index} href={item.link}>
-            <Text
-              fontSize={'15px'}
-              color={'gray.500'}
-              cursor={'pointer'}
-              borderBottom={item.border && '1px'}
-              borderBottomColor={'gray.100'}
-              pb={item.border && 4}
-              pt={4}
-              _hover={{ color: 'black', transition: 'linear 0.2s' }}
-            >
-              {item.title}
-            </Text>
-          </Link>
+          <>
+            {item.link && (
+              <Link key={index} href={item.link}>
+                <Text
+                  fontSize={'15px'}
+                  color={'gray.500'}
+                  cursor={'pointer'}
+                  borderBottom={item.border && '1px'}
+                  borderBottomColor={'gray.100'}
+                  pb={item.border && 4}
+                  pt={4}
+                  _hover={{ color: 'black', transition: 'linear 0.2s' }}
+                >
+                  {item.title}
+                </Text>
+              </Link>
+            )}
+            {!item.link && (
+              <Text
+                key={index}
+                onClick={() => signOutUser()}
+                fontSize={'15px'}
+                color={'gray.500'}
+                cursor={'pointer'}
+                borderBottom={item.border && '1px'}
+                borderBottomColor={'gray.100'}
+                pb={item.border && 4}
+                pt={4}
+                _hover={{ color: 'black', transition: 'linear 0.2s' }}
+              >
+                {item.title}
+              </Text>
+            )}
+          </>
         ))}
       </Box>
     </Box>

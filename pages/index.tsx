@@ -29,8 +29,6 @@ const Home: NextPageWithLayout = () => {
     keepPreviousData: true,
   });
 
-  console.log('course', queryCourses);
-
   return (
     <Container className="home">
       <Banner items={bannerItems} />
