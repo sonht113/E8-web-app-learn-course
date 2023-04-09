@@ -13,8 +13,6 @@ type IOTPInputProps = {
   sendOTP: () => void;
   otp?: string;
   setOtp: (_v: string) => void;
-  verifyOTP?: () => void;
-  isVerifySuccessfully?: { success: boolean; error: string };
 };
 
 const OTPInput: React.FC<IOTPInputProps> = ({
@@ -25,8 +23,6 @@ const OTPInput: React.FC<IOTPInputProps> = ({
   sendOTP,
   otp,
   setOtp,
-  verifyOTP,
-  isVerifySuccessfully,
 }) => {
   const onSubmit = () => {
     if (!isSwitch) {
@@ -56,10 +52,10 @@ const OTPInput: React.FC<IOTPInputProps> = ({
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
           bg={'gray.100'}
-          disabled={!enableSendOTP}
+          disabled={enableSendOTP}
         />
         <Button
-          onClick={otp ? verifyOTP : onSubmit}
+          onClick={onSubmit}
           fontSize={'sm'}
           position={'absolute'}
           top={0}
@@ -68,24 +64,12 @@ const OTPInput: React.FC<IOTPInputProps> = ({
           color={'white'}
           bg={'#00b0a7'}
           zIndex={4}
-          isDisabled={!enableSendOTP}
+          isDisabled={enableSendOTP}
           _hover={{ color: 'black', bg: 'gray.300' }}
         >
-          {otp ? 'Verify' : 'Nhận mã'}
+          Nhận mã
         </Button>
       </Box>
-      {otp && (
-        <Text
-          fontSize={'xs'}
-          pl={3}
-          color={isVerifySuccessfully.success ? 'green' : 'red'}
-        >
-          {' '}
-          {isVerifySuccessfully.success
-            ? 'Mã OTP hợp lệ'
-            : isVerifySuccessfully.error}
-        </Text>
-      )}
     </Box>
   );
 };

@@ -6,15 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 
-import { DataLoginRegister, DataVerify } from 'types/auth.type';
-import {
-  login,
-  sendOtpEmail,
-  sendOtpPhone,
-  signUp,
-  verifyOtpEmail,
-  verifyOtpPhone,
-} from 'api/auth.api';
+import { DataLoginRegister } from 'types/auth.type';
+import { login, sendOtpEmail, sendOtpPhone, signUp } from 'api/auth.api';
 import { User } from 'types/user.type';
 import { useRouter } from 'next/router';
 import { getMe } from 'api/user.api';
@@ -37,9 +30,7 @@ type IAuthenContext = {
   sendOTPPhone: (phone: string) => void;
   otp: string;
   setOtp: (_v: string) => void;
-  verifyOTPEmail: (body: DataVerify) => void;
-  verifyOTPPhone: (body: DataVerify) => void;
-  isVerifySuccessfully: { success: boolean; error: string };
+  errorOTP: string;
 };
 
 export const AuthenContext = React.createContext<IAuthenContext>({
@@ -56,20 +47,15 @@ export const AuthenContext = React.createContext<IAuthenContext>({
   otp: '',
   loading: true,
   setOtp: (otp: string) => {},
-  verifyOTPEmail: (body: DataVerify) => {},
-  verifyOTPPhone: (body: DataVerify) => {},
-  isVerifySuccessfully: { success: false, error: '' },
+  errorOTP: '',
 });
 
 export const AuthenContextProvider = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>('');
+  const [errorOTP, setErrorOTP] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [otp, setOtp] = useState<string>('');
-  const [isVerifySuccessfully, setIsVerifySuccessfully] = useState<{
-    success: boolean;
-    error: string;
-  }>({ success: false, error: '' });
 
   const router = useRouter();
 
@@ -87,14 +73,6 @@ export const AuthenContextProvider = ({ children }) => {
 
   const sendOTPPhoneMutate = useMutation({
     mutationFn: (phone: string) => sendOtpPhone(phone),
-  });
-
-  const verifyOTPEmailMutate = useMutation({
-    mutationFn: (body: DataVerify) => verifyOtpEmail(body),
-  });
-
-  const verifyOTPPhoneMutate = useMutation({
-    mutationFn: (body: DataVerify) => verifyOtpPhone(body),
   });
 
   const loginUser = (body: DataLoginRegister) => {
@@ -137,6 +115,7 @@ export const AuthenContextProvider = ({ children }) => {
       },
       onError: (error: any) => {
         console.log(error);
+        setErrorOTP(error.respone.data.errors[0].detail);
       },
     });
   };
@@ -148,41 +127,10 @@ export const AuthenContextProvider = ({ children }) => {
       },
       onError: (error: any) => {
         console.log(error);
+        setErrorOTP(error.respone.data.errors[0].detail);
       },
     });
   };
-
-  const verifyOTPEmail = (body: DataVerify) => {
-    verifyOTPEmailMutate.mutate(body, {
-      onSuccess: () => {
-        setIsVerifySuccessfully({ success: true, error: '' });
-      },
-      onError: (error: any) => {
-        setIsVerifySuccessfully({
-          success: false,
-          error: error?.response.data.errors[0].detail,
-        });
-      },
-    });
-  };
-
-  const verifyOTPPhone = (body: DataVerify) => {
-    verifyOTPPhoneMutate.mutate(body, {
-      onSuccess: () => {
-        setIsVerifySuccessfully({ success: true, error: '' });
-      },
-      onError: (error: any) => {
-        setIsVerifySuccessfully({
-          success: false,
-          error: error?.response.data.errors[0].detail,
-        });
-      },
-    });
-  };
-
-  useEffect(() => {
-    otp === '' && setIsVerifySuccessfully({ success: false, error: '' });
-  }, [otp]);
 
   useEffect(() => {
     async function loadUserFromCookies() {
@@ -211,9 +159,7 @@ export const AuthenContextProvider = ({ children }) => {
         sendOTPPhone,
         otp,
         setOtp,
-        verifyOTPEmail,
-        verifyOTPPhone,
-        isVerifySuccessfully,
+        errorOTP,
       }}
     >
       {children}
