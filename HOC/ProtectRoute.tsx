@@ -11,6 +11,7 @@ export const ProtectRoute = ({ children }) => {
     loading ||
     (!isAuthenticated &&
       router.pathname !== '/login' &&
+      router.pathname !== '/register' &&
       router.pathname !== '/' &&
       !router.pathname.includes('/learning-paths') &&
       router.pathname !== '/course' &&

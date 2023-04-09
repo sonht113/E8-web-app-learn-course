@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Auth, DataLoginRegister, DataVerify } from 'types/auth.type';
+import { Auth, DataLoginRegister } from 'types/auth.type';
 import http from 'utils/http';
 
 export const login = async (
@@ -20,18 +20,4 @@ export const sendOtpEmail = async (email: string) => {
 
 export const sendOtpPhone = async (phone: string) => {
   return await http.post('/otps/send-otp-phone', { phone: phone });
-};
-
-export const verifyOtpEmail = (body: DataVerify) => {
-  return http.put('/otps/verify-otp-email', {
-    email: body.email,
-    otpCode: body.otpCode,
-  });
-};
-
-export const verifyOtpPhone = (body: DataVerify) => {
-  return http.put('/otps/verify-otp-phone', {
-    phone: body.phone,
-    otpCode: body.otpCode,
-  });
 };

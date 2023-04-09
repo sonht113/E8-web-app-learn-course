@@ -25,7 +25,7 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
   loginUser,
   signUpUser,
 }) => {
-  const [enableSendOTP, setEnableSendOTP] = useState<boolean>(false);
+  const [enableSendOTP, setEnableSendOTP] = useState<boolean>(true);
   const [addressSendOTP, setAddressSendOTP] = useState<string>('');
   const [isSwitch, setIsSwitch] = useState<boolean>(false);
   const [errorValidateOTP, setErrorValidateOTP] = useState<string>('');
@@ -39,16 +39,8 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
     formState: { errors },
   } = useForm<FormData>();
 
-  const {
-    isAuthenticated,
-    sendOTPEmail,
-    sendOTPPhone,
-    otp,
-    setOtp,
-    verifyOTPEmail,
-    verifyOTPPhone,
-    isVerifySuccessfully,
-  } = useContext(AuthenContext);
+  const { isAuthenticated, sendOTPEmail, sendOTPPhone, otp, setOtp } =
+    useContext(AuthenContext);
 
   const defaultInput = useMemo(() => {
     return {
@@ -74,22 +66,15 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
   }, []);
 
   const submit = (data: FormData) => {
-    if (router.pathname === '/register' && isVerifySuccessfully.success) {
+    if (router.pathname === '/register') {
       signUpUser({ ...data, otpCode: JSON.stringify(otp) });
     } else {
       loginUser(data);
     }
-    reset();
   };
 
   const sendOTP = () => {
     isSwitch ? sendOTPPhone(addressSendOTP) : sendOTPEmail(addressSendOTP);
-  };
-
-  const verifyOTP = () => {
-    isSwitch
-      ? verifyOTPPhone({ phone: addressSendOTP, otpCode: JSON.stringify(otp) })
-      : verifyOTPEmail({ email: addressSendOTP, otpCode: JSON.stringify(otp) });
   };
 
   useEffect(() => {
@@ -98,12 +83,12 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
 
   useEffect(() => {
     if (watch('email') || watch('phone')) {
-      setEnableSendOTP(true);
+      setEnableSendOTP(false);
       watch('email')
         ? setAddressSendOTP(watch('email'))
         : setAddressSendOTP(watch('phone'));
     } else {
-      setEnableSendOTP(false);
+      setEnableSendOTP(true);
       setErrorValidateOTP('');
       setOtp('');
     }
@@ -151,8 +136,6 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
             enableSendOTP={enableSendOTP}
             otp={otp}
             setOtp={setOtp}
-            verifyOTP={verifyOTP}
-            isVerifySuccessfully={isVerifySuccessfully}
           />
         )}
         <Box mt={5} w={['100%']} mx={'auto'}>

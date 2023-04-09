@@ -13,9 +13,3 @@ export type Auth = {
   refreshToken: string;
   user: User;
 };
-
-export type DataVerify = {
-  email?: string;
-  phone?: string;
-  otpCode: string;
-};
