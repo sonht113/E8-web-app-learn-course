@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { Box, Center, Flex, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';

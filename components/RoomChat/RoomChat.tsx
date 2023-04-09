@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Box, Text, Flex, Avatar, Center } from '@chakra-ui/react';
 

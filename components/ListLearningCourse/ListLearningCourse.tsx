@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
 import React from 'react';

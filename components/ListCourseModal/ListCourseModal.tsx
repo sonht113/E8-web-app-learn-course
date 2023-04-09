@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import React from 'react';
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import ListLearningCourse from '../ListLearningCourse';

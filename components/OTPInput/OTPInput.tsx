@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-
 import { Box, Input, Button, Text } from '@chakra-ui/react';
 import React from 'react';
 import validator from 'validator';

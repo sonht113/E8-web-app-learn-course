@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import React from 'react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';

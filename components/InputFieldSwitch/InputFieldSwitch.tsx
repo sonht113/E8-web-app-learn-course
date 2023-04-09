@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import React, { ReactElement } from 'react';
 import {
   Flex,

@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -12,7 +10,6 @@ type IActiveMenuContext = {
 
 export const ActiveMenuContext = React.createContext<IActiveMenuContext>({
   activeMenu: ACTIVE_DEFAULT,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setActiveMenu: (v: string) => {},
 });
 

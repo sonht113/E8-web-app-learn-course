@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import { Flex, Image } from '@chakra-ui/react';
 import React from 'react';
 

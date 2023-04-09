@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
-
 import React, { useState } from 'react';
 import { LectureType } from 'types/chapter.type';
 

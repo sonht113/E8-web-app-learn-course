@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type CourseType = {
   _id?: string;
   idCategories?: string;

@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 

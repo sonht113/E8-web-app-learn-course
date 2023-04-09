@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-/* eslint-disable no-unused-vars */
 import { useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 
