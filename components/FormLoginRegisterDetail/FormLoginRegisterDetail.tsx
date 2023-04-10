@@ -90,7 +90,7 @@ const FormLoginRegisterDetail: React.FC<IFormLoginRegisterDetail> = ({
     } else {
       setEnableSendOTP(true);
       setErrorValidateOTP('');
-      setOtp('');
+      setOtp({ value: '', loading: false });
     }
   }, [watch('email'), watch('phone')]);
 

@@ -8,8 +8,8 @@ type IOTPInputProps = {
   isSwitch?: boolean;
   setErrorValidateOTP?: (_v: string) => void;
   sendOTP: () => void;
-  otp?: string;
-  setOtp: (_v: string) => void;
+  otp?: { value: string; loading: boolean };
+  setOtp: (_v: { value: string; loading: boolean }) => void;
 };
 
 const OTPInput: React.FC<IOTPInputProps> = ({
@@ -46,13 +46,14 @@ const OTPInput: React.FC<IOTPInputProps> = ({
           _placeholder={{ fontSize: 'sm' }}
           placeholder="Nhập mã xác nhận"
           rounded={'full'}
-          value={otp}
-          onChange={(e) => setOtp(e.target.value)}
+          value={otp.value}
+          onChange={(e) => setOtp({ ...otp, value: e.target.value })}
           bg={'gray.100'}
           disabled={enableSendOTP}
         />
         <Button
           onClick={onSubmit}
+          isLoading={otp.loading}
           fontSize={'sm'}
           position={'absolute'}
           top={0}
@@ -64,7 +65,7 @@ const OTPInput: React.FC<IOTPInputProps> = ({
           isDisabled={enableSendOTP}
           _hover={{ color: 'black', bg: 'gray.300' }}
         >
-          Nhận mã
+          {otp.value ? 'Nhận lại mã' : 'Nhận mã'}
         </Button>
       </Box>
     </Box>
