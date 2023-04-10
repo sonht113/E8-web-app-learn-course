@@ -7,6 +7,7 @@ import { login, sendOtpEmail, sendOtpPhone, signUp } from 'api/auth.api';
 import { User } from 'types/user.type';
 import { useRouter } from 'next/router';
 import { getMe } from 'api/user.api';
+import useToastify from 'hook/useToastify';
 
 declare global {
   type unknow = any;
@@ -24,9 +25,8 @@ type IAuthenContext = {
   signOutUser: () => void;
   sendOTPEmail: (email: string) => void;
   sendOTPPhone: (phone: string) => void;
-  otp: string;
-  setOtp: (_v: string) => void;
-  errorOTP: string;
+  otp: { value: string; loading: boolean };
+  setOtp: (_v: { value: string; loading: boolean }) => void;
 };
 
 export const AuthenContext = React.createContext<IAuthenContext>({
@@ -40,18 +40,21 @@ export const AuthenContext = React.createContext<IAuthenContext>({
   signOutUser: () => {},
   sendOTPEmail: (email: string) => {},
   sendOTPPhone: (phone: string) => {},
-  otp: '',
+  otp: { value: '', loading: false },
   loading: true,
-  setOtp: (otp: string) => {},
-  errorOTP: '',
+  setOtp: (otp: { value: string; loading: boolean }) => {},
 });
 
 export const AuthenContextProvider = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>('');
-  const [errorOTP, setErrorOTP] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const [otp, setOtp] = useState<string>('');
+  const [otp, setOtp] = useState<{ value: string; loading: boolean }>({
+    value: '',
+    loading: false,
+  });
+  const toast = useToastify();
+  const DURATION_TOAST = 3000;
 
   const router = useRouter();
 
@@ -77,10 +80,20 @@ export const AuthenContextProvider = ({ children }) => {
         Cookies.set('access_token', res.data.accessToken);
         Cookies.set('refresh_token', res.data.refreshToken);
         localStorage.setItem('user_data', JSON.stringify(res.data.user));
+        toast.handleOpenToastify(
+          'success',
+          'Đăng nhập thành công',
+          DURATION_TOAST
+        );
         setUser(res.data.user);
       },
       onError(error: any) {
         setError(error.response.data.errors[0].detail);
+        toast.handleOpenToastify(
+          'error',
+          error.response.data.errors[0].detail,
+          DURATION_TOAST
+        );
       },
     });
   };
@@ -88,11 +101,19 @@ export const AuthenContextProvider = ({ children }) => {
   const signUpUser = (body: DataLoginRegister) => {
     signUpMutate.mutate(body, {
       onSuccess: (res) => {
-        console.log(res);
+        toast.handleOpenToastify(
+          'success',
+          'Đăng ký thành công',
+          DURATION_TOAST
+        );
         router.push('/login');
       },
       onError: (error: any) => {
-        console.log(error);
+        toast.handleOpenToastify(
+          'error',
+          error.response.data.errors[0].detail,
+          DURATION_TOAST
+        );
       },
     });
   };
@@ -105,25 +126,41 @@ export const AuthenContextProvider = ({ children }) => {
   };
 
   const sendOTPEmail = (email: string) => {
+    setOtp({ ...otp, loading: true });
     sendOTPEmailMutate.mutate(email, {
       onSuccess: (res) => {
-        setOtp(res.data);
+        setOtp({
+          value: res.data,
+          loading: false,
+        });
       },
       onError: (error: any) => {
-        console.log(error);
-        setErrorOTP(error.respone.data.errors[0].detail);
+        setOtp({ ...otp, loading: false });
+        toast.handleOpenToastify(
+          'error',
+          error.response.data.errors[0].detail,
+          DURATION_TOAST
+        );
       },
     });
   };
 
   const sendOTPPhone = (phone: string) => {
+    setOtp({ ...otp, loading: true });
     sendOTPPhoneMutate.mutate(phone, {
       onSuccess: (res) => {
-        setOtp(res.data);
+        setOtp({
+          value: res.data,
+          loading: false,
+        });
       },
       onError: (error: any) => {
-        console.log(error);
-        setErrorOTP(error.respone.data.errors[0].detail);
+        setOtp({ ...otp, loading: false });
+        toast.handleOpenToastify(
+          'error',
+          error.response.data.errors[0].detail,
+          DURATION_TOAST
+        );
       },
     });
   };
@@ -155,7 +192,6 @@ export const AuthenContextProvider = ({ children }) => {
         sendOTPPhone,
         otp,
         setOtp,
-        errorOTP,
       }}
     >
       {children}
