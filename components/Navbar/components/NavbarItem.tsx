@@ -1,8 +1,18 @@
+import BenefitComponent from '@/components/BenefitComponent';
+import CommentModal from '@/components/CommentModal';
 import { BellIcon, ChatIcon } from '@chakra-ui/icons';
-import { Avatar, Text, Box, Flex, Heading } from '@chakra-ui/react';
+import {
+  Avatar,
+  Text,
+  Box,
+  Flex,
+  Heading,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
 import React, { useContext } from 'react';
+import { GiUpgrade } from 'react-icons/gi';
 
 const popupAvatarItems = [
   {
@@ -23,6 +33,11 @@ const popupAvatarItems = [
   {
     title: 'Bài viết đã lưu',
     link: '/me/blog-saved',
+    border: true,
+  },
+  {
+    icon: <GiUpgrade fontSize="24px" color="green" />,
+    title: 'Upgrade to teacher',
     border: true,
   },
   {
@@ -86,6 +101,7 @@ const Chat = () => {
 
 const PopupAvatar = () => {
   const { signOutUser } = useContext(AuthenContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box>
       <Flex
@@ -129,7 +145,7 @@ const PopupAvatar = () => {
                 </Text>
               </Link>
             )}
-            {!item.link && (
+            {!item.link && !item.icon && (
               <Text
                 key={index}
                 onClick={() => signOutUser()}
@@ -144,6 +160,29 @@ const PopupAvatar = () => {
               >
                 {item.title}
               </Text>
+            )}
+            {item.icon && (
+              <Flex
+                borderBottom={item.border && '1px'}
+                borderBottomColor={'gray.100'}
+                alignItems="center"
+              >
+                {item.icon}
+                <Text
+                  key={index}
+                  onClick={onOpen}
+                  fontSize={'15px'}
+                  color={'gray.500'}
+                  cursor={'pointer'}
+                  pb={item.border && 4}
+                  pt={4}
+                  ms={4}
+                  _hover={{ color: 'black', transition: 'linear 0.2s' }}
+                >
+                  {item.title}
+                </Text>
+                <BenefitComponent isOpen={isOpen} onClose={onClose} />
+              </Flex>
             )}
           </>
         ))}
