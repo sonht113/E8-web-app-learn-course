@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Container } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 
 import { NextPageWithLayout } from '../types/layout.type';
 import DefaultLayout from 'layouts/defaultLayout';
@@ -8,30 +9,29 @@ import { CourseType } from 'types/course.type';
 import ListCourse from '@/components/ListCourse';
 import ListBlog from '@/components/ListBlog';
 import ListTeacher from '@/components/ListTeacher';
-import { useQuery } from '@tanstack/react-query';
 import { getBanners } from 'api/banner.api';
 import { getCourses } from 'api/course.api';
 
-import { bannerItems, blogs, teachers } from '_mock/data';
+import { blogs, teachers } from '_mock/data';
 
 const Home: NextPageWithLayout = () => {
   const queryBanners = useQuery({
     queryKey: ['banners'],
     queryFn: () => getBanners(),
     keepPreviousData: true,
+    staleTime: 100 * 1000,
   });
-
-  console.log(queryBanners);
 
   const queryCourses = useQuery({
     queryKey: ['courses'],
     queryFn: () => getCourses(),
     keepPreviousData: true,
+    staleTime: 5 * 1000,
   });
 
   return (
     <Container className="home">
-      <Banner items={bannerItems} />
+      <Banner banners={queryBanners.data?.data} />
       <ListCourse
         isPro={true}
         title={'Khoá học Pro'}
