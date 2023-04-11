@@ -1,5 +1,5 @@
 import { ArrowForwardIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Text, Grid, Flex } from '@chakra-ui/react';
+import { Box, Text, Grid, Flex, Skeleton, Center } from '@chakra-ui/react';
 import React from 'react';
 import { CourseViewHome } from 'types/course.type';
 import Course from '../Course';
@@ -71,6 +71,20 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         pb={5}
         overflowX={['scroll', 'scroll', 'scroll', 'hidden']}
       >
+        {!courses &&
+          [1, 2, 3].map((_item, index) => (
+            <Skeleton
+              key={index}
+              w={['60vw', '30vw', '30vw', 'full']}
+              h={'180px'}
+              rounded={'xl'}
+            />
+          ))}
+        {courses?.length === 0 && (
+          <Text fontSize={'sm'} fontWeight={'medium'} color={'gray.500'}>
+            Không có khoá học nào
+          </Text>
+        )}
         {courses?.map((course: CourseViewHome, index: number) => (
           <Course
             key={index}
