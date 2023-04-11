@@ -1,6 +1,9 @@
-import { Text, Flex, Grid, GridItem, Image, Box } from '@chakra-ui/react';
+import { Text, Flex, Grid, GridItem, Box } from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
+
+import logo from 'public/static/images/icon.png';
+import Image from 'next/image';
 
 const infoE8: string[] = [
   'Điện thoại: 0246.329.1102',
@@ -45,13 +48,7 @@ const Footer = () => {
       >
         <GridItem>
           <Flex alignItems={'center'} gap={2} mb={4}>
-            <Image
-              rounded={'md'}
-              boxSize={'40px'}
-              objectFit="cover"
-              src="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
-              alt="E8 logo"
-            />
+            <Image src={logo} alt="E8 logo" width={40} />
             <Text fontSize={'lg'} color={'white'} fontWeight={'bold'}>
               Học tiếng anh để đi làm
             </Text>

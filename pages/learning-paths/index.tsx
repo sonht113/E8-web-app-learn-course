@@ -37,7 +37,7 @@ const LearningPaths: NextPageWithLayout = () => {
         gap={4}
         width={{ base: '100%', lg: '90%' }}
       >
-        {learningPathsData?.learningPathGroups.map((item) => {
+        {learningPathsData?.learningPathGroups?.map((item) => {
           return (
             <LearningPathsBox
               title={item.title}

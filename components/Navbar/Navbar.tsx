@@ -5,15 +5,15 @@ import {
   Grid,
   GridItem,
   Text,
-  Image,
   Container,
   Popover,
   PopoverTrigger,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-
 import { ArrowBackIcon, HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
+
 import ButtonFC from '../Button/Button';
+import logo from 'public/static/images/icon.png';
 import Search from '../Search';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
 import Popup from '../Popup';
@@ -27,6 +27,7 @@ import {
   Chat,
 } from './components/NavbarItem';
 import { AuthenContext } from 'context/AuthenContext';
+import Image from 'next/image';
 
 interface INavbarProps {
   onOpen?: () => void;
@@ -133,15 +134,16 @@ const Logo = () => {
   return (
     <Container display={['none', 'none', 'none', 'block']}>
       <Flex alignItems={'center'} gap={4}>
-        <Box>
-          <Image
-            rounded={'md'}
-            boxSize={'45px'}
-            objectFit="cover"
-            src="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
-            alt="E8 logo"
-          />
-        </Box>
+        <Link href={'/'}>
+          <Box>
+            <Image
+              src={logo}
+              alt="E8 logo"
+              width={40}
+              style={{ objectFit: 'cover' }}
+            />
+          </Box>
+        </Link>
         <Box>
           <Text fontWeight={'bold'}>Học tiếng anh để đi làm</Text>
         </Box>
