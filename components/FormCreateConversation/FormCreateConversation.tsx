@@ -1,13 +1,16 @@
 import { Avatar, Box, Button, Flex, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiFillCamera } from 'react-icons/ai';
+import { ChatContext } from 'context/ChatContext';
 import InputField from '../InputField';
 
 const FormCreateConversation = () => {
   const [imagePreview, setImagePreview] = useState<null | string>(null);
-  const [image, setImage] = useState(null);
   const [errorValidateImage, setErrorValidateImage] = useState<string>('');
+
+  const { avatarClassRoom, setAvatarClassRoom } = useContext(ChatContext);
+
   const {
     register,
     handleSubmit,
@@ -15,14 +18,12 @@ const FormCreateConversation = () => {
   } = useForm();
 
   const submit = (data) => {
-    if (!image) {
+    if (!avatarClassRoom) {
       setErrorValidateImage('Vui lòng chọn ảnh đại diện cho lớp học');
       return;
     }
     console.log(data);
   };
-
-  console.log(errors);
 
   return (
     <Flex flexDirection={'column'} alignItems={'center'} pb={4}>
@@ -34,7 +35,9 @@ const FormCreateConversation = () => {
           Chọn ảnh đại diện
         </Text>
         {imagePreview ? (
-          <Avatar src={imagePreview} w={'100px'} h={'100px'} />
+          <Box position={'relative'} _hover={{ cursor: 'pointer' }}>
+            <Avatar src={imagePreview} w={'100px'} h={'100px'} />
+          </Box>
         ) : (
           <>
             <Box _hover={{ cursor: 'pointer' }} w={'100px'} h={'100px'}>
@@ -59,7 +62,7 @@ const FormCreateConversation = () => {
               id="avatarClass"
               style={{ display: 'none' }}
               onChange={(e) => {
-                setImage(e.target.files[0]);
+                setAvatarClassRoom(e.target.files);
                 setImagePreview(URL.createObjectURL(e.target.files[0]));
               }}
             />
