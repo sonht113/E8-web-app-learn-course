@@ -41,7 +41,7 @@ export type User = {
   groupAPIDenines?: APIDenie[];
   groupAPIAccesses?: APIAccess[];
   groups?: Group[];
-  id: string;
+  _id: string;
   groupDetails?: GroupDetail[];
   myLearningCourses?: CourseType[];
   createdAt?: string;
