@@ -61,7 +61,7 @@ const SidebarChat = () => {
 
           {conversations?.map((item: Conversation, index: number) => (
             <RoomChat
-              key={index}
+              key={item._id}
               onSelect={() => selectRoom(item._id)}
               showMessage={showMessage}
               setShowMessage={setShowMessage}

@@ -26,12 +26,14 @@ type IHeaderChatProps = {
   showMessage?: boolean;
   setShowMessage?: (v: boolean) => void;
   isMobile?: boolean;
+  handleOpenModalAddStudent?: () => void;
 };
 
 const HeaderChat: React.FC<IHeaderChatProps> = ({
   setShowMessage,
   showMessage,
   isMobile,
+  handleOpenModalAddStudent,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -81,7 +83,11 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
       </Box>
       <Flex gap={4}>
         <Tooltip label={'Thêm thành viên'} hasArrow placement="bottom-start">
-          <Box>
+          <Box
+            onClick={() => {
+              handleOpenModalAddStudent();
+            }}
+          >
             <AiOutlineUserAdd fontSize={'30px'} cursor={'pointer'} />
           </Box>
         </Tooltip>
