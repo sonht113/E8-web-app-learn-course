@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Text, Flex, Avatar, Center } from '@chakra-ui/react';
+import { Conversation } from 'types/converation.type';
 
 type IRoomChatProps = {
   showMessage?: boolean;
@@ -7,6 +8,7 @@ type IRoomChatProps = {
   isMobile?: boolean;
   onSelect?: () => void;
   isActive?: boolean;
+  data?: Conversation;
 };
 
 const RoomChat: React.FC<IRoomChatProps> = ({
@@ -14,6 +16,7 @@ const RoomChat: React.FC<IRoomChatProps> = ({
   isMobile,
   onSelect,
   isActive,
+  data,
 }) => {
   return (
     <Box
@@ -40,9 +43,9 @@ const RoomChat: React.FC<IRoomChatProps> = ({
       <Flex alignItems={'center'} gap={3}>
         <Box>
           <Avatar
-            name="Dan Abrahmov"
+            name={data?.chatName}
             size={['md', 'md', 'md', 'lg']}
-            src="https://bit.ly/dan-abramov"
+            src={data?.avatar}
           />
         </Box>
         <Box>
@@ -54,17 +57,19 @@ const RoomChat: React.FC<IRoomChatProps> = ({
             textOverflow={'ellipsis'}
             whiteSpace={'nowrap'}
           >
-            Name room
+            {data?.chatName}
           </Text>
-          <Text
-            w={['220px', '100px', '100px', '100px', '200px']}
-            fontSize={['sm', 'sm', 'sm', 'md']}
-            overflow={'hidden'}
-            whiteSpace={'nowrap'}
-            color={isActive ? 'gray.500' : 'gray.400'}
-          >
-            What are you doing?
-          </Text>
+          {data?.lastestMessage && (
+            <Text
+              w={['220px', '100px', '100px', '100px', '200px']}
+              fontSize={['sm', 'sm', 'sm', 'md']}
+              overflow={'hidden'}
+              whiteSpace={'nowrap'}
+              color={isActive ? 'gray.500' : 'gray.400'}
+            >
+              {data?.lastestMessage.text}
+            </Text>
+          )}
         </Box>
       </Flex>
       <Center

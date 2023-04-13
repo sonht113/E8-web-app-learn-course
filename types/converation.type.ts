@@ -1,5 +1,3 @@
-import { User } from './user.type';
-
 enum RoleConversationEnum {
   ADMIN = 'ADMIN',
   USER = 'USER',
@@ -7,12 +5,12 @@ enum RoleConversationEnum {
 
 export type Conversation = {
   _id: string;
-  users: Pick<User, 'id'>[];
+  users: string[];
   chatName: string;
   isGroup: boolean;
   avatar: string;
-  lastestMessage: { idUser: string; text: string };
-  admin: boolean;
+  lastestMessage?: { idUser: string; text: string };
+  role?: RoleConversationEnum.ADMIN | RoleConversationEnum.USER;
 };
 
 export type ConversationCreate = {
@@ -23,3 +21,5 @@ export type ConversationCreate = {
   latestMessage?: string;
   role?: RoleConversationEnum;
 };
+
+export type ConversationUpdate = Partial<ConversationCreate>;

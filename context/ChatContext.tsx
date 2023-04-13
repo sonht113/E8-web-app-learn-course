@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getConversations } from 'api/chat.api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getConversationDetail, getConversations } from 'api/chat.api';
 import { uploadFilesAPI } from 'api/upload.api';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +15,8 @@ type IChatContext = {
   conversations: Conversation[] | any;
   avatarClassRoom: any;
   setAvatarClassRoom: (v: any) => void;
+  conversationDetail: Conversation | null;
+  setConversationDetail: React.Dispatch<React.SetStateAction<Conversation>>;
 };
 
 export const ChatContext = React.createContext<IChatContext>({
@@ -27,19 +29,25 @@ export const ChatContext = React.createContext<IChatContext>({
   conversations: [],
   avatarClassRoom: null,
   setAvatarClassRoom: (_v: any) => {},
+  conversationDetail: null,
+  setConversationDetail: (v: Conversation | null) => {},
 });
 
 export const ChatContextProvider = ({ children }) => {
   const [showMessage, setShowMessage] = useState(false);
   const [avatarClassRoom, setAvatarClassRoom] = useState<any>(null);
   const [roomActive, setRoomActive] = useState('');
+  const [conversationDetail, setConversationDetail] =
+    useState<Conversation | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const selectRoom = (roomId: string) => {
     setRoomActive(roomId);
     router.push(`/chat?room=${roomId}`);
+    conversationDetailQuery(roomId);
   };
 
   const conversationsQuery = useQuery({
@@ -48,6 +56,18 @@ export const ChatContextProvider = ({ children }) => {
     keepPreviousData: true,
     staleTime: 5000,
   });
+
+  const conversationDetailQuery = (id: string) => {
+    queryClient.prefetchQuery(['conversation', id], {
+      queryFn: () =>
+        getConversationDetail(id)
+          .then((res) => {
+            setConversationDetail(res?.data);
+            return res;
+          })
+          .catch((err) => console.log(err)),
+    });
+  };
 
   const uploadMutate = useMutation({
     mutationFn: (body: any) => uploadFilesAPI(body),
@@ -79,6 +99,8 @@ export const ChatContextProvider = ({ children }) => {
     <ChatContext.Provider
       value={{
         conversations: conversationsQuery.data?.data,
+        conversationDetail,
+        setConversationDetail,
         showMessage,
         setShowMessage,
         roomActive,

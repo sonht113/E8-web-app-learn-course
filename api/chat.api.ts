@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Conversation } from 'types/converation.type';
+import { Conversation, ConversationUpdate } from 'types/converation.type';
 import { UserPaginate } from 'types/user-paginate.type';
 import http from 'utils/http';
 
@@ -7,6 +7,12 @@ export const getConversations = async (): Promise<
   AxiosResponse<Conversation, any>
 > => {
   return await http.get('/conversations');
+};
+
+export const getConversationDetail = async (
+  id: string
+): Promise<AxiosResponse<Conversation, any>> => {
+  return await http.get(`/conversations/${id}`);
 };
 
 export const searchUserWantAddJoinClassRoom = async (
@@ -28,4 +34,11 @@ export const searchUserWantAddJoinClassRoom = async (
       email: body,
     },
   });
+};
+
+export const updateConversation = async (body: {
+  id: string;
+  data: ConversationUpdate;
+}): Promise<AxiosResponse<Conversation, any>> => {
+  return await http.put(`/conversations/${body.id}`, body.data);
 };

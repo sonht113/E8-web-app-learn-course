@@ -1,6 +1,7 @@
 import { AddIcon, CheckIcon } from '@chakra-ui/icons';
 import { Avatar, Box, Button, Center, Flex, Text } from '@chakra-ui/react';
 import React, { Dispatch, memo, SetStateAction } from 'react';
+import { Conversation, ConversationUpdate } from 'types/converation.type';
 import { UserPaginate } from 'types/user-paginate.type';
 
 import InputField from '../InputField';
@@ -10,6 +11,8 @@ type IFormAddStudentJoinClassProps = {
   setValue?: Dispatch<SetStateAction<string>>;
   isLoading?: boolean;
   data?: UserPaginate;
+  handleAddStudent: (body: { id: string; data: ConversationUpdate }) => void;
+  conversation: Conversation;
 };
 
 const FormAddStudentJoinClass: React.FC<IFormAddStudentJoinClassProps> = ({
@@ -17,6 +20,8 @@ const FormAddStudentJoinClass: React.FC<IFormAddStudentJoinClassProps> = ({
   setValue,
   isLoading,
   data,
+  handleAddStudent,
+  conversation,
 }) => {
   return (
     <Box pb={10}>
@@ -52,12 +57,30 @@ const FormAddStudentJoinClass: React.FC<IFormAddStudentJoinClassProps> = ({
               {data?.results[0].fullName}
             </Text>
           </Flex>
-          <Button size={'sm'} color={'white'} colorScheme={'teal'}>
-            <AddIcon />
-          </Button>
-          <Button size={'sm'} color={'white'} colorScheme={'teal'}>
-            <CheckIcon />
-          </Button>
+          {conversation?.users.findIndex(
+            (item) => item === data?.results[0]._id
+          ) > -1 ? (
+            <CheckIcon color={'green'} />
+          ) : (
+            <Button
+              size={'sm'}
+              color={'white'}
+              colorScheme={'teal'}
+              onClick={() =>
+                handleAddStudent({
+                  id: conversation?._id,
+                  data: {
+                    avatar: conversation?.avatar,
+                    isGroup: conversation?.isGroup,
+                    chatName: conversation?.chatName,
+                    users: [...conversation.users, data?.results[0]._id],
+                  },
+                })
+              }
+            >
+              <AddIcon />
+            </Button>
+          )}
         </Flex>
       )}
     </Box>

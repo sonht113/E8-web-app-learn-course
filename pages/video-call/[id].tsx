@@ -10,6 +10,7 @@ const VideoCall = () => {
   const { isMobile } = useContext(ChatContext);
 
   const roomId = String(router.query.id);
+  console.log(user);
 
   const myMeeting = async (element: HTMLElement | undefined | null) => {
     const appId = Number(process.env.NEXT_PUBLIC_APP_ID);
@@ -22,7 +23,13 @@ const VideoCall = () => {
       serverSecret,
       roomId,
       Date.now().toString(),
-      user?.fullName ? user?.fullName : 'User'
+      user?.fullName
+        ? user?.fullName
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D')
+        : 'User'
     );
 
     const zp = ZegoUIKitPrebuilt.create(kitToken);
@@ -45,11 +52,6 @@ const VideoCall = () => {
         userList.forEach((userJoin) => {
           userJoin.setUserAvatar(user?.avatar);
         });
-      },
-      onLeaveRoom: () => {
-        zp.destroy();
-        router.push(`/chat?room=${router.query.id}`);
-        window.location.reload();
       },
     });
   };
