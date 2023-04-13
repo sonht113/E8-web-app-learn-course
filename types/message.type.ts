@@ -9,7 +9,7 @@ enum FileType {
 export type Message = {
   idChat: string;
   sender: string;
-  readers: Pick<User, 'id'>[] | string[];
+  readers: Pick<User, '_id'>[] | string[];
   content: string;
   fileType: FileType.IMAGE | FileType.FILE | FileType.TEXT;
 };
