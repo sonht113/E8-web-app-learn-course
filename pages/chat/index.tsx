@@ -17,8 +17,6 @@ import {
 import { ConversationUpdate } from 'types/converation.type';
 import useToastify from 'hook/useToastify';
 
-const messages = [1, 3, 4, 4, 4, 4, 4];
-
 enum TypePreview {
   'IMAGE',
   'FILE',
@@ -44,6 +42,7 @@ const Chat: NextPageWithLayout = () => {
     isMobile,
     conversationDetail,
     setConversationDetail,
+    messages,
   } = useContext(ChatContext);
 
   const toast = useToastify();
