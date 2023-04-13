@@ -7,6 +7,8 @@ type IInputFieldProps = {
   placeholder?: string;
   type?: string;
   validate?: any;
+  change?: (v: any) => void;
+  value?: string;
 };
 
 const InputField: React.FC<IInputFieldProps> = ({
@@ -15,6 +17,8 @@ const InputField: React.FC<IInputFieldProps> = ({
   placeholder,
   type,
   validate,
+  change,
+  value,
 }) => {
   return (
     <Box _focus={{ borderColor: 'none' }}>
@@ -24,9 +28,11 @@ const InputField: React.FC<IInputFieldProps> = ({
         _placeholder={{ fontSize: 'sm' }}
         bg={'gray.100'}
         type={type}
+        value={value}
         {...validate}
         rounded={'full'}
         name={name}
+        onChange={(e) => change(e.target.value)}
       />
     </Box>
   );

@@ -7,6 +7,10 @@ import HeaderChat from '@/components/HeaderChat';
 import InputChat from '@/components/InputChat';
 import MessageChat from '@/components/MessageChat';
 import ModalFC from '@/components/ModalFC';
+import FormAddStudentJoinClass from '@/components/FormAddStudentJoinClass';
+import useDebounce from 'hook/useDebounce';
+import { useQuery } from '@tanstack/react-query';
+import { searchUserWantAddJoinClassRoom } from 'api/chat.api';
 
 const messages = [1, 3, 4, 4, 4, 4, 4];
 
@@ -26,20 +30,42 @@ const Chat: NextPageWithLayout = () => {
     typePreview: 0,
     url: '',
   });
+  const [typeShowModal, setTypeShowModal] = useState<string>('');
+  const [valueSearchUser, setValueSearchUser] = useState<string>('');
+
   const { showMessage, setShowMessage, isMobile } = useContext(ChatContext);
+
+  const debounceValue = useDebounce(valueSearchUser, 1000);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['search', debounceValue],
+    queryFn: () => {
+      return searchUserWantAddJoinClassRoom(debounceValue);
+    },
+  });
 
   return (
     <React.Fragment>
-      <ModalFC onClose={onClose} isOpen={isOpen}>
-        {dataModal.typePreview === 0 && (
+      <ModalFC
+        title={typeShowModal === 'add-student' && 'Add student'}
+        onClose={() => {
+          onClose();
+          typeShowModal === 'add-student' && setValueSearchUser('');
+        }}
+        isOpen={isOpen}
+      >
+        {typeShowModal === 'show-file' && dataModal.typePreview === 0 && (
           <Flex w={'full'} justifyContent={'center'} pb={8}>
-            <Image
-              cursor={'pointer'}
-              objectFit="cover"
-              src={dataModal.url}
-              alt="Dan Abramov"
-            />
+            <Image cursor={'pointer'} objectFit="cover" src={dataModal.url} />
           </Flex>
+        )}
+        {typeShowModal === 'add-student' && (
+          <FormAddStudentJoinClass
+            setValue={setValueSearchUser}
+            value={valueSearchUser}
+            data={data?.data}
+            isLoading={isLoading}
+          />
         )}
       </ModalFC>
       <Box
@@ -51,6 +77,10 @@ const Chat: NextPageWithLayout = () => {
           showMessage={showMessage}
           isMobile={isMobile}
           setShowMessage={setShowMessage}
+          handleOpenModalAddStudent={() => {
+            setTypeShowModal('add-student');
+            onOpen();
+          }}
         />
         <Box
           display={'flex'}
@@ -67,7 +97,10 @@ const Chat: NextPageWithLayout = () => {
           {messages.map((_item, index) => (
             <MessageChat
               key={index}
-              handleOpenModalPreview={() => onOpen()}
+              handleOpenModalPreview={() => {
+                setTypeShowModal('show-file');
+                onOpen();
+              }}
               setDataModal={setDataModal}
             />
           ))}
