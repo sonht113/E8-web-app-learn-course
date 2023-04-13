@@ -15,6 +15,10 @@ export const getConversationDetail = async (
   return await http.get(`/conversations/${id}`);
 };
 
+export const getMessages = async (idConversation: string) => {
+  return await http.get(`/messages?idConversation=${idConversation}`);
+};
+
 export const searchUserWantAddJoinClassRoom = async (
   body: string
 ): Promise<AxiosResponse<UserPaginate, any>> => {

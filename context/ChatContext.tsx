@@ -1,5 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getConversationDetail, getConversations } from 'api/chat.api';
+import {
+  getConversationDetail,
+  getConversations,
+  getMessages,
+} from 'api/chat.api';
 import { uploadFilesAPI } from 'api/upload.api';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -17,6 +21,7 @@ type IChatContext = {
   setAvatarClassRoom: (v: any) => void;
   conversationDetail: Conversation | null;
   setConversationDetail: React.Dispatch<React.SetStateAction<Conversation>>;
+  messages: any[];
 };
 
 export const ChatContext = React.createContext<IChatContext>({
@@ -31,6 +36,7 @@ export const ChatContext = React.createContext<IChatContext>({
   setAvatarClassRoom: (_v: any) => {},
   conversationDetail: null,
   setConversationDetail: (v: Conversation | null) => {},
+  messages: [],
 });
 
 export const ChatContextProvider = ({ children }) => {
@@ -39,6 +45,7 @@ export const ChatContextProvider = ({ children }) => {
   const [roomActive, setRoomActive] = useState('');
   const [conversationDetail, setConversationDetail] =
     useState<Conversation | null>(null);
+  const [messages, setMessages] = useState<any[]>([]);
   const [isMobile, setIsMobile] = useState(false);
 
   const router = useRouter();
@@ -48,6 +55,7 @@ export const ChatContextProvider = ({ children }) => {
     setRoomActive(roomId);
     router.push(`/chat?room=${roomId}`);
     conversationDetailQuery(roomId);
+    messagesQuery(roomId);
   };
 
   const conversationsQuery = useQuery({
@@ -63,6 +71,18 @@ export const ChatContextProvider = ({ children }) => {
         getConversationDetail(id)
           .then((res) => {
             setConversationDetail(res?.data);
+            return res;
+          })
+          .catch((err) => console.log(err)),
+    });
+  };
+
+  const messagesQuery = (id: string) => {
+    queryClient.prefetchQuery(['meesage', id], {
+      queryFn: () =>
+        getMessages(id)
+          .then((res) => {
+            setMessages(res?.data);
             return res;
           })
           .catch((err) => console.log(err)),
@@ -109,6 +129,7 @@ export const ChatContextProvider = ({ children }) => {
         selectRoom,
         avatarClassRoom,
         setAvatarClassRoom,
+        messages,
       }}
     >
       {children}
