@@ -67,6 +67,7 @@ const SidebarChat = () => {
               setShowMessage={setShowMessage}
               isMobile={isMobile}
               isActive={roomActive === item._id}
+              data={item}
             />
           ))}
         </Box>

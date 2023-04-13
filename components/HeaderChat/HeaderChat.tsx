@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import {
   useDisclosure,
@@ -21,6 +21,7 @@ import { ArrowBackIcon, DragHandleIcon } from '@chakra-ui/icons';
 import { AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
 import { BsCameraVideo } from 'react-icons/bs';
 import Link from 'next/link';
+import { ChatContext } from 'context/ChatContext';
 
 type IHeaderChatProps = {
   showMessage?: boolean;
@@ -36,6 +37,7 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
   handleOpenModalAddStudent,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { conversationDetail } = useContext(ChatContext);
   const btnRef = React.useRef();
 
   const router = useRouter();
@@ -65,34 +67,35 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
         <Box display={'flex'} ml={3} gap={2} alignItems={'center'}>
           <Avatar
             className="avatar-group-chat"
-            name="Dan Abrahmov"
-            src="https://bit.ly/dan-abramov"
+            src={conversationDetail?.avatar}
           />
           <Box>
             <Text fontSize={'md'} color={'gray.500'} fontWeight={'bold'}>
-              Group name
+              {conversationDetail?.chatName}
             </Text>
             <Flex gap={1}>
               <AiOutlineUser color="gray" />
               <Text fontSize={'sm'} color={'gray.400'}>
-                3 thanh vien
+                {conversationDetail?.users.length} thanh vien
               </Text>
             </Flex>
           </Box>
         </Box>
       </Box>
       <Flex gap={4}>
-        <Tooltip label={'Thêm thành viên'} hasArrow placement="bottom-start">
-          <Box
-            onClick={() => {
-              handleOpenModalAddStudent();
-            }}
-          >
-            <AiOutlineUserAdd fontSize={'30px'} cursor={'pointer'} />
-          </Box>
-        </Tooltip>
+        {conversationDetail?.role === 'ADMIN' && (
+          <Tooltip label={'Thêm thành viên'} hasArrow placement="bottom-start">
+            <Box
+              onClick={() => {
+                handleOpenModalAddStudent();
+              }}
+            >
+              <AiOutlineUserAdd fontSize={'30px'} cursor={'pointer'} />
+            </Box>
+          </Tooltip>
+        )}
         <Tooltip label={'Cuộc gọi video'} hasArrow placement="bottom-start">
-          <Link href={`/video-call/${router.query.room}`}>
+          <Link target={'_blank'} href={`/video-call/${router.query.room}`}>
             <Box>
               <BsCameraVideo fontSize={'30px'} cursor={'pointer'} />
             </Box>

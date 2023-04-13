@@ -9,8 +9,13 @@ import MessageChat from '@/components/MessageChat';
 import ModalFC from '@/components/ModalFC';
 import FormAddStudentJoinClass from '@/components/FormAddStudentJoinClass';
 import useDebounce from 'hook/useDebounce';
-import { useQuery } from '@tanstack/react-query';
-import { searchUserWantAddJoinClassRoom } from 'api/chat.api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import {
+  searchUserWantAddJoinClassRoom,
+  updateConversation,
+} from 'api/chat.api';
+import { ConversationUpdate } from 'types/converation.type';
+import useToastify from 'hook/useToastify';
 
 const messages = [1, 3, 4, 4, 4, 4, 4];
 
@@ -33,7 +38,16 @@ const Chat: NextPageWithLayout = () => {
   const [typeShowModal, setTypeShowModal] = useState<string>('');
   const [valueSearchUser, setValueSearchUser] = useState<string>('');
 
-  const { showMessage, setShowMessage, isMobile } = useContext(ChatContext);
+  const {
+    showMessage,
+    setShowMessage,
+    isMobile,
+    conversationDetail,
+    setConversationDetail,
+  } = useContext(ChatContext);
+
+  const toast = useToastify();
+  const DURATION_TOAST = 1000;
 
   const debounceValue = useDebounce(valueSearchUser, 1000);
 
@@ -43,6 +57,30 @@ const Chat: NextPageWithLayout = () => {
       return searchUserWantAddJoinClassRoom(debounceValue);
     },
   });
+
+  const updateConversationMutate = useMutation({
+    mutationFn: (body: { id: string; data: ConversationUpdate }) =>
+      updateConversation(body),
+  });
+
+  const handleUpdateConversation = (body: {
+    id: string;
+    data: ConversationUpdate;
+  }) => {
+    updateConversationMutate.mutate(body, {
+      onSuccess: (res) => {
+        toast.handleOpenToastify('success', 'Thêm thành công', DURATION_TOAST);
+        setConversationDetail(res?.data);
+      },
+      onError: (error) => {
+        toast.handleOpenToastify(
+          'error',
+          'Thêm không thành công',
+          DURATION_TOAST
+        );
+      },
+    });
+  };
 
   return (
     <React.Fragment>
@@ -65,6 +103,8 @@ const Chat: NextPageWithLayout = () => {
             value={valueSearchUser}
             data={data?.data}
             isLoading={isLoading}
+            handleAddStudent={handleUpdateConversation}
+            conversation={conversationDetail}
           />
         )}
       </ModalFC>
