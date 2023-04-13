@@ -130,7 +130,7 @@ const PopupAvatar = () => {
         {popupAvatarItems.map((item, index) => (
           <>
             {item.link && (
-              <Link key={index} href={item.link}>
+              <Link key={item.link} href={item.link}>
                 <Text
                   fontSize={'15px'}
                   color={'gray.500'}

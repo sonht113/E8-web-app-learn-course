@@ -59,7 +59,7 @@ const SidebarChat = () => {
             </Text>
           )}
 
-          {conversations?.map((item: Conversation, index: number) => (
+          {conversations?.map((item: Conversation, _index: number) => (
             <RoomChat
               key={item._id}
               onSelect={() => selectRoom(item._id)}

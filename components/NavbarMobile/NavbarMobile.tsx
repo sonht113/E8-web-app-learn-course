@@ -126,7 +126,7 @@ const NavbarMobile: React.FC<INavbarMobileProps> = () => {
       <DrawerOverlay />
       <DrawerContent>
         <Box w={'full'}>
-          <Flex overflow={'scroll'}>
+          <Flex h={'100vh'} className={'navbarMobile'}>
             <Center
               bg={'gray.200'}
               position={'absolute'}

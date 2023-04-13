@@ -61,18 +61,24 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
         )}
       </Box>
       <Grid
-        templateColumns={[
-          'repeat(5, 1fr)',
-          'repeat(5, 1fr)',
-          'repeat(5, 1fr)',
-          'repeat(4, 1fr)',
-        ]}
+        templateColumns={
+          courses?.length === 0
+            ? '1fr'
+            : [
+                'repeat(5, 1fr)',
+                'repeat(5, 1fr)',
+                'repeat(5, 1fr)',
+                'repeat(4, 1fr)',
+              ]
+        }
         gap={5}
         pb={5}
-        overflowX={['scroll', 'scroll', 'scroll', 'hidden']}
+        overflowX={
+          courses?.length !== 0 && ['scroll', 'scroll', 'scroll', 'hidden']
+        }
       >
         {!courses &&
-          [1, 2, 3].map((_item, index) => (
+          [1, 2, 3, 4, 5].map((_item, index) => (
             <Skeleton
               key={index}
               w={['60vw', '30vw', '30vw', 'full']}

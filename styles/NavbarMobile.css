@@ -2,6 +2,13 @@
   --default-position: -100%;
 }
 
+.navbarMobile {
+  overflow-y: scroll;
+}
+.navbarMobile::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes Navbar_Mobile_Slide_In {
   from {
     left: var(--default-position);
