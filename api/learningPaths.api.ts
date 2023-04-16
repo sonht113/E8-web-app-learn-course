@@ -5,5 +5,5 @@ import http from 'utils/http';
 export const getLearningPaths = (): Promise<
   AxiosResponse<LearningPath, any>
 > => {
-  return http.get('/learning-paths');
+  return http.get('/learning-paths/paginate?populate=courses');
 };

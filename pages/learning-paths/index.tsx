@@ -14,6 +14,7 @@ import DefaultLayout from 'layouts/defaultLayout';
 import { ReactElement } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { NextPageWithLayout } from 'types/layout.type';
+import { LearningPathInfo } from 'types/learningPaths.type';
 
 const LearningPaths: NextPageWithLayout = () => {
   const queryLearningPaths = useQuery({
@@ -22,22 +23,30 @@ const LearningPaths: NextPageWithLayout = () => {
     keepPreviousData: true,
   });
 
-  const learningPathsData = queryLearningPaths.data?.data[0];
+  const learningPathsData = queryLearningPaths?.data?.data?.results;
+
+  const learningPathData = learningPathsData?.filter(
+    (item: LearningPathInfo) => item.isParent === true
+  );
 
   return (
     <Container paddingX={2} maxW="100%">
       <Box marginBottom={4}>
         <Heading as="h5" size="xl">
-          {learningPathsData?.title}
+          Lộ trình học
         </Heading>
-        <Text paddingY={4}>{learningPathsData?.desc}</Text>
+        <Text paddingY={4}>
+          Để bắt đầu một cách thuận lợi, bạn nên tập trung vào một lộ trình học.
+          Ví dụ: Để đi làm với kiến thức Tiếng Anh tốt bạn nên tập trung vào lộ
+          trình "TOEIC".
+        </Text>
       </Box>
       <Grid
         templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
         gap={4}
         width={{ base: '100%', lg: '90%' }}
       >
-        {learningPathsData?.learningPathGroups?.map((item) => {
+        {learningPathData?.map((item) => {
           return (
             <LearningPathsBox
               title={item.title}
