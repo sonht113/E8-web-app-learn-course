@@ -28,6 +28,11 @@ export type CourseViewHome = Pick<
   '_id' | 'title' | 'thumbnail' | 'isPrivate' | 'price' | 'totalViews'
 >;
 
+export type CourseViewPopUp = Pick<
+  CourseType,
+  '_id' | 'title' | 'desc' | 'thumbnail'
+>;
+
 type Instructor = {
   position: string;
   idUser: string;

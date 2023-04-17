@@ -1,5 +1,4 @@
 import BenefitComponent from '@/components/BenefitComponent';
-import CommentModal from '@/components/CommentModal';
 import { BellIcon, ChatIcon } from '@chakra-ui/icons';
 import {
   Avatar,
@@ -8,11 +7,13 @@ import {
   Flex,
   Heading,
   useDisclosure,
+  Image,
 } from '@chakra-ui/react';
 import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import { GiUpgrade } from 'react-icons/gi';
+import { CourseViewPopUp } from 'types/course.type';
 
 const popupAvatarItems = [
   {
@@ -192,6 +193,7 @@ const PopupAvatar = () => {
 };
 
 const PopupMyCourse = () => {
+  const { myCourses } = useContext(AuthenContext);
   return (
     <Box pb={5}>
       <Flex justifyContent={'space-between'} alignItems={'center'}>
@@ -209,7 +211,49 @@ const PopupMyCourse = () => {
         </Link>
       </Flex>
       <Box mt={5}>
-        <Text fontSize={'sm'}>Bạn chưa đăng ký khóa học nào</Text>
+        {myCourses?.length === 0 && (
+          <Text fontSize={'sm'}>Bạn chưa đăng ký khóa học nào</Text>
+        )}
+        {myCourses?.length !== 0 &&
+          myCourses?.map((item: CourseViewPopUp) => (
+            <Link href={'/learning/fjdksjflsjfl'}>
+              <Flex
+                key={item?._id}
+                alignItems={'center'}
+                gap={2}
+                border={'1px'}
+                borderColor={'gray.500'}
+                mt={3}
+                p={2}
+                rounded={'md'}
+              >
+                <Image w={'50px'} objectFit={'cover'} src={item?.thumbnail} />
+                <Box>
+                  <Text
+                    whiteSpace={'nowrap'}
+                    width={'160px'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    fontSize={'sm'}
+                    fontWeight={'bold'}
+                    color={'gray.600'}
+                  >
+                    {item?.title}
+                  </Text>
+                  <Text
+                    whiteSpace={'nowrap'}
+                    width={'160px'}
+                    overflow={'hidden'}
+                    textOverflow={'ellipsis'}
+                    fontSize={'sm'}
+                    color={'gray.400'}
+                  >
+                    {item?.desc}
+                  </Text>
+                </Box>
+              </Flex>
+            </Link>
+          ))}
       </Box>
     </Box>
   );
