@@ -8,6 +8,7 @@ import { User } from 'types/user.type';
 import { useRouter } from 'next/router';
 import { getMe } from 'api/user.api';
 import useToastify from 'hook/useToastify';
+import { CourseViewPopUp } from 'types/course.type';
 
 declare global {
   type unknow = any;
@@ -27,6 +28,7 @@ type IAuthenContext = {
   sendOTPPhone: (phone: string) => void;
   otp: { value: string; loading: boolean };
   setOtp: (_v: { value: string; loading: boolean }) => void;
+  myCourses: CourseViewPopUp[];
 };
 
 export const AuthenContext = React.createContext<IAuthenContext>({
@@ -43,6 +45,7 @@ export const AuthenContext = React.createContext<IAuthenContext>({
   otp: { value: '', loading: false },
   loading: true,
   setOtp: (otp: { value: string; loading: boolean }) => {},
+  myCourses: [],
 });
 
 export const AuthenContextProvider = ({ children }) => {
@@ -192,6 +195,7 @@ export const AuthenContextProvider = ({ children }) => {
         sendOTPPhone,
         otp,
         setOtp,
+        myCourses: user?.myCourses,
       }}
     >
       {children}
