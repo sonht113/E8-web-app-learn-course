@@ -13,6 +13,7 @@ import { ActiveMenuContextProvider } from 'context/ActiveMenuContext';
 import { AuthenContextProvider } from 'context/AuthenContext';
 import { ProtectRoute } from 'HOC/ProtectRoute';
 import 'react-toastify/dist/ReactToastify.css';
+import ErrorBoundary from 'HOC/ErrorBoundary';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -45,7 +46,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                         key="title"
                       />
                     </Head>
-                    <Component {...pageProps} />{' '}
+                    <ErrorBoundary>
+                      <Component {...pageProps} />{' '}
+                    </ErrorBoundary>
                   </React.Fragment>
                 )}
               </NavbarMobileContextProvider>
