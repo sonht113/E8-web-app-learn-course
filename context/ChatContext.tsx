@@ -48,6 +48,7 @@ export const ChatContextProvider = ({ children }) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [isMobile, setIsMobile] = useState(false);
 
+  const formData = new FormData();
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -107,11 +108,22 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    if (avatarClassRoom) {
+      formData.append('files', avatarClassRoom);
+      uploadFiles(formData);
+    }
+  }, [avatarClassRoom]);
+
+  useEffect(() => {
     const width = window.innerWidth;
     if (width <= 480) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
+    }
+
+    if (router.query.room) {
+      selectRoom(String(router.query.room));
     }
   }, []);
 

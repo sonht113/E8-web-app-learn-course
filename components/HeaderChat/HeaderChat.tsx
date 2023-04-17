@@ -102,7 +102,7 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
           </Link>
         </Tooltip>
         <Tooltip label={'Tuỳ chọn'} hasArrow placement="bottom-start">
-          <Box>
+          <Box display={'none'}>
             <DragHandleIcon
               ref={btnRef}
               onClick={onOpen}
