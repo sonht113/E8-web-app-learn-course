@@ -216,7 +216,7 @@ const PopupMyCourse = () => {
         )}
         {myCourses?.length !== 0 &&
           myCourses?.map((item: CourseViewPopUp) => (
-            <Link href={'/learning/fjdksjflsjfl'}>
+            <Link href={`/learning/${item?._id}`}>
               <Flex
                 key={item?._id}
                 alignItems={'center'}
