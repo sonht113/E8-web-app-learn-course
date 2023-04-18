@@ -1,4 +1,4 @@
-import { AspectRatio, Box, Heading, Text } from '@chakra-ui/react';
+import { AspectRatio, Box, Heading, Skeleton, Text } from '@chakra-ui/react';
 import React from 'react';
 import { LectureType } from 'types/chapter.type';
 
@@ -24,9 +24,18 @@ const LearningVideo: React.FC<ILearningVideoProps> = ({
       </Box>
       <Box paddingX={{ base: 5, md: 20 }}>
         <Box marginY={{ base: '24px', md: '48px' }}>
-          <Heading as="h2" fontSize="28px" fontWeight={600} marginBottom="8px">
-            {lecture.title}
-          </Heading>
+          {lecture?.title ? (
+            <Heading
+              as="h2"
+              fontSize="28px"
+              fontWeight={600}
+              marginBottom="8px"
+            >
+              {lecture.title}
+            </Heading>
+          ) : (
+            <Skeleton height="30px" width="60%" rounded={'md'} />
+          )}
           <Text fontSize="14px">Cập nhật tháng 2 năm 2022</Text>
         </Box>
         <Box>

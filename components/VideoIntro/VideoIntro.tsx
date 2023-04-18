@@ -6,6 +6,7 @@ import {
   Button,
   Text,
   Flex,
+  Skeleton,
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -35,14 +36,18 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({ chapters, courseData }) => {
         height={'250px'}
         display={{ base: 'none', md: 'block' }}
       >
-        <AspectRatio width="100%" height="100%" ratio={1} borderRadius={8}>
-          <iframe
-            title="naruto"
-            src={urlVideo}
-            allowFullScreen
-            style={{ borderRadius: 'inherit' }}
-          />
-        </AspectRatio>
+        {urlVideo ? (
+          <AspectRatio width="100%" height="100%" ratio={1} borderRadius={8}>
+            <iframe
+              title="naruto"
+              src={urlVideo}
+              allowFullScreen
+              style={{ borderRadius: 'inherit' }}
+            />
+          </AspectRatio>
+        ) : (
+          <Skeleton height="250px" rounded={'xl'} />
+        )}
       </Box>
       <VStack border={{ base: '1px', md: '0' }} borderColor={'gray.200'}>
         <Center>

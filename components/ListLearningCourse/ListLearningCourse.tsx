@@ -1,5 +1,5 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Skeleton, Spacer, Text } from '@chakra-ui/react';
 import React from 'react';
 import { ChapterType, LectureType } from 'types/chapter.type';
 import CourseItem from '../CourseItem';
@@ -35,9 +35,16 @@ const ListLearningCourse: React.FC<IListLearningCourseProps> = ({
         </Button>
       </Flex>
       <Box height="100%" overflowY="scroll" className="scroll-custom">
-        {chapters?.map((chapter) => (
-          <CourseItem key={chapter?._id} {...{ isOpen, chapter, setLecture }} />
-        ))}
+        {chapters ? (
+          chapters?.map((chapter) => (
+            <CourseItem
+              key={chapter?._id}
+              {...{ isOpen, chapter, setLecture }}
+            />
+          ))
+        ) : (
+          <Skeleton height="40px" rounded={'md'} />
+        )}
       </Box>
     </Box>
   );
