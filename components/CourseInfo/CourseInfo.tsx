@@ -1,4 +1,11 @@
-import { Box, Text, Flex, Spacer } from '@chakra-ui/react';
+import {
+  Box,
+  Text,
+  Flex,
+  Spacer,
+  Skeleton,
+  SkeletonText,
+} from '@chakra-ui/react';
 import React from 'react';
 import { ChapterType } from 'types/chapter.type';
 import { CourseType } from 'types/course.type';
@@ -19,10 +26,19 @@ const CourseInfo: React.FC<ICourseInfoProps> = ({
 }) => {
   return (
     <Box>
-      <Text fontSize={{ base: '24px' }} fontWeight="bold" as="h1">
-        {title}
-      </Text>
-      <Text fontSize="14px">{description}</Text>
+      {title ? (
+        <Text fontSize={{ base: '24px' }} fontWeight="bold" as="h1">
+          {title}
+        </Text>
+      ) : (
+        <Skeleton height="30px" width="50%" rounded={'xl'} />
+      )}
+
+      {description ? (
+        <Text fontSize="14px">{description}</Text>
+      ) : (
+        <SkeletonText mt="4" noOfLines={2} spacing="4" skeletonHeight="2" />
+      )}
 
       <Box paddingY={4} fontSize="14px">
         <Text fontSize="xl" fontWeight="bold" paddingBottom={2}>
@@ -39,10 +55,13 @@ const CourseInfo: React.FC<ICourseInfoProps> = ({
           </Text>
         </Flex>
       </Box>
-
-      {chapters?.sort()?.map((chapter) => {
-        return <CourseContent chapter={chapter} />;
-      })}
+      {chapters ? (
+        chapters?.sort()?.map((chapter) => {
+          return <CourseContent chapter={chapter} />;
+        })
+      ) : (
+        <Skeleton height="50px" rounded={'md'} />
+      )}
     </Box>
   );
 };

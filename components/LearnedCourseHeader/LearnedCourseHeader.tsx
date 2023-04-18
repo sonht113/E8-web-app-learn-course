@@ -1,9 +1,12 @@
 import { ChevronLeftIcon } from '@chakra-ui/icons';
-import { Flex, Image, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 import { AiFillQuestionCircle } from 'react-icons/ai';
 import { MdStickyNote2 } from 'react-icons/md';
 import { Link } from '@chakra-ui/react';
+import Image from 'next/image';
+
+import logo from 'public/static/images/icon.png';
 
 type ILearnedCourseHeaderProps = {
   title: string;
@@ -32,13 +35,10 @@ const LearnedCourseHeader: React.FC<ILearnedCourseHeaderProps> = ({
         </Link>
         <Link href="/">
           <Image
-            rounded={'md'}
-            boxSize={'30px'}
-            objectFit="cover"
-            src="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
+            width={40}
+            style={{ objectFit: 'cover' }}
+            src={logo}
             alt="E8 logo"
-            marginX={4}
-            display={{ base: 'none', md: 'block' }}
           />
         </Link>
         <Text
@@ -46,6 +46,7 @@ const LearnedCourseHeader: React.FC<ILearnedCourseHeaderProps> = ({
           color="#fff"
           maxWidth={{ base: '150px', sm: '100%' }}
           noOfLines={1}
+          ms={3}
         >
           {title}
         </Text>
