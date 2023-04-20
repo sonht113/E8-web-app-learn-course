@@ -11,47 +11,10 @@ import {
 } from '@chakra-ui/react';
 import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { GiUpgrade } from 'react-icons/gi';
 import { CourseViewPopUp } from 'types/course.type';
 import { TypeUser } from 'types/user.type';
-
-const popupAvatarItems = [
-  {
-    title: 'Trang cá nhân',
-    link: '/profile',
-    border: true,
-  },
-  {
-    title: 'Viết blog',
-    link: '/blog/create-blog',
-    border: false,
-  },
-  {
-    title: 'Bài viết của tôi',
-    link: '/me/blog',
-    border: true,
-  },
-  {
-    title: 'Bài viết đã lưu',
-    link: '/me/blog-saved',
-    border: true,
-  },
-  {
-    icon: <GiUpgrade fontSize="24px" color="green" />,
-    title: 'Upgrade to teacher',
-    border: true,
-  },
-  {
-    title: 'Cài đặt',
-    link: '/settings/personal',
-    border: false,
-  },
-  {
-    title: 'Đăng xuất',
-    border: false,
-  },
-];
 
 const UserAvatar = () => {
   const { user } = useContext(AuthenContext);
@@ -97,7 +60,7 @@ const Chat = () => {
   return (
     <Link href={'/chat'}>
       <ChatIcon
-        display={['block', 'block', 'block', 'none']}
+        display={['block', 'block', 'block']}
         fontSize={'xl'}
         cursor={'pointer'}
         color={['gray.600', 'gray.400']}
@@ -109,6 +72,46 @@ const Chat = () => {
 const PopupAvatar = () => {
   const { signOutUser, user } = useContext(AuthenContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const popupAvatarItems = useMemo(
+    () => [
+      {
+        title: 'Trang cá nhân',
+        link: `/profile/${user._id}`,
+        border: true,
+      },
+      {
+        title: 'Viết blog',
+        link: '/blog/create-blog',
+        border: false,
+      },
+      {
+        title: 'Bài viết của tôi',
+        link: '/me/blog',
+        border: true,
+      },
+      {
+        title: 'Bài viết đã lưu',
+        link: '/me/blog-saved',
+        border: true,
+      },
+      {
+        icon: <GiUpgrade fontSize="24px" color="green" />,
+        title: 'Upgrade to teacher',
+        border: true,
+      },
+      {
+        title: 'Cài đặt',
+        link: '/settings/personal',
+        border: false,
+      },
+      {
+        title: 'Đăng xuất',
+        border: false,
+      },
+    ],
+    []
+  );
 
   return (
     <Box>

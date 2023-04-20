@@ -90,7 +90,7 @@ const Course: React.FC<ICourseProps> = ({
             top={1}
             left={2}
             width={[4, 5]}
-            src={'static/images/pro.svg'}
+            src={'/static/images/pro.svg'}
             alt={'course'}
           />
         )}
@@ -99,7 +99,7 @@ const Course: React.FC<ICourseProps> = ({
         >
           <Text
             my={2}
-            fontSize={['md', 'lg']}
+            fontSize={['md', 'md', 'md']}
             fontWeight={'medium'}
             color={'#3e3e3e'}
             whiteSpace={'nowrap'}
@@ -111,7 +111,7 @@ const Course: React.FC<ICourseProps> = ({
           </Text>
           {isFree && (
             <Text
-              fontSize={['sm', 'md']}
+              fontSize={['sm', 'sm']}
               fontWeight={'medium'}
               color={'#3f3f3f'}
             >
@@ -128,7 +128,9 @@ const Course: React.FC<ICourseProps> = ({
               </Flex>
             </Box>
           )}
-          {router.pathname.includes('/profile') && <Text>{desc}</Text>}
+          {router.pathname.includes('/profile') && (
+            <Text fontSize={'sm'}>{desc}</Text>
+          )}
         </Box>
       </Box>
     </Link>

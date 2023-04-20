@@ -29,7 +29,7 @@ type GroupDetail = {
 };
 
 export type User = {
-  favoriteCourses: CourseType[];
+  favoriteCourses?: CourseType[];
   myCourses: CourseType[];
   receivedNotificationTypes?: Notification[];
   isDeleted?: boolean;
@@ -42,7 +42,7 @@ export type User = {
   email?: string;
   phone?: string;
   fullName: string;
-  role: string;
+  role?: string;
   groupAPIDenines?: APIDenie[];
   groupAPIAccesses?: APIAccess[];
   groups?: Group[];
@@ -52,4 +52,5 @@ export type User = {
   createdAt?: string;
   updatedAt?: string;
   typeUser?: TypeUser.STUDENT | TypeUser.TEACHER;
+  slug?: string;
 };

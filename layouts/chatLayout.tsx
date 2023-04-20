@@ -7,7 +7,7 @@ import SidebarChat from '@/components/SidebarChat';
 import { ChatContext, ChatContextProvider } from 'context/ChatContext';
 import { useRouter } from 'next/router';
 
-const DefaultLayout = ({ children }) => {
+const ChatLayout = ({ children }) => {
   const router = useRouter();
   return (
     <React.Fragment>
@@ -43,4 +43,4 @@ const EmptyRoom = () => {
   );
 };
 
-export default DefaultLayout;
+export default ChatLayout;

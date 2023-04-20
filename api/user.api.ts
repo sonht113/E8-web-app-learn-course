@@ -13,8 +13,8 @@ export const getMe = async (populate: string, fields: string) => {
 
 export const getUser = async (
   idUser: string,
-  populate: string
-): Promise<AxiosResponse<any, any>> => {
+  populate?: string
+): Promise<AxiosResponse<User, any>> => {
   if (populate) {
     return await http.get(`/users/${idUser}`, {
       params: {
