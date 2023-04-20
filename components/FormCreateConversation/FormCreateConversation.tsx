@@ -5,16 +5,24 @@ import { AiFillCamera } from 'react-icons/ai';
 import { ChatContext } from 'context/ChatContext';
 import InputField from '../InputField';
 
-const FormCreateConversation = () => {
+type IFormCreateConversationProps = {
+  onCloseModal: () => void;
+};
+
+const FormCreateConversation: React.FC<IFormCreateConversationProps> = ({
+  onCloseModal,
+}) => {
   const [imagePreview, setImagePreview] = useState<null | string>(null);
   const [errorValidateImage, setErrorValidateImage] = useState<string>('');
 
-  const { avatarClassRoom, setAvatarClassRoom } = useContext(ChatContext);
+  const { avatarClassRoom, setAvatarClassRoom, createConversation } =
+    useContext(ChatContext);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const submit = (data) => {
@@ -22,7 +30,10 @@ const FormCreateConversation = () => {
       setErrorValidateImage('Vui lòng chọn ảnh đại diện cho lớp học');
       return;
     }
-    console.log(data);
+    createConversation(data.nameClass, () => {
+      reset();
+      onCloseModal();
+    });
   };
 
   return (
@@ -86,6 +97,7 @@ const FormCreateConversation = () => {
                 required: 'Vui lòng nhập tên lớp học',
               }),
             }}
+            change={(value) => value}
           />
           {errors.nameClass && (
             <Text color={'red'} fontSize={'xs'} pl={2}>

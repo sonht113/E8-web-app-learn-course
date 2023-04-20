@@ -65,10 +65,12 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
         />
 
         <Box display={'flex'} ml={3} gap={2} alignItems={'center'}>
-          <Avatar
-            className="avatar-group-chat"
-            src={conversationDetail?.avatar}
-          />
+          <Box border={'2px'} borderColor={'green.500'} rounded={'full'}>
+            <Avatar
+              className="avatar-group-chat"
+              src={conversationDetail?.avatar}
+            />
+          </Box>
           <Box>
             <Text fontSize={'md'} color={'gray.500'} fontWeight={'bold'}>
               {conversationDetail?.chatName}

@@ -8,7 +8,9 @@ type Upload = {
 export const uploadFilesAPI = async (
   body: any
 ): Promise<AxiosResponse<Upload, any>> => {
-  return await http.post('/uploads', body);
+  return await http.post('/uploads', body, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
 export const confirmUploadAPI = async (

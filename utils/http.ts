@@ -13,7 +13,10 @@ http.interceptors.request.use(
   function (config: InternalAxiosRequestConfig<any>) {
     const token = Cookies.get('access_token');
     const clonedConfig = { ...config };
-    clonedConfig.headers['Content-Type'] = 'application/json';
+    if (!clonedConfig.headers['Content-Type']) {
+      clonedConfig.headers['Content-Type'] = 'application/json';
+    }
+
     if (token) {
       clonedConfig.headers['Authorization'] = `Bearer ${token}`;
     }

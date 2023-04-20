@@ -3,39 +3,25 @@ import React from 'react';
 
 type IListImageProps = {
   click?: (_url: string) => void;
+  sender?: boolean;
+  image?: string;
 };
 
-const ListImage: React.FC<IListImageProps> = ({ click }) => {
+const ListImage: React.FC<IListImageProps> = ({ click, sender, image }) => {
   return (
     <Flex
       flexWrap={'wrap'}
       gap={2}
       mt={2}
       maxW={['200px', '300px', '300px', '400px']}
+      justifyContent={sender && 'flex-end'}
     >
       <Image
         cursor={'pointer'}
         boxSize={['80px', '100px', '100px', '150px']}
         objectFit="cover"
-        src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80"
-        alt="Dan Abramov"
-        onClick={() =>
-          click(
-            'https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&w=1000&q=80'
-          )
-        }
-      />
-      <Image
-        boxSize={['80px', '100px', '100px', '150px']}
-        objectFit="cover"
-        src="https://bit.ly/dan-abramov"
-        alt="Dan Abramov"
-      />
-      <Image
-        boxSize={['80px', '100px', '100px', '150px']}
-        objectFit="cover"
-        src="https://bit.ly/dan-abramov"
-        alt="Dan Abramov"
+        src={image}
+        onClick={() => click(image)}
       />
     </Flex>
   );

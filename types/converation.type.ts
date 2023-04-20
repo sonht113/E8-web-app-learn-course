@@ -11,6 +11,8 @@ export type Conversation = {
   avatar: string;
   lastestMessage?: { idUser: string; text: string };
   role?: RoleConversationEnum.ADMIN | RoleConversationEnum.USER;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type ConversationCreate = {
@@ -19,7 +21,7 @@ export type ConversationCreate = {
   isGroup: boolean;
   avatar: string;
   latestMessage?: string;
-  role?: RoleConversationEnum;
+  role?: RoleConversationEnum.ADMIN;
 };
 
 export type ConversationUpdate = Partial<ConversationCreate>;
