@@ -30,7 +30,7 @@ const SidebarChat = () => {
   return (
     <React.Fragment>
       <ModalFC title={'Tạo lớp học'} isOpen={isOpen} onClose={onClose}>
-        <FormCreateConversation />
+        <FormCreateConversation onCloseModal={onClose} />
       </ModalFC>
       <Box
         h={'calc(100vh - 64px)'}
@@ -42,15 +42,34 @@ const SidebarChat = () => {
       >
         <HeaderSidebarChat click={() => onOpen()} />
         <Box
-          h={'calc(100vh - 126px)'}
+          h={'50px'}
+          display={'flex'}
+          alignItems={'center'}
+          borderBottom={'1px'}
+          borderColor={'gray'}
+          bg={'gray.100'}
+        >
+          <Text
+            bgGradient={'linear(to-r, rgb(1, 84, 50), rgb(5, 206, 152) )'}
+            pl={2}
+            pr={4}
+            fontWeight={'medium'}
+            color={'white'}
+          >
+            Lớp học online
+          </Text>
+        </Box>
+        <Box
+          h={'calc(100vh - 176px)'}
           overflowY={conversations?.length > 5 ? 'scroll' : 'hidden'}
           display={conversations?.length === 0 && 'flex'}
           justifyContent={conversations?.length === 0 && 'center'}
           alignItems={conversations?.length === 0 && 'center'}
+          bg={'gray.300'}
         >
           {!conversations &&
             [{ id: 1 }, { id: 2 }, { id: 3 }].map((item, _index) => (
-              <Skeleton height={'100px'} mb={3} />
+              <Skeleton height={'100px'} mb={3} bg={'green'} />
             ))}
 
           {conversations?.length === 0 && (
@@ -59,17 +78,23 @@ const SidebarChat = () => {
             </Text>
           )}
 
-          {conversations?.map((item: Conversation, _index: number) => (
-            <RoomChat
-              key={item._id}
-              onSelect={() => selectRoom(item._id)}
-              showMessage={showMessage}
-              setShowMessage={setShowMessage}
-              isMobile={isMobile}
-              isActive={roomActive === item._id}
-              data={item}
-            />
-          ))}
+          {conversations
+            ?.sort(
+              (a: Conversation, b: Conversation) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+            .map((item: Conversation, _index: number) => (
+              <RoomChat
+                key={item._id}
+                onSelect={() => selectRoom(item._id)}
+                showMessage={showMessage}
+                setShowMessage={setShowMessage}
+                isMobile={isMobile}
+                isActive={roomActive === item._id}
+                data={item}
+              />
+            ))}
         </Box>
       </Box>
     </React.Fragment>

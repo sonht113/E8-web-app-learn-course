@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import { Box, Input, Flex, Tooltip } from '@chakra-ui/react';
 import { AttachmentIcon } from '@chakra-ui/icons';
 import { BsFillImageFill } from 'react-icons/bs';
 import { FiSend } from 'react-icons/fi';
+import { FileType } from 'types/message.type';
+import { DataMessage } from 'pages/chat';
 
 type IInputChatProps = {
   isMobile?: boolean;
+  message: DataMessage;
+  setMessage: React.Dispatch<React.SetStateAction<DataMessage>>;
+  onSendMessage: () => void;
+  onSendFiles: (v: DataMessage) => void;
 };
 
-const InputChat: React.FC<IInputChatProps> = ({ isMobile }) => {
-  const [message, setMessage] = useState('');
-
+const InputChat: React.FC<IInputChatProps> = ({
+  isMobile,
+  message,
+  setMessage,
+  onSendMessage,
+  onSendFiles,
+}) => {
   return (
     <Box
       h={'60px'}
@@ -33,11 +43,20 @@ const InputChat: React.FC<IInputChatProps> = ({ isMobile }) => {
         border={'1px'}
         borderColor={'gray.200'}
         rounded={'full'}
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
+        value={message.value}
+        onChange={(e) =>
+          setMessage({ ...message, value: e.target.value, type: FileType.TEXT })
+        }
       />
       <Flex w={['50%', '30%', '20%']} gap={5} justifyContent={'flex-end'}>
-        <input type="file" style={{ display: 'none' }} id="file" />
+        <input
+          type="file"
+          style={{ display: 'none' }}
+          id="file"
+          onChange={(e) =>
+            onSendFiles({ value: e.target.files[0], type: FileType.FILE })
+          }
+        />
         <Tooltip label={'Đính kèm tệp'} hasArrow placement="top-start">
           <label htmlFor="file">
             <AttachmentIcon
@@ -52,7 +71,9 @@ const InputChat: React.FC<IInputChatProps> = ({ isMobile }) => {
           accept="image/*"
           style={{ display: 'none' }}
           id="image"
-          multiple
+          onChange={(e) =>
+            onSendFiles({ value: e.target.files[0], type: FileType.IMAGE })
+          }
         />
         <Tooltip label={'Đính kèm ảnh'} hasArrow placement="top-end">
           <label htmlFor="image">
@@ -65,9 +86,14 @@ const InputChat: React.FC<IInputChatProps> = ({ isMobile }) => {
         </Tooltip>
         <label>
           <FiSend
+            onClick={onSendMessage}
             fontSize={'25px'}
-            cursor={message ? 'pointer' : 'not-allowed'}
-            color={message ? 'green' : 'gray'}
+            cursor={
+              message.value && message.type === FileType.TEXT
+                ? 'pointer'
+                : 'not-allowed'
+            }
+            color={message.value ? 'green' : 'gray'}
           />
         </label>
       </Flex>
@@ -75,4 +101,4 @@ const InputChat: React.FC<IInputChatProps> = ({ isMobile }) => {
   );
 };
 
-export default InputChat;
+export default memo(InputChat);

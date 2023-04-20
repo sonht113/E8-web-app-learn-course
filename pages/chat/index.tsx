@@ -16,11 +16,18 @@ import {
 } from 'api/chat.api';
 import { ConversationUpdate } from 'types/converation.type';
 import useToastify from 'hook/useToastify';
+import { FileType, Message, MessageSocket } from 'types/message.type';
 
 enum TypePreview {
   'IMAGE',
   'FILE',
+  'AUDIO',
 }
+
+export type DataMessage = {
+  value: string | any;
+  type: FileType.TEXT | FileType.IMAGE | FileType.FILE | FileType.AUDIO;
+};
 
 export type DataModal = {
   typePreview: TypePreview.IMAGE | TypePreview.FILE;
@@ -35,6 +42,10 @@ const Chat: NextPageWithLayout = () => {
   });
   const [typeShowModal, setTypeShowModal] = useState<string>('');
   const [valueSearchUser, setValueSearchUser] = useState<string>('');
+  const [message, setMessage] = useState<DataMessage>({
+    value: '',
+    type: FileType.TEXT,
+  });
 
   const {
     showMessage,
@@ -43,8 +54,8 @@ const Chat: NextPageWithLayout = () => {
     conversationDetail,
     setConversationDetail,
     messages,
+    sendMessage,
   } = useContext(ChatContext);
-
   const toast = useToastify();
   const DURATION_TOAST = 1000;
 
@@ -79,6 +90,16 @@ const Chat: NextPageWithLayout = () => {
         );
       },
     });
+  };
+
+  const handleSendMessage = () => {
+    sendMessage(message);
+    setMessage({ value: '', type: FileType.TEXT });
+  };
+
+  const handleSendFiles = (fileMessage: DataMessage) => {
+    sendMessage(fileMessage);
+    setMessage({ value: '', type: FileType.TEXT });
   };
 
   return (
@@ -132,8 +153,9 @@ const Chat: NextPageWithLayout = () => {
           h={'calc(100vh - 61px - 64px)'}
           overflowY={'scroll'}
           mt={'61px'}
+          bg={'gray.300'}
         >
-          {messages.map((_item, index) => (
+          {messages?.map((item: MessageSocket, index) => (
             <MessageChat
               key={index}
               handleOpenModalPreview={() => {
@@ -141,10 +163,17 @@ const Chat: NextPageWithLayout = () => {
                 onOpen();
               }}
               setDataModal={setDataModal}
+              message={item}
             />
           ))}
         </Box>
-        <InputChat isMobile={isMobile} />
+        <InputChat
+          isMobile={isMobile}
+          setMessage={setMessage}
+          message={message}
+          onSendMessage={handleSendMessage}
+          onSendFiles={handleSendFiles}
+        />
       </Box>
     </React.Fragment>
   );
