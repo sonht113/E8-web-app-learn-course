@@ -32,25 +32,25 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           <ProtectRoute>
             <ActiveMenuContextProvider>
               <NavbarMobileContextProvider>
-                {getLayout(
-                  <React.Fragment>
-                    <Head>
-                      <title>E8 Learn EL to work</title>
-                      <link
-                        rel="shortcut icon"
-                        href="/static/images/icon.png"
-                      />
-                      <meta
-                        property="og:title"
-                        content="E8 Learn EL to work"
-                        key="title"
-                      />
-                    </Head>
-                    <ErrorBoundary>
+                <ErrorBoundary>
+                  {getLayout(
+                    <React.Fragment>
+                      <Head>
+                        <title>E8 Learn EL to work</title>
+                        <link
+                          rel="shortcut icon"
+                          href="/static/images/icon.png"
+                        />
+                        <meta
+                          property="og:title"
+                          content="E8 Learn EL to work"
+                          key="title"
+                        />
+                      </Head>
                       <Component {...pageProps} />{' '}
-                    </ErrorBoundary>
-                  </React.Fragment>
-                )}
+                    </React.Fragment>
+                  )}
+                </ErrorBoundary>
               </NavbarMobileContextProvider>
             </ActiveMenuContextProvider>
           </ProtectRoute>

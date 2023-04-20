@@ -1,10 +1,17 @@
-@media (min-width: 639px) and (max-width: 991px) {
+@media screen and (min-width: 639px) {
   .Course {
     display: flex;
+    align-items: center;
     gap: 20px;
   }
   .contentCourse {
     width: 90%;
+  }
+}
+
+@media screen and (min-width: 1436px) {
+  .Course {
+    align-items: flex-start;
   }
 }
 .detailCourse {

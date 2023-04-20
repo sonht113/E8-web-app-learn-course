@@ -8,17 +8,30 @@ import {
   ListItem,
   List,
   ListIcon,
+  Center,
 } from '@chakra-ui/react';
 import { MdCheckCircle } from 'react-icons/md';
 import ProfileLayout from 'layouts/profileLayout';
 import CoverImage from '../../public/static/images/cover-image.jpg';
-import React, { ReactElement, useState } from 'react';
-import { courses } from '_mock/data';
+import React, { ReactElement, useContext, useMemo } from 'react';
 import Course from '@/components/Course';
 import { CourseType } from 'types/course.type';
+import { TypeUser } from 'types/user.type';
+import { ProfileContext } from 'context/ProfileContext';
 
 const Profile = () => {
-  const [isTeacher] = useState<boolean>(true);
+  const { user } = useContext(ProfileContext);
+  const isTeacher = useMemo(() => user?.typeUser === TypeUser.TEACHER, [user]);
+
+  const proMyCourses = useMemo(
+    () => user?.myCourses.filter((course: CourseType) => course.isPrivate),
+    [user]
+  );
+
+  const freeMyCourses = useMemo(
+    () => user?.myCourses.filter((course: CourseType) => !course.isPrivate),
+    [user]
+  );
 
   return (
     <React.Fragment>
@@ -37,11 +50,15 @@ const Profile = () => {
             p={2}
             bg={'white'}
             size={['xl', '2xl']}
-            name="Christian Nwamba"
-            src="https://bit.ly/code-beast"
+            name={user?.fullName
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd')
+              .replace(/Đ/g, 'D')}
+            src={user?.avatar}
           />
           <Text fontSize={'2xl'} fontWeight={'bold'} pb={[0, 7]} ml={[0, 5]}>
-            Hồ Trọng Sơn {isTeacher && '(Teacher)'}
+            {user?.fullName} {isTeacher && '(Teacher)'}
           </Text>
         </Box>
       </Box>
@@ -69,15 +86,19 @@ const Profile = () => {
             <List spacing={3}>
               <ListItem>
                 <ListIcon as={MdCheckCircle} color="green.500" />
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit
+                {user?.email}
               </ListItem>
               <ListItem>
                 <ListIcon as={MdCheckCircle} color="green.500" />
-                Assumenda, quia temporibus eveniet a libero incidunt suscipit
+                {user?.phone}
               </ListItem>
               <ListItem>
                 <ListIcon as={MdCheckCircle} color="green.500" />
-                Quidem, ipsam illum quis sed voluptatum quae eum fugit earum
+                {user?.gender}
+              </ListItem>
+              <ListItem>
+                <ListIcon as={MdCheckCircle} color="green.500" />
+                {user?.street}
               </ListItem>
             </List>
           </Box>
@@ -88,20 +109,22 @@ const Profile = () => {
               borderRadius={'md'}
               p={3}
             >
-              <Text fontSize={['md', 'lg']} fontWeight={'bold'}>
+              <Text fontSize={['md', 'lg']} fontWeight={'bold'} mb={5}>
                 Khoá học pro
               </Text>
+              {proMyCourses.length === 0 && <EmptyCourse />}
               <Flex flexDirection={'column'} gap={5}>
-                {courses.map((course: CourseType) => (
-                  <Course
-                    id={course._id}
-                    isFree={true}
-                    thumbnail={course.thumbnail}
-                    price={course.price}
-                    title={course.title}
-                    desc={course.desc}
-                  />
-                ))}
+                {proMyCourses.length !== 0 &&
+                  proMyCourses.map((course: CourseType) => (
+                    <Course
+                      id={course._id}
+                      isFree={true}
+                      thumbnail={course.thumbnail}
+                      price={course.price}
+                      title={course.title}
+                      desc={course.desc}
+                    />
+                  ))}
               </Flex>
             </Box>
           )}
@@ -116,15 +139,17 @@ const Profile = () => {
             <Text fontSize={['md', 'lg']} mb={5} fontWeight={'bold'}>
               {isTeacher ? 'Lớp học online' : 'Các khoá học đã tham gia'}
             </Text>
+            {user?.myLearningCourses.length === 0 && <EmptyCourse />}
             <Flex flexDirection={'column'} gap={5}>
-              {courses.map((course: CourseType) => (
-                <Course
-                  id={course._id}
-                  thumbnail={course.thumbnail}
-                  title={course.title}
-                  desc={course.desc}
-                />
-              ))}
+              {user?.myLearningCourses.length !== 0 &&
+                user?.myLearningCourses.map((course: CourseType) => (
+                  <Course
+                    id={course._id}
+                    thumbnail={course.thumbnail}
+                    title={course.title}
+                    desc={course.desc}
+                  />
+                ))}
             </Flex>
           </Box>
           {isTeacher && (
@@ -135,20 +160,22 @@ const Profile = () => {
                 borderRadius={'md'}
                 p={3}
               >
-                <Text fontSize={['md', 'lg']} fontWeight={'bold'}>
+                <Text fontSize={['md', 'lg']} fontWeight={'bold'} mb={5}>
                   Khoá học free
                 </Text>
+                {freeMyCourses.length === 0 && <EmptyCourse />}
                 <Flex flexDirection={'column'} gap={5}>
-                  {courses.map((course: CourseType) => (
-                    <Course
-                      id={course._id}
-                      isFree={false}
-                      totalViews={course.totalViews}
-                      thumbnail={course.thumbnail}
-                      title={course.title}
-                      desc={course.desc}
-                    />
-                  ))}
+                  {freeMyCourses.length !== 0 &&
+                    freeMyCourses.map((course: CourseType) => (
+                      <Course
+                        id={course._id}
+                        isFree={false}
+                        totalViews={course.totalViews}
+                        thumbnail={course.thumbnail}
+                        title={course.title}
+                        desc={course.desc}
+                      />
+                    ))}
                 </Flex>
               </Box>
             </>
@@ -156,6 +183,16 @@ const Profile = () => {
         </Box>
       </Grid>
     </React.Fragment>
+  );
+};
+
+const EmptyCourse = () => {
+  return (
+    <Center>
+      <Text fontSize={'sm'} fontWeight={'medium'} color={'gray.500'}>
+        Không có khoá học nào ở đây
+      </Text>
+    </Center>
   );
 };
 
