@@ -14,6 +14,7 @@ import Link from 'next/link';
 import React, { useContext } from 'react';
 import { GiUpgrade } from 'react-icons/gi';
 import { CourseViewPopUp } from 'types/course.type';
+import { TypeUser } from 'types/user.type';
 
 const popupAvatarItems = [
   {
@@ -53,11 +54,16 @@ const popupAvatarItems = [
 ];
 
 const UserAvatar = () => {
+  const { user } = useContext(AuthenContext);
   return (
     <Avatar
       size={['sm']}
-      name="Dan Abrahmov"
-      src="https://bit.ly/dan-abramov"
+      name={user.fullName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')}
+      src={user.avatar}
       cursor={'pointer'}
     />
   );
@@ -101,8 +107,9 @@ const Chat = () => {
 };
 
 const PopupAvatar = () => {
-  const { signOutUser } = useContext(AuthenContext);
+  const { signOutUser, user } = useContext(AuthenContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box>
       <Flex
@@ -115,15 +122,26 @@ const PopupAvatar = () => {
       >
         <Avatar
           size={['md']}
-          name="Dan Abrahmov"
-          src="https://bit.ly/dan-abramov"
+          name={user.fullName
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D')}
+          src={user.avatar}
         />
         <Box>
           <Text fontSize={'md'} fontWeight={'bold'}>
-            Dan Abrahmov
+            {user.fullName}
           </Text>
           <Text fontSize={'sm'} color={'gray.500'}>
-            @DanAbrahmov
+            @
+            {user.fullName
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd')
+              .replace(/Đ/g, 'D')
+              .replace(' ', '')
+              .replace(' ', '')}
           </Text>
         </Box>
       </Flex>
@@ -162,7 +180,7 @@ const PopupAvatar = () => {
                 {item.title}
               </Text>
             )}
-            {item.icon && (
+            {item.icon && user.typeUser === TypeUser.STUDENT && (
               <Flex
                 borderBottom={item.border && '1px'}
                 borderBottomColor={'gray.100'}

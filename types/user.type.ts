@@ -1,5 +1,10 @@
 import { CourseType } from './course.type';
 
+export enum TypeUser {
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
+}
+
 type Notification = {
   content: string;
 };
@@ -46,4 +51,5 @@ export type User = {
   myLearningCourses?: CourseType[];
   createdAt?: string;
   updatedAt?: string;
+  typeUser?: TypeUser.STUDENT | TypeUser.TEACHER;
 };
