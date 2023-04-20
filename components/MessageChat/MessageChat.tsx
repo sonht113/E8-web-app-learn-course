@@ -3,20 +3,22 @@ import React, {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useRef,
 } from 'react';
 import { Box, Flex, Avatar, Text } from '@chakra-ui/react';
+import { DownloadIcon } from '@chakra-ui/icons';
+
 import ListImage from '../ListImage/ListImage';
 import { DataModal } from 'pages/chat';
-import { FileType, Message, MessageSocket } from 'types/message.type';
+import { FileType, Message } from 'types/message.type';
 import { AuthenContext } from 'context/AuthenContext';
-import { DownloadIcon } from '@chakra-ui/icons';
 import Link from 'next/link';
 
 type IMessageChatProps = {
   handleOpenModalPreview?: () => void;
   setDataModal?: Dispatch<SetStateAction<DataModal>>;
-  message: MessageSocket;
+  message: Message;
 };
 
 const MessageChat: React.FC<IMessageChatProps> = ({
@@ -26,6 +28,11 @@ const MessageChat: React.FC<IMessageChatProps> = ({
 }) => {
   const { user } = useContext(AuthenContext);
   const ref = useRef<any>();
+
+  const isSender = useMemo(
+    () => message.sender._id === user._id,
+    [message, user]
+  );
 
   useEffect(() => {
     ref.current?.scrollIntoView({
@@ -39,30 +46,35 @@ const MessageChat: React.FC<IMessageChatProps> = ({
         ref={ref}
         mt={5}
         gap={3}
-        justifyContent={message.sender.id === user._id && 'flex-start'}
-        flexDirection={message.sender.id === user._id ? 'row-reverse' : 'row'}
+        justifyContent={isSender && 'flex-start'}
+        flexDirection={isSender ? 'row-reverse' : 'row'}
       >
         <Avatar
           name={
-            message.sender.id === user._id &&
-            user?.fullName
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .replace(/đ/g, 'd')
-              .replace(/Đ/g, 'D')
+            isSender
+              ? user?.fullName
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '')
+                  .replace(/đ/g, 'd')
+                  .replace(/Đ/g, 'D')
+              : message.sender?.fullName
+                  .normalize('NFD')
+                  .replace(/[\u0300-\u036f]/g, '')
+                  .replace(/đ/g, 'd')
+                  .replace(/Đ/g, 'D')
           }
-          src={message.sender.id === user._id && user.avatar}
+          src={isSender && user.avatar}
         />
         <Box>
           {message.fileType === FileType.TEXT && (
             <Box
-              bg={message.sender.id === user._id ? 'green.300' : 'white'}
+              bg={isSender ? 'green.300' : 'white'}
               px={5}
               py={2}
               rounded={'lg'}
               maxW={['200px', '300px', '300px', '400px']}
             >
-              {message.sender.id !== user._id && (
+              {!isSender && (
                 <Text fontSize={'sm'} fontWeight={'medium'} color={'gray'}>
                   {message.sender.fullName}
                 </Text>
@@ -76,7 +88,7 @@ const MessageChat: React.FC<IMessageChatProps> = ({
                 handleOpenModalPreview();
                 setDataModal({ typePreview: 0, url: url });
               }}
-              sender={message.sender.id === user._id}
+              sender={isSender}
               image={message.content}
             />
           )}
@@ -84,9 +96,7 @@ const MessageChat: React.FC<IMessageChatProps> = ({
             <Flex
               alignItems={'center'}
               gap={2}
-              flexDirection={
-                message.sender.id === user._id ? 'row-reverse' : 'row'
-              }
+              flexDirection={isSender ? 'row-reverse' : 'row'}
             >
               <iframe src={message.content} height="200" width="250"></iframe>
               <Link href={message.content} target={'_blank'}>
@@ -98,7 +108,7 @@ const MessageChat: React.FC<IMessageChatProps> = ({
               </Link>
             </Flex>
           )}
-          {message.sender.id === user._id && (
+          {isSender && (
             <Text fontSize={'sm'} color={'gray.600'} float={'right'} pr={3}>
               Đã xem...
             </Text>

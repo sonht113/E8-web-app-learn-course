@@ -4,7 +4,7 @@ import {
   ConversationCreate,
   ConversationUpdate,
 } from 'types/converation.type';
-import { Message } from 'types/message.type';
+import { Message, MessageCreateType } from 'types/message.type';
 import { UserPaginate } from 'types/user-paginate.type';
 import http from 'utils/http';
 
@@ -21,10 +21,11 @@ export const getConversationDetail = async (
 };
 
 export const getMessages = async (idConversation: string, sender: string) => {
-  return await http.get('/messages', {
+  return await http.get('/messages/paginate', {
     params: {
       idConversation: idConversation,
-      sender: sender,
+      populate: sender,
+      limit: 100,
     },
   });
 };
@@ -35,7 +36,7 @@ export const createConversationApi = async (
   return await http.post('/conversations', body);
 };
 
-export const createMessagesApi = async (body: Message) => {
+export const createMessagesApi = async (body: MessageCreateType) => {
   return await http.post(`/messages`, body);
 };
 

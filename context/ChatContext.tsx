@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
 import { Conversation, ConversationCreate } from 'types/converation.type';
 import { AuthenContext } from './AuthenContext';
-import { FileType, Message, MessageSocket } from 'types/message.type';
+import { FileType, Message, MessageCreateType } from 'types/message.type';
 
 type DataMessage = {
   value: string | any;
@@ -32,7 +32,7 @@ type IChatContext = {
   setAvatarClassRoom: (v: any) => void;
   conversationDetail: Conversation | null;
   setConversationDetail: React.Dispatch<React.SetStateAction<Conversation>>;
-  messages: any[];
+  messages: Message[] | null;
   createConversation: (nameChat: string, callback: () => void) => void;
   sendMessage: (v: DataMessage) => void;
 };
@@ -49,7 +49,7 @@ export const ChatContext = React.createContext<IChatContext>({
   setAvatarClassRoom: (_v: any) => {},
   conversationDetail: null,
   setConversationDetail: (v: Conversation | null) => {},
-  messages: [],
+  messages: null,
   createConversation: (v: string, callback) => {},
   sendMessage: (v: DataMessage) => {},
 });
@@ -63,7 +63,7 @@ export const ChatContextProvider = ({ children }) => {
   const [roomActive, setRoomActive] = useState<string>('');
   const [conversationDetail, setConversationDetail] =
     useState<Conversation | null>(null);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[] | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [fileUploaded, setFileUploaded] = useState<string>('');
 
@@ -80,6 +80,7 @@ export const ChatContextProvider = ({ children }) => {
     setRoomActive(roomId);
     router.push(`/chat?room=${roomId}`);
     conversationDetailQuery(roomId);
+    setMessages(null);
     messagesQuery(roomId);
   };
 
@@ -114,11 +115,27 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const messagesQuery = (id: string) => {
-    queryClient.prefetchQuery(['meesage', id], {
+    queryClient.prefetchQuery(['meesages', id], {
       queryFn: () =>
-        getMessages(id, user._id)
+        getMessages(id, 'sender')
           .then((res) => {
-            setMessages(res.data);
+            const arr = [];
+            const results = res.data.results.sort(
+              (a: Message, b: Message) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+            );
+            for (const message of results) {
+              arr.push({
+                ...message,
+                sender: {
+                  _id: message.sender._id,
+                  avatar: message.sender.avatar,
+                  fullName: message.sender.fullName,
+                },
+              });
+            }
+            setMessages(arr);
             return res;
           })
           .catch((err) => console.log(err)),
@@ -126,7 +143,7 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const createMessageMutate = useMutation({
-    mutationFn: (body: Message) => createMessagesApi(body),
+    mutationFn: (body: MessageCreateType) => createMessagesApi(body),
   });
 
   const uploadMutate = useMutation({
@@ -199,7 +216,7 @@ export const ChatContextProvider = ({ children }) => {
     });
   };
 
-  const createMessage = (body: Message) => {
+  const createMessage = (body: MessageCreateType) => {
     createMessageMutate.mutate(body, {
       onSuccess: (res) => {
         return res;
@@ -211,10 +228,10 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const sendMessage = (message: DataMessage) => {
-    let body: MessageSocket = {
+    let body: Message = {
       idConversation: roomActive,
       sender: {
-        id: user._id,
+        _id: user._id,
         fullName: user.fullName,
         avatar: user.avatar,
       },
@@ -242,9 +259,9 @@ export const ChatContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (fileUploaded) {
-      const body: MessageSocket = {
+      const body: Message = {
         idConversation: roomActive,
-        sender: { id: user._id, fullName: user.fullName, avatar: user.avatar },
+        sender: { _id: user._id, fullName: user.fullName, avatar: user.avatar },
         readers: [user._id],
         content: fileUploaded,
         fileType: fileUploaded.includes('/image')
