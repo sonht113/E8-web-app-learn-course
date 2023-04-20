@@ -9,6 +9,9 @@ import {
   List,
   ListIcon,
   Center,
+  SkeletonCircle,
+  SkeletonText,
+  Skeleton,
 } from '@chakra-ui/react';
 import { MdCheckCircle } from 'react-icons/md';
 import ProfileLayout from 'layouts/profileLayout';
@@ -18,6 +21,8 @@ import Course from '@/components/Course';
 import { CourseType } from 'types/course.type';
 import { TypeUser } from 'types/user.type';
 import { ProfileContext } from 'context/ProfileContext';
+import ListSkeleton from '@/components/ListSkeleton';
+import { WarningTwoIcon } from '@chakra-ui/icons';
 
 const Profile = () => {
   const { user } = useContext(ProfileContext);
@@ -41,32 +46,44 @@ const Profile = () => {
           src={CoverImage}
           alt={'cover-image'}
         />
-        <Box
-          className="avatarProfile"
-          position={'absolute'}
-          bottom={['-40%', '-25%']}
-        >
-          <Avatar
-            p={2}
-            bg={'white'}
-            size={['xl', '2xl']}
-            name={user?.fullName
-              .normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .replace(/đ/g, 'd')
-              .replace(/Đ/g, 'D')}
-            src={user?.avatar}
-          />
-          <Text fontSize={'2xl'} fontWeight={'bold'} pb={[0, 7]} ml={[0, 5]}>
-            {user?.fullName} {isTeacher && '(Teacher)'}
-          </Text>
-        </Box>
+        {!user && (
+          <Box
+            className="avatarProfile"
+            position={'absolute'}
+            bottom={['-50%', '-25%']}
+          >
+            <SkeletonCircle size={['100', '140']} />
+            <Skeleton height="30px" width={'150px'} mb={5} ml={[0, 5]} />
+          </Box>
+        )}
+        {user && (
+          <Box
+            className="avatarProfile"
+            position={'absolute'}
+            bottom={['-40%', '-25%']}
+          >
+            <Avatar
+              p={2}
+              bg={'white'}
+              size={['xl', '2xl']}
+              name={user.fullName
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D')}
+              src={user?.avatar}
+            />
+            <Text fontSize={'2xl'} fontWeight={'bold'} pb={[0, 7]} ml={[0, 5]}>
+              {user.fullName} {isTeacher && '(Teacher)'}
+            </Text>
+          </Box>
+        )}
       </Box>
       <Grid
         templateColumns={[
           'repeat(1, 1fr)',
           'repeat(1, 1fr)',
-          'repeat(1,1fr)',
+          'repeat(1, 1fr)',
           'repeat(2, 1fr)',
         ]}
         gap={6}
@@ -83,24 +100,67 @@ const Profile = () => {
             <Text fontSize={['md', 'lg']} fontWeight={'bold'}>
               Giới thiệu
             </Text>
-            <List spacing={3}>
-              <ListItem>
-                <ListIcon as={MdCheckCircle} color="green.500" />
-                {user?.email}
-              </ListItem>
-              <ListItem>
-                <ListIcon as={MdCheckCircle} color="green.500" />
-                {user?.phone}
-              </ListItem>
-              <ListItem>
-                <ListIcon as={MdCheckCircle} color="green.500" />
-                {user?.gender}
-              </ListItem>
-              <ListItem>
-                <ListIcon as={MdCheckCircle} color="green.500" />
-                {user?.street}
-              </ListItem>
-            </List>
+            {!user && <ListSkeleton />}
+            {user && (
+              <List spacing={3}>
+                <ListItem>
+                  <ListIcon
+                    as={user.email ? MdCheckCircle : WarningTwoIcon}
+                    color={user.email ? 'green.500' : 'yellow.500'}
+                  />
+                  <Text
+                    fontSize={'sm'}
+                    fontWeight={'medium'}
+                    color={'gray.600'}
+                    display={'inline'}
+                  >
+                    {user.email || 'Trống'}
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <ListIcon
+                    as={user.phone ? MdCheckCircle : WarningTwoIcon}
+                    color={user.phone ? 'green.500' : 'yellow.500'}
+                  />
+                  <Text
+                    fontSize={'sm'}
+                    fontWeight={'medium'}
+                    color={'gray.600'}
+                    display={'inline'}
+                  >
+                    {user.phone || 'Trống'}
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <ListIcon
+                    as={user.gender ? MdCheckCircle : WarningTwoIcon}
+                    color={user.gender ? 'green.500' : 'yellow.500'}
+                  />
+                  <Text
+                    fontSize={'sm'}
+                    fontWeight={'medium'}
+                    color={'gray.600'}
+                    display={'inline'}
+                  >
+                    {user.gender || 'Trống'}
+                  </Text>
+                </ListItem>
+                <ListItem>
+                  <ListIcon
+                    as={user.street ? MdCheckCircle : WarningTwoIcon}
+                    color={user.street ? 'green.500' : 'yellow.500'}
+                  />
+                  <Text
+                    fontSize={'sm'}
+                    fontWeight={'medium'}
+                    color={'gray.600'}
+                    display={'inline'}
+                  >
+                    {user.street || 'Trống'}
+                  </Text>
+                </ListItem>
+              </List>
+            )}
           </Box>
           {isTeacher && (
             <Box
