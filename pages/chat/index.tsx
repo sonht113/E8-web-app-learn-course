@@ -16,7 +16,8 @@ import {
 } from 'api/chat.api';
 import { ConversationUpdate } from 'types/converation.type';
 import useToastify from 'hook/useToastify';
-import { FileType, Message, MessageSocket } from 'types/message.type';
+import { FileType, Message } from 'types/message.type';
+import MessageSkeleton from '@/components/MessageSkeleton';
 
 enum TypePreview {
   'IMAGE',
@@ -93,11 +94,13 @@ const Chat: NextPageWithLayout = () => {
   };
 
   const handleSendMessage = () => {
+    if (!message.value) return;
     sendMessage(message);
     setMessage({ value: '', type: FileType.TEXT });
   };
 
   const handleSendFiles = (fileMessage: DataMessage) => {
+    if (!fileMessage.type) return;
     sendMessage(fileMessage);
     setMessage({ value: '', type: FileType.TEXT });
   };
@@ -155,17 +158,20 @@ const Chat: NextPageWithLayout = () => {
           mt={'61px'}
           bg={'gray.300'}
         >
-          {messages?.map((item: MessageSocket, index) => (
-            <MessageChat
-              key={index}
-              handleOpenModalPreview={() => {
-                setTypeShowModal('show-file');
-                onOpen();
-              }}
-              setDataModal={setDataModal}
-              message={item}
-            />
-          ))}
+          {!messages &&
+            [1, 2, 3].map((_item, index) => <MessageSkeleton key={index} />)}
+          {messages &&
+            messages?.map((item: Message, index) => (
+              <MessageChat
+                key={index}
+                handleOpenModalPreview={() => {
+                  setTypeShowModal('show-file');
+                  onOpen();
+                }}
+                setDataModal={setDataModal}
+                message={item}
+              />
+            ))}
         </Box>
         <InputChat
           isMobile={isMobile}

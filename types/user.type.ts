@@ -30,13 +30,13 @@ type GroupDetail = {
 
 export type User = {
   favoriteCourses?: CourseType[];
-  myCourses: CourseType[];
+  myCourses?: CourseType[];
   receivedNotificationTypes?: Notification[];
   isDeleted?: boolean;
   deviceID?: string;
   isEnableFCM?: string;
   dateOfBirth?: string | number;
-  gender: string;
+  gender?: string;
   avatar?: string;
   street?: string;
   email?: string;
