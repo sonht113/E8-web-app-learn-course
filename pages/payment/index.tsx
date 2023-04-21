@@ -123,7 +123,12 @@ const PaymentContent = () => {
               >
                 {courseData?.price ? (
                   <>
-                    <Text fontSize="16px" fontWeight={400} color="gray" ms={48}>
+                    <Text
+                      fontSize="16px"
+                      fontWeight={400}
+                      color="gray"
+                      ms={{ base: 12, md: 48 }}
+                    >
                       Giá bán:{' '}
                     </Text>
                     <Spacer />
@@ -133,7 +138,12 @@ const PaymentContent = () => {
                   </>
                 ) : (
                   <>
-                    <Text fontSize="16px" fontWeight={400} color="gray" ms={48}>
+                    <Text
+                      fontSize="16px"
+                      fontWeight={400}
+                      color="gray"
+                      ms={{ base: 12, md: 48 }}
+                    >
                       Giá:{' '}
                     </Text>
                     <Spacer />
@@ -144,7 +154,11 @@ const PaymentContent = () => {
                 )}
               </Flex>
               <Flex pt={4}>
-                <Text fontSize="18px" fontWeight={700} ms={48}>
+                <Text
+                  fontSize="18px"
+                  fontWeight={700}
+                  ms={{ base: 12, md: 48 }}
+                >
                   Tổng tiền:{' '}
                 </Text>
                 <Spacer />
