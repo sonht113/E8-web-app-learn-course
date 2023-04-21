@@ -13,7 +13,12 @@ import { FaMapMarkedAlt } from 'react-icons/fa';
 
 // import QRCode from '../../public/static/images/qr-code.jpg';
 
-const BankInfor = () => {
+type IBankInforProps = {
+  title: string;
+  price: number;
+};
+
+const BankInfor = ({ title, price }: IBankInforProps) => {
   return (
     <Box>
       <Text textAlign="center" mb={8} color="green">
@@ -41,10 +46,21 @@ const BankInfor = () => {
               fontSize="18px"
               borderBottomWidth="1px"
               borderColor="blue.300"
+              justifyContent={!title && 'center'}
             >
-              <Text>Tên khóa học:</Text>
-              <Spacer />
-              <Text fontWeight={700}>TOEIC</Text>
+              {title ? (
+                <>
+                  <Text fontSize={16}>Tên khóa học:</Text>
+                  <Spacer />
+                  <Text fontSize={16} fontWeight={700}>
+                    {title}
+                  </Text>
+                </>
+              ) : (
+                <Text fontSize={16} fontWeight={700}>
+                  UPGRADE TO TEACHER
+                </Text>
+              )}
             </Flex>
             <Text fontSize="18px" pt={8}>
               Chi tiết thanh toán:
@@ -56,13 +72,27 @@ const BankInfor = () => {
                 borderColor="gray.500"
                 alignItems="center"
               >
-                <Text fontSize="16px" fontWeight={400} color="gray">
-                  Giá bán:{' '}
-                </Text>
-                <Spacer />
-                <Text fontSize="20px" fontWeight={500} color="green">
-                  150,000đ
-                </Text>
+                {price ? (
+                  <>
+                    <Text fontSize="16px" fontWeight={400} color="gray">
+                      Giá bán:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text fontSize="20px" fontWeight={500} color="green">
+                      {price}đ
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text fontSize="16px" fontWeight={400} color="gray">
+                      Giá:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text fontSize="20px" fontWeight={500} color="green">
+                      499000đ
+                    </Text>
+                  </>
+                )}
               </Flex>
               <Flex pt={4}>
                 <Text fontSize="18px" fontWeight={700}>
@@ -70,7 +100,7 @@ const BankInfor = () => {
                 </Text>
                 <Spacer />
                 <Text fontSize="20px" fontWeight={500} color="green">
-                  150,000đ
+                  {price ? `${price}đ` : '499000đ'}
                 </Text>
               </Flex>
             </Box>
@@ -106,6 +136,9 @@ const BankInfor = () => {
                     height="100%"
                     alt="QR Code"
                   /> */}
+                  <Text textAlign="center" fontSize={20} color="gray">
+                    Coming soon...
+                  </Text>
                 </Box>
               </GridItem>
 

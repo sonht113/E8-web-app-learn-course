@@ -1,7 +1,8 @@
 import { Box, Text, Image, Flex } from '@chakra-ui/react';
+import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import { HiUserGroup } from 'react-icons/hi';
 import ButtonFC from '../Button/Button';
 
@@ -25,9 +26,18 @@ const Course: React.FC<ICourseProps> = ({
   totalViews,
 }) => {
   const router = useRouter();
+  const { isAuthenticated } = useContext(AuthenContext);
 
   return (
-    <Link href={`/course/${id}`}>
+    <Link
+      href={
+        isFree
+          ? isAuthenticated
+            ? `/payment?type=COURSE_PAYMENT&idCourse=${id}`
+            : '/login'
+          : `/course/${id}`
+      }
+    >
       <Box
         position={'relative'}
         className={router.pathname.includes('/profile') && 'Course'}
@@ -72,7 +82,11 @@ const Course: React.FC<ICourseProps> = ({
             >
               <ButtonFC
                 title={
-                  router.pathname.includes('/profile')
+                  isFree
+                    ? router.pathname.includes('/profile')
+                      ? 'Tiếp tục học'
+                      : 'Mua khóa học'
+                    : router.pathname.includes('/profile')
                     ? 'Tiếp tục học'
                     : 'Xem khoá học'
                 }
