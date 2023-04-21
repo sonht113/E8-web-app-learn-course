@@ -53,7 +53,7 @@ const PaymentModal: React.FC<IPaymentModalProps> = ({
               <TabPanel color="white">
                 <BankInfor {...{ title, price }} />
               </TabPanel>
-              <TabPanel color="white">
+              <TabPanel color="white" padding={0}>
                 <FormInforUser />
               </TabPanel>
             </TabPanels>
