@@ -14,6 +14,7 @@ type ICourseProps = {
   desc?: string | number;
   thumbnail: string;
   totalViews?: string | number;
+  isJoined?: boolean;
 };
 
 const Course: React.FC<ICourseProps> = ({
@@ -24,6 +25,7 @@ const Course: React.FC<ICourseProps> = ({
   price,
   thumbnail,
   totalViews,
+  isJoined,
 }) => {
   const router = useRouter();
   const { isAuthenticated } = useContext(AuthenContext);
@@ -33,7 +35,9 @@ const Course: React.FC<ICourseProps> = ({
       href={
         !isFree
           ? isAuthenticated
-            ? `/payment?type=COURSE_PAYMENT&idCourse=${id}`
+            ? isJoined
+              ? `/course/${id}`
+              : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
             : '/login'
           : `/course/${id}`
       }
@@ -133,7 +137,7 @@ const Course: React.FC<ICourseProps> = ({
             </Text>
           )}
           {isFree && (
-            <Box display={['none', 'none', 'block']}>
+            <Box>
               <Flex alignItems={'center'} gap={2}>
                 <HiUserGroup />
                 <Text fontSize={['sm']} fontWeight={'medium'} color={'#3f3f3f'}>

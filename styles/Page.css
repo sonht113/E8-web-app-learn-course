@@ -10,6 +10,11 @@
   width: 75% !important;
 }
 
+.search {
+  height: calc(100vh - 84px - 60px);
+  overflow-y: scroll;
+}
+
 @media screen and (min-width: 992px) {
   .home,
   .course,
@@ -40,5 +45,9 @@
   .chat {
     width: 100% !important;
     height: 100vh;
+  }
+
+  .search::-webkit-scrollbar {
+    display: none;
   }
 }

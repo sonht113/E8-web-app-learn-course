@@ -8,13 +8,16 @@ import {
   Container,
   Popover,
   PopoverTrigger,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { ArrowBackIcon, HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
+import Image from 'next/image';
 
 import ButtonFC from '../Button/Button';
 import logo from 'public/static/images/icon.png';
-import Search from '../Search';
+import SearchFC from '../Search';
 import { NavbarMobileContext } from 'context/NavbarMobileContext';
 import Popup from '../Popup';
 import {
@@ -27,7 +30,12 @@ import {
   Chat,
 } from './components/NavbarItem';
 import { AuthenContext } from 'context/AuthenContext';
-import Image from 'next/image';
+import PopupSearch from '../PopupSearch';
+import useDebounce from 'hook/useDebounce';
+import { useQuery } from '@tanstack/react-query';
+import { searchCourse } from 'api/course.api';
+import { CourseType } from 'types/course.type';
+import Course from '../Course';
 
 interface INavbarProps {
   onOpen?: () => void;
@@ -54,8 +62,16 @@ const navbarItems = [
 
 const Navbar: React.FC<INavbarProps> = () => {
   const [keywordSearch, setKeyWordSearch] = useState<string>('');
+  const [openPopupSearch, setOpenPopupSearch] = useState<boolean>(false);
   const { onOpen } = useContext(NavbarMobileContext);
-  const { isAuthenticated } = useContext(AuthenContext);
+  const { isAuthenticated, user } = useContext(AuthenContext);
+
+  const debounceValue = useDebounce(keywordSearch, 1000);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['search', debounceValue],
+    queryFn: () => searchCourse(debounceValue),
+  });
 
   return (
     <Grid
@@ -83,15 +99,74 @@ const Navbar: React.FC<INavbarProps> = () => {
           <Back />
         </Flex>
       </GridItem>
-      <GridItem>
-        <Search
+      <GridItem position={'relative'}>
+        <SearchFC
           display={['none', 'block']}
           radius={'full'}
           width={['full']}
           placeholder="Tìm kiếm khoá học, bài viết, video, ..."
           value={keywordSearch}
           setValue={setKeyWordSearch}
+          focus={() => setOpenPopupSearch(true)}
         />
+        {openPopupSearch && (
+          <PopupSearch
+            close={() => {
+              setOpenPopupSearch(false);
+              setKeyWordSearch('');
+            }}
+          >
+            {isLoading && (
+              <Center>
+                <Spinner />
+              </Center>
+            )}
+            {!isLoading && data?.data.results.length === 0 && (
+              <Center>
+                <Text fontSize={'sm'} fontWeight={'medium'} color={'gray.500'}>
+                  Không có kết quả
+                </Text>
+              </Center>
+            )}
+            {!isLoading && data?.data.results.length !== 0 && (
+              <>
+                {!keywordSearch ? (
+                  <Text
+                    mb={3}
+                    fontSize={'lg'}
+                    fontWeight={'medium'}
+                    textTransform={'uppercase'}
+                  >
+                    Tất cả khoá học:
+                  </Text>
+                ) : (
+                  <Text
+                    mb={3}
+                    fontSize={'lg'}
+                    fontWeight={'medium'}
+                    textTransform={'uppercase'}
+                  >
+                    Kết quả:
+                  </Text>
+                )}
+                <Flex flexDirection={'column'} alignItems={'center'} gap={5}>
+                  {data?.data.results.map((course: CourseType) => (
+                    <Course
+                      isFree={!course?.isPrivate}
+                      thumbnail={course?.thumbnail}
+                      title={course?.title}
+                      price={course?.price}
+                      id={course?._id}
+                      totalViews={course?.totalViews}
+                      isJoined={course?.userJoined?.includes(user._id)}
+                    />
+                  ))}
+                </Flex>
+              </>
+            )}
+          </PopupSearch>
+        )}
+
         <Link href={'/search'}>
           <SearchIcon
             float={'right'}
