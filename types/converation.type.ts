@@ -9,10 +9,17 @@ export type Conversation = {
   chatName: string;
   isGroup: boolean;
   avatar: string;
-  lastestMessage?: { idUser: string; text: string };
+  latestMessage?: { idUser: string; text: string };
   role?: RoleConversationEnum.ADMIN | RoleConversationEnum.USER;
   createdAt?: string;
   updatedAt?: string;
+};
+
+type UserInfo = {
+  fullName?: string;
+  idUser?: string;
+  avatar?: string;
+  slug?: string;
 };
 
 export type ConversationCreate = {
@@ -20,7 +27,10 @@ export type ConversationCreate = {
   chatName: string;
   isGroup: boolean;
   avatar: string;
-  latestMessage?: string;
+  latestMessage?: {
+    user: UserInfo;
+    text: string;
+  };
   role?: RoleConversationEnum.ADMIN;
 };
 

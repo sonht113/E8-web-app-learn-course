@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import {
   useDisclosure,
@@ -22,6 +22,8 @@ import { AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
 import { BsCameraVideo } from 'react-icons/bs';
 import Link from 'next/link';
 import { ChatContext } from 'context/ChatContext';
+import { AuthenContext } from 'context/AuthenContext';
+import { TypeUser } from 'types/user.type';
 
 type IHeaderChatProps = {
   showMessage?: boolean;
@@ -38,9 +40,12 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { conversationDetail } = useContext(ChatContext);
+  const { user } = useContext(AuthenContext);
   const btnRef = React.useRef();
 
   const router = useRouter();
+
+  const isTeacher = useMemo(() => user.typeUser === TypeUser.TEACHER, [user]);
 
   return (
     <Flex
@@ -85,7 +90,7 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
         </Box>
       </Box>
       <Flex gap={4}>
-        {conversationDetail?.role === 'ADMIN' && (
+        {isTeacher && (
           <Tooltip label={'Thêm thành viên'} hasArrow placement="bottom-start">
             <Box
               onClick={() => {

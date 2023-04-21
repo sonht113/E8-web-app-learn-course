@@ -12,7 +12,7 @@ import useDebounce from 'hook/useDebounce';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   searchUserWantAddJoinClassRoom,
-  updateConversation,
+  updateConversationApi,
 } from 'api/chat.api';
 import { ConversationUpdate } from 'types/converation.type';
 import useToastify from 'hook/useToastify';
@@ -71,7 +71,7 @@ const Chat: NextPageWithLayout = () => {
 
   const updateConversationMutate = useMutation({
     mutationFn: (body: { id: string; data: ConversationUpdate }) =>
-      updateConversation(body),
+      updateConversationApi(body),
   });
 
   const handleUpdateConversation = (body: {
@@ -158,8 +158,7 @@ const Chat: NextPageWithLayout = () => {
           mt={'61px'}
           bg={'gray.300'}
         >
-          {!messages &&
-            [1, 2, 3].map((_item, index) => <MessageSkeleton key={index} />)}
+          {!messages && <MessageSkeleton />}
           {messages &&
             messages?.map((item: Message, index) => (
               <MessageChat

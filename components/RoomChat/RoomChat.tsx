@@ -60,15 +60,15 @@ const RoomChat: React.FC<IRoomChatProps> = ({
           >
             {data?.chatName}
           </Text>
-          {data?.lastestMessage && (
+          {data?.latestMessage && (
             <Text
               w={['220px', '100px', '100px', '100px', '200px']}
               fontSize={['sm', 'sm', 'sm', 'md']}
               overflow={'hidden'}
               whiteSpace={'nowrap'}
-              color={isActive ? 'gray.500' : 'gray.400'}
+              color={isActive ? 'white' : 'gray.400'}
             >
-              {data?.lastestMessage.text}
+              {data?.latestMessage.text}
             </Text>
           )}
         </Box>

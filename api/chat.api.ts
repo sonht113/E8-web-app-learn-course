@@ -40,7 +40,7 @@ export const createMessagesApi = async (body: MessageCreateType) => {
   return await http.post(`/messages`, body);
 };
 
-export const updateConversation = async (body: {
+export const updateConversationApi = async (body: {
   id: string;
   data: ConversationUpdate;
 }): Promise<AxiosResponse<Conversation, any>> => {
