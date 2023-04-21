@@ -37,9 +37,10 @@ type ISearchProps = {
   display?: any;
   value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
+  focus?: () => void;
 };
 
-const Search: React.FC<ISearchProps> = ({
+const SearchFC: React.FC<ISearchProps> = ({
   placeholder,
   sizeInput,
   sizeIcon,
@@ -52,9 +53,10 @@ const Search: React.FC<ISearchProps> = ({
   display,
   value,
   setValue,
+  focus,
 }) => {
   return (
-    <InputGroup display={display} width={width}>
+    <InputGroup display={display} width={width} onFocus={focus}>
       <InputLeftElement
         height={'full'}
         children={<SearchIcon fontSize={sizeIcon} color={colorIcon} />}
@@ -86,4 +88,4 @@ const Search: React.FC<ISearchProps> = ({
   );
 };
 
-export default Search;
+export default SearchFC;
