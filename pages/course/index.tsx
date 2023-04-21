@@ -37,14 +37,14 @@ const Course: NextPageWithLayout = () => {
         isPro={true}
         title={'Khoá học Pro'}
         courses={queryCourses.data?.data.filter(
-          (course: CourseType) => !course.isFree
+          (course: CourseType) => course.isPrivate
         )}
       />
       <ListCourse
         isPro={false}
         title={'Khoá học Free'}
         courses={queryCourses.data?.data.filter(
-          (course: CourseType) => course.isFree
+          (course: CourseType) => !course.isPrivate
         )}
       />
       <IntroLearningPath data={introLearningPath} />

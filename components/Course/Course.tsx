@@ -31,7 +31,7 @@ const Course: React.FC<ICourseProps> = ({
   return (
     <Link
       href={
-        isFree
+        !isFree
           ? isAuthenticated
             ? `/payment?type=COURSE_PAYMENT&idCourse=${id}`
             : '/login'
@@ -82,7 +82,7 @@ const Course: React.FC<ICourseProps> = ({
             >
               <ButtonFC
                 title={
-                  isFree
+                  !isFree
                     ? router.pathname.includes('/profile')
                       ? 'Tiếp tục học'
                       : 'Mua khóa học'
@@ -98,7 +98,7 @@ const Course: React.FC<ICourseProps> = ({
             </Box>
           </Box>
         </Box>
-        {isFree && (
+        {!isFree && (
           <Image
             position={'absolute'}
             top={1}
@@ -123,7 +123,7 @@ const Course: React.FC<ICourseProps> = ({
           >
             {title}
           </Text>
-          {isFree && (
+          {!isFree && (
             <Text
               fontSize={['sm', 'sm']}
               fontWeight={'medium'}
@@ -132,7 +132,7 @@ const Course: React.FC<ICourseProps> = ({
               {price} vnđ
             </Text>
           )}
-          {!isFree && (
+          {isFree && (
             <Box display={['none', 'none', 'block']}>
               <Flex alignItems={'center'} gap={2}>
                 <HiUserGroup />
