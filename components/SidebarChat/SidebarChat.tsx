@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Box,
@@ -15,6 +15,8 @@ import { ChatContext } from 'context/ChatContext';
 import ModalFC from '../ModalFC';
 import FormCreateConversation from '../FormCreateConversation';
 import { Conversation } from 'types/converation.type';
+import { AuthenContext } from 'context/AuthenContext';
+import { TypeUser } from 'types/user.type';
 
 const SidebarChat = () => {
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -26,6 +28,9 @@ const SidebarChat = () => {
     roomActive,
     conversations,
   } = useContext(ChatContext);
+  const { user } = useContext(AuthenContext);
+
+  const isTeacher = useMemo(() => user.typeUser === TypeUser.TEACHER, [user]);
 
   return (
     <React.Fragment>
@@ -40,7 +45,7 @@ const SidebarChat = () => {
         display={showMessage && 'none'}
         pt={2}
       >
-        <HeaderSidebarChat click={() => onOpen()} />
+        <HeaderSidebarChat click={() => onOpen()} isTeacher={isTeacher} />
         <Box
           h={'50px'}
           display={'flex'}
@@ -81,8 +86,8 @@ const SidebarChat = () => {
           {conversations
             ?.sort(
               (a: Conversation, b: Conversation) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime()
             )
             .map((item: Conversation, _index: number) => (
               <RoomChat
@@ -103,9 +108,13 @@ const SidebarChat = () => {
 
 type IHeaderSidebarChatProps = {
   click?: () => void;
+  isTeacher?: boolean;
 };
 
-const HeaderSidebarChat: React.FC<IHeaderSidebarChatProps> = ({ click }) => {
+const HeaderSidebarChat: React.FC<IHeaderSidebarChatProps> = ({
+  click,
+  isTeacher,
+}) => {
   return (
     <Flex
       borderBottom={'1px'}
@@ -129,15 +138,17 @@ const HeaderSidebarChat: React.FC<IHeaderSidebarChatProps> = ({ click }) => {
         radius={'lg'}
         placeholder={'Tìm kiếm'}
       />
-      <Tooltip label={'Tạo nhóm chat'} hasArrow placement="bottom">
-        <Box _hover={{ bg: 'gray.200' }} p={1} rounded={'md'} onClick={click}>
-          <AiOutlineUsergroupAdd
-            size={'25px'}
-            cursor={'pointer'}
-            color={'gray'}
-          />
-        </Box>
-      </Tooltip>
+      {isTeacher && (
+        <Tooltip label={'Tạo nhóm chat'} hasArrow placement="bottom">
+          <Box _hover={{ bg: 'gray.200' }} p={1} rounded={'md'} onClick={click}>
+            <AiOutlineUsergroupAdd
+              size={'25px'}
+              cursor={'pointer'}
+              color={'gray'}
+            />
+          </Box>
+        </Tooltip>
+      )}
     </Flex>
   );
 };

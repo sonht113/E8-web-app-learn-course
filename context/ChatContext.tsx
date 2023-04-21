@@ -5,13 +5,18 @@ import {
   getConversationDetail,
   getConversations,
   getMessages,
+  updateConversationApi,
 } from 'api/chat.api';
 import { io } from 'socket.io-client';
 import { confirmUploadAPI, uploadFilesAPI } from 'api/upload.api';
 import useToastify from 'hook/useToastify';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
-import { Conversation, ConversationCreate } from 'types/converation.type';
+import {
+  Conversation,
+  ConversationCreate,
+  ConversationUpdate,
+} from 'types/converation.type';
 import { AuthenContext } from './AuthenContext';
 import { FileType, Message, MessageCreateType } from 'types/message.type';
 
@@ -119,7 +124,7 @@ export const ChatContextProvider = ({ children }) => {
       queryFn: () =>
         getMessages(id, 'sender')
           .then((res) => {
-            const arr = [];
+            const arr: Message[] = [];
             const results = res.data.results.sort(
               (a: Message, b: Message) =>
                 new Date(a.createdAt).getTime() -
@@ -144,6 +149,11 @@ export const ChatContextProvider = ({ children }) => {
 
   const createMessageMutate = useMutation({
     mutationFn: (body: MessageCreateType) => createMessagesApi(body),
+  });
+
+  const updateConversationMutate = useMutation({
+    mutationFn: (body: { id: string; data: ConversationUpdate }) =>
+      updateConversationApi(body),
   });
 
   const uploadMutate = useMutation({
@@ -216,6 +226,20 @@ export const ChatContextProvider = ({ children }) => {
     });
   };
 
+  const updateConversation = (body: {
+    id: string;
+    data: ConversationUpdate;
+  }) => {
+    updateConversationMutate.mutate(body, {
+      onSuccess: () => {
+        conversationsQuery();
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+  };
+
   const createMessage = (body: MessageCreateType) => {
     createMessageMutate.mutate(body, {
       onSuccess: (res) => {
@@ -242,6 +266,19 @@ export const ChatContextProvider = ({ children }) => {
 
     if (message.type === FileType.TEXT) {
       body = { ...body, content: message.value };
+      updateConversation({
+        id: roomActive,
+        data: {
+          users: conversationDetail.users,
+          chatName: conversationDetail.chatName,
+          isGroup: conversationDetail.isGroup,
+          avatar: conversationDetail.avatar,
+          latestMessage: {
+            user: { idUser: user._id },
+            text: message.value,
+          },
+        },
+      });
     }
 
     if (message.type === FileType.IMAGE || message.type === FileType.FILE) {
@@ -250,16 +287,15 @@ export const ChatContextProvider = ({ children }) => {
     }
     socket.emit('message', body);
     createMessage({ ...body, sender: user._id });
+    socket.on('message', (message) => {
+      const arr = [...messages, message];
+      setMessages(arr);
+    });
   };
-
-  socket.on('message', (message) => {
-    setMessages([...messages, message]);
-    setFileUploaded('');
-  });
 
   useEffect(() => {
     if (fileUploaded) {
-      const body: Message = {
+      const mess: Message = {
         idConversation: roomActive,
         sender: { _id: user._id, fullName: user.fullName, avatar: user.avatar },
         readers: [user._id],
@@ -268,8 +304,30 @@ export const ChatContextProvider = ({ children }) => {
           ? FileType.IMAGE
           : FileType.FILE,
       };
-      socket.emit('message', body);
-      createMessage({ ...body, sender: user._id });
+      socket.emit('message', mess);
+      createMessage({ ...mess, sender: user._id });
+      socket.on('message', (message) => {
+        const arr = [...messages, message];
+        setMessages(arr);
+        setFileUploaded('');
+      });
+      updateConversation({
+        id: roomActive,
+        data: {
+          users: conversationDetail.users,
+          chatName: conversationDetail.chatName,
+          isGroup: conversationDetail.isGroup,
+          avatar: conversationDetail.avatar,
+          latestMessage: {
+            user: {
+              idUser: user._id,
+            },
+            text: fileUploaded.includes('/image')
+              ? `${user.fullName} đã gửi một ảnh.`
+              : `${user.fullName} đã gửi một file.`,
+          },
+        },
+      });
     }
   }, [fileUploaded]);
 

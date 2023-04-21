@@ -24,6 +24,26 @@ const MessageSkeleton = () => {
         <SkeletonCircle size="50" />
         <Skeleton height="40px" width={['150px', '250px']} />
       </Flex>
+      <Flex
+        mt={5}
+        gap={3}
+        justifyContent={'flex-start'}
+        flexDirection={'row-reverse'}
+        alignItems={'center'}
+      >
+        <SkeletonCircle size="50" />
+        <Skeleton height="40px" width={['150px', '250px']} />
+      </Flex>
+      <Flex
+        mt={5}
+        gap={3}
+        justifyContent={'flex-start'}
+        flexDirection={'row'}
+        alignItems={'center'}
+      >
+        <SkeletonCircle size="50" />
+        <Skeleton height="40px" width={['150px', '250px']} />
+      </Flex>
     </React.Fragment>
   );
 };
