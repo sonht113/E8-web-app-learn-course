@@ -5,11 +5,11 @@ import {
   Flex,
   Grid,
   GridItem,
-  Image,
   Text,
   Spacer,
   useDisclosure,
 } from '@chakra-ui/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   AiFillEdit,
@@ -26,6 +26,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCourse } from 'api/course.api';
 import { MdOutlineManageSearch } from 'react-icons/md';
 import { FaAward } from 'react-icons/fa';
+import logo from 'public/static/images/icon.png';
 
 const PaymentContent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -55,11 +56,10 @@ const PaymentContent = () => {
         <Box>
           <Link href="/">
             <Image
-              rounded={'md'}
-              boxSize={'45px'}
-              objectFit="cover"
-              src="https://fullstack.edu.vn/static/media/f8-icon.18cd71cfcfa33566a22b.png"
+              src={logo}
               alt="E8 logo"
+              width={50}
+              style={{ objectFit: 'cover' }}
             />
           </Link>
         </Box>

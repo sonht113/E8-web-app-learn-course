@@ -11,22 +11,37 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { createTransaction } from 'api/transaction.api';
+import { AuthenContext } from 'context/AuthenContext';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import EnterFormImg from '../../public/static/images/enter-form.webp';
+import { useMutation } from '@tanstack/react-query';
+import { TransactionBody } from 'types/transaction.type';
+import useToastify from 'hook/useToastify';
+import Link from 'next/link';
 
 type FormValues = {
-  stk: string;
-  owner: string;
+  accountNumber: string;
+  accountName: string;
   bankName: string;
+  bankBranch: string;
   email: string;
   phone: number;
 };
 
 const FormInforUser = () => {
   const router = useRouter();
+  const toast = useToastify();
 
-  const { type } = router.query;
+  const DURATION_TOAST = 3000;
+
+  const createTransactionMutate = useMutation({
+    mutationFn: (body: Partial<TransactionBody>) => createTransaction(body),
+  });
+
+  const { type, idCourse } = router.query;
 
   const {
     register,
@@ -35,8 +50,34 @@ const FormInforUser = () => {
     formState: { errors },
   } = useForm<FormValues>();
 
+  const { user } = useContext(AuthenContext);
+
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
+    const transactionBody = {
+      ...data,
+      idUser: user?._id,
+      type: type,
+      ...(idCourse ? { idCourse: idCourse } : ''),
+    };
+
+    createTransactionMutate.mutate(transactionBody, {
+      onSuccess: () => {
+        toast.handleOpenToastify(
+          'success',
+          'Thanh toán thành công',
+          DURATION_TOAST
+        );
+        router.push('/');
+      },
+      onError: (error: any) => {
+        toast.handleOpenToastify(
+          'error',
+          'Thanh toán thất bại',
+          DURATION_TOAST
+        );
+        console.log(error);
+      },
+    });
     reset();
   };
 
@@ -64,41 +105,56 @@ const FormInforUser = () => {
 
       <GridItem colSpan={{ base: 1, md: 3 }}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl isInvalid={!!errors.stk}>
-            <FormLabel htmlFor="stk">STK Ngân hàng</FormLabel>
+          <FormControl isInvalid={!!errors.accountNumber}>
+            <FormLabel htmlFor="accountNumber">STK Ngân hàng</FormLabel>
             <Input
-              id="stk"
-              type="string"
+              id="accountNumber"
+              type="number"
               placeholder="Vui lòng nhập số tài khoản ngân hàng"
-              {...register('stk', { required: 'Bạn phải nhập ô này' })}
-            />
-            <FormErrorMessage>{errors.stk?.message}</FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={!!errors.owner} mt={4}>
-            <FormLabel htmlFor="owner">Tên chủ tài khoản</FormLabel>
-            <Input
-              id="owner"
-              type="string"
-              placeholder="Vui lòng nhập tên chủ tài khoản"
-              {...register('owner', {
+              {...register('accountNumber', {
                 required: 'Bạn phải nhập ô này',
               })}
             />
-            <FormErrorMessage>{errors.owner?.message}</FormErrorMessage>
+            <FormErrorMessage>{errors.accountNumber?.message}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.accountName} mt={4}>
+            <FormLabel htmlFor="accountName">Tên chủ tài khoản</FormLabel>
+            <Input
+              id="accountName"
+              type="string"
+              placeholder="Vui lòng nhập tên chủ tài khoản"
+              {...register('accountName', {
+                required: 'Bạn phải nhập ô này',
+              })}
+            />
+            <FormErrorMessage>{errors.accountName?.message}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!errors.bankName} mt={4}>
-            <FormLabel htmlFor="bankName">Chi nhánh ngân hàng</FormLabel>
+            <FormLabel htmlFor="bankName">Tên ngân hàng</FormLabel>
             <Input
               id="bankName"
               type="string"
-              placeholder="Vui lòng nhập chi nhánh ngân hàng"
+              placeholder="Vui lòng nhập tên ngân hàng"
               {...register('bankName', {
                 required: 'Bạn phải nhập ô này',
               })}
             />
             <FormErrorMessage>{errors.bankName?.message}</FormErrorMessage>
+          </FormControl>
+
+          <FormControl isInvalid={!!errors.bankBranch} mt={4}>
+            <FormLabel htmlFor="bankBranch">Chi nhánh ngân hàng</FormLabel>
+            <Input
+              id="bankBranch"
+              type="string"
+              placeholder="Vui lòng nhập chi nhánh ngân hàng"
+              {...register('bankBranch', {
+                required: 'Bạn phải nhập ô này',
+              })}
+            />
+            <FormErrorMessage>{errors.bankBranch?.message}</FormErrorMessage>
           </FormControl>
 
           <FormControl isInvalid={!!errors.email} mt={4}>
