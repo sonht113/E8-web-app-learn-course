@@ -10,6 +10,7 @@ import {
   Flex,
   Box,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 
 import EnterFormImg from '../../public/static/images/enter-form.webp';
@@ -23,6 +24,10 @@ type FormValues = {
 };
 
 const FormInforUser = () => {
+  const router = useRouter();
+
+  const { type } = router.query;
+
   const {
     register,
     handleSubmit,

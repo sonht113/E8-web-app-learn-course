@@ -11,12 +11,38 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { AiFillQuestionCircle, AiOutlineCheckCircle } from 'react-icons/ai';
+import {
+  AiFillEdit,
+  AiFillQuestionCircle,
+  AiFillWechat,
+  AiOutlineCheckCircle,
+  AiOutlineFolderOpen,
+} from 'react-icons/ai';
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { GiInfinity } from 'react-icons/gi';
 import PaymentModal from '@/components/PaymentModal';
-const Logo = () => {
+import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+import { getCourse } from 'api/course.api';
+import { MdOutlineManageSearch } from 'react-icons/md';
+import { FaAward } from 'react-icons/fa';
+
+const PaymentContent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const { idCourse } = router.query;
+
+  let courseData;
+  if (idCourse) {
+    const queryCourse = useQuery({
+      queryKey: ['course'],
+      queryFn: () => getCourse(idCourse),
+      keepPreviousData: true,
+    });
+    courseData = queryCourse.data?.data;
+  }
+
   return (
     <Box
       px={{ base: 4, md: 10 }}
@@ -57,7 +83,9 @@ const Logo = () => {
           color="white"
           my={8}
         >
-          Mở khóa toàn bộ khóa học
+          {courseData?.title
+            ? 'Mở khóa toàn bộ khóa học'
+            : 'Mở toàn bộ đặc quyền của teacher'}
         </Text>
         <Grid
           templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
@@ -70,16 +98,20 @@ const Logo = () => {
           <GridItem colSpan={{ base: 1, md: 2 }}>
             <Box fontSize="16px" fontWeight={400}>
               <Text>
-                Sở hữu khóa học HTML CSS đầy đủ và chi tiết nhất bạn có thể tìm
-                thấy trên Internet.
+                {courseData?.title
+                  ? `Sở hữu khóa học ${courseData?.title} đầy đủ và chi tiết nhất bạn
+                có thể tìm thấy trên Internet.`
+                  : 'Có cơ hội đăng và dạy các khóa học thuộc thế mạnh của bản thân, tiếp cận với số lượng học viên lớn.'}
               </Text>
               <Text my={4}>
-                Có tới hàng trăm bài tập thực hành sau mỗi bài học và bạn sẽ
-                được làm 8 dự án thực tế trong khóa học này.
+                {courseData?.title
+                  ? `${courseData?.desc}`
+                  : 'Quản lý các khóa học một cách hiệu quả và dễ dàng.'}
               </Text>
               <Text>
-                Khóa học chưa hoàn thành 100%, dự kiến hoàn thành trong 3 tháng
-                tới. Bài học mới được cập nhật mỗi ngày.
+                {courseData?.title
+                  ? ' Khóa học chưa hoàn thành 100%, dự kiến hoàn thành trong 3 tháng tới. Bài học mới được cập nhật mỗi ngày.'
+                  : 'Tương các với các học viên thông qua các nhóm chat và trong giờ học online'}
               </Text>
             </Box>
             <Box my={8} bgColor="gray.800" p={4} borderRadius={8}>
@@ -89,13 +121,27 @@ const Logo = () => {
                 borderColor="gray.500"
                 alignItems="center"
               >
-                <Text fontSize="16px" fontWeight={400} color="gray" ms={48}>
-                  Giá bán:{' '}
-                </Text>
-                <Spacer />
-                <Text fontSize="20px" fontWeight={500} color="green">
-                  150,000đ
-                </Text>
+                {courseData?.price ? (
+                  <>
+                    <Text fontSize="16px" fontWeight={400} color="gray" ms={48}>
+                      Giá bán:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text fontSize="20px" fontWeight={500} color="green">
+                      {courseData?.price}đ
+                    </Text>
+                  </>
+                ) : (
+                  <>
+                    <Text fontSize="16px" fontWeight={400} color="gray" ms={48}>
+                      Giá:{' '}
+                    </Text>
+                    <Spacer />
+                    <Text fontSize="20px" fontWeight={500} color="green">
+                      499000đ
+                    </Text>
+                  </>
+                )}
               </Flex>
               <Flex pt={4}>
                 <Text fontSize="18px" fontWeight={700} ms={48}>
@@ -103,7 +149,7 @@ const Logo = () => {
                 </Text>
                 <Spacer />
                 <Text fontSize="20px" fontWeight={500} color="green">
-                  150,000đ
+                  {courseData?.price ? `${courseData?.price}đ` : '499000đ'}
                 </Text>
               </Flex>
             </Box>
@@ -115,7 +161,12 @@ const Logo = () => {
             >
               LẤY THÔNG TIN THANH TOÁN
             </Button>
-            <PaymentModal isOpen={isOpen} onClose={onClose} />
+            <PaymentModal
+              isOpen={isOpen}
+              onClose={onClose}
+              title={courseData?.title}
+              price={courseData?.price}
+            />
           </GridItem>
           <GridItem colSpan={{ base: 1, md: 1 }}>
             <Box
@@ -128,22 +179,49 @@ const Logo = () => {
               <Text py={4} textAlign="center" fontSize="24px" fontWeight={700}>
                 Bạn sẽ nhận được gì?
               </Text>
-              <Flex alignItems="center" py={2}>
-                <AiOutlineCheckCircle />
-                <Text ps={2}>Truy cập toàn bộ khóa HTML CSS Pro</Text>
-              </Flex>
-              <Flex alignItems="center" py={2}>
-                <AiFillQuestionCircle />
-                <Text ps={2}>Kênh hỏi đáp riêng tư</Text>
-              </Flex>
-              <Flex alignItems="center" py={2}>
-                <RiQuestionAnswerLine />
-                <Text ps={2}>Đáp án cho mọi thử thách</Text>
-              </Flex>
-              <Flex alignItems="center" py={2}>
-                <GiInfinity />
-                <Text ps={2}>Mua một lần, học mãi mãi</Text>
-              </Flex>
+              {courseData?.title ? (
+                <>
+                  <Flex alignItems="center" py={2}>
+                    <AiOutlineCheckCircle />
+                    <Text ps={2}>Truy cập toàn bộ khóa HTML CSS Pro</Text>
+                  </Flex>
+                  <Flex alignItems="center" py={2}>
+                    <AiFillQuestionCircle />
+                    <Text ps={2}>Kênh hỏi đáp riêng tư</Text>
+                  </Flex>
+                  <Flex alignItems="center" py={2}>
+                    <RiQuestionAnswerLine />
+                    <Text ps={2}>Đáp án cho mọi thử thách</Text>
+                  </Flex>
+                  <Flex alignItems="center" py={2}>
+                    <GiInfinity />
+                    <Text ps={2}>Mua một lần, học mãi mãi</Text>
+                  </Flex>
+                </>
+              ) : (
+                <>
+                  <Flex alignItems="center" my={4}>
+                    <AiFillEdit />
+                    <Text ms={4}>Có quyền tạo khóa học của riêng mình</Text>
+                  </Flex>
+                  <Flex alignItems="center" my={4}>
+                    <AiOutlineFolderOpen />
+                    <Text ms={4}>Mở lớp học trực tuyến</Text>
+                  </Flex>
+                  <Flex alignItems="center" my={4}>
+                    <MdOutlineManageSearch />
+                    <Text ms={4}>Quản lý các khóa học</Text>
+                  </Flex>
+                  <Flex alignItems="center" my={4}>
+                    <AiFillWechat />
+                    <Text ms={4}>Có thể tương tác với học viên</Text>
+                  </Flex>
+                  <Flex alignItems="center" my={4}>
+                    <FaAward />
+                    <Text ms={4}>Chế độ khen thưởng hợp lý</Text>
+                  </Flex>
+                </>
+              )}
             </Box>
           </GridItem>
         </Grid>
@@ -153,7 +231,7 @@ const Logo = () => {
 };
 
 const Payment = () => {
-  return <Logo />;
+  return <PaymentContent />;
 };
 
 export default Payment;

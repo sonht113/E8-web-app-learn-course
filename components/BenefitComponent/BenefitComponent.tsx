@@ -97,7 +97,7 @@ const BenefitComponent: React.FC<IBenefitComponentProps> = ({
             >
               Hủy bỏ
             </Button>
-            <Link href="/payment">
+            <Link href="/payment?type=UPGRADE_TO_TEACHER">
               <Button
                 colorScheme="whatsapp"
                 _hover={{

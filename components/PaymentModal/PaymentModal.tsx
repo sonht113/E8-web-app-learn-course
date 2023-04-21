@@ -15,10 +15,17 @@ import BankInfor from './BankInfor';
 import FormInforUser from './FormInforUser';
 
 type IPaymentModalProps = {
+  title: string;
+  price: number;
   onClose: () => void;
   isOpen: boolean;
 };
-const PaymentModal: React.FC<IPaymentModalProps> = ({ onClose, isOpen }) => {
+const PaymentModal: React.FC<IPaymentModalProps> = ({
+  title,
+  price,
+  onClose,
+  isOpen,
+}) => {
   return (
     <Modal
       isCentered={false}
@@ -44,7 +51,7 @@ const PaymentModal: React.FC<IPaymentModalProps> = ({ onClose, isOpen }) => {
             </TabList>
             <TabPanels>
               <TabPanel color="white">
-                <BankInfor />
+                <BankInfor {...{ title, price }} />
               </TabPanel>
               <TabPanel color="white">
                 <FormInforUser />
