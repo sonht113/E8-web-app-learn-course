@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createConversationApi,
   createMessagesApi,
@@ -40,6 +40,7 @@ type IChatContext = {
   messages: Message[] | null;
   createConversation: (nameChat: string, callback: () => void) => void;
   sendMessage: (v: DataMessage) => void;
+  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
 };
 
 export const ChatContext = React.createContext<IChatContext>({
@@ -57,13 +58,16 @@ export const ChatContext = React.createContext<IChatContext>({
   messages: null,
   createConversation: (v: string, callback) => {},
   sendMessage: (v: DataMessage) => {},
+  setConversations: () => {},
 });
 
 export const ChatContextProvider = ({ children }) => {
   const { user } = useContext(AuthenContext);
 
   const [showMessage, setShowMessage] = useState(false);
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<Conversation[] | null>(
+    null
+  );
   const [avatarClassRoom, setAvatarClassRoom] = useState<any>(null);
   const [roomActive, setRoomActive] = useState<string>('');
   const [conversationDetail, setConversationDetail] =
@@ -108,7 +112,7 @@ export const ChatContextProvider = ({ children }) => {
   };
 
   const conversationDetailQuery = (id: string) => {
-    queryClient.prefetchQuery(['conversation', id], {
+    return queryClient.prefetchQuery(['conversation', id], {
       queryFn: () =>
         getConversationDetail(id)
           .then((res) => {
@@ -371,6 +375,7 @@ export const ChatContextProvider = ({ children }) => {
         messages,
         createConversation,
         sendMessage,
+        setConversations,
       }}
     >
       {children}

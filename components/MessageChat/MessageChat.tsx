@@ -98,14 +98,53 @@ const MessageChat: React.FC<IMessageChatProps> = ({
               gap={2}
               flexDirection={isSender ? 'row-reverse' : 'row'}
             >
-              <iframe src={message.content} height="200" width="250"></iframe>
-              <Link href={message.content} target={'_blank'}>
-                <DownloadIcon
-                  cursor={'pointer'}
-                  color={'green.500'}
-                  fontSize={'lg'}
-                />
-              </Link>
+              {(message.content.includes('.pdf') ||
+                message.content.includes('.mp4') ||
+                message.content.includes('.mp3') ||
+                message.content.includes('.mov')) && (
+                <>
+                  <iframe
+                    src={message.content}
+                    height="200"
+                    width="250"
+                  ></iframe>
+                  <Link href={message.content} target={'_blank'}>
+                    <DownloadIcon
+                      cursor={'pointer'}
+                      color={'green.500'}
+                      fontSize={'lg'}
+                    />
+                  </Link>
+                </>
+              )}
+              {(message.content.includes('.doc') ||
+                message.content.includes('.docx') ||
+                message.content.includes('.txt') ||
+                message.content.includes('.xlsx') ||
+                message.content.includes('.pptx')) && (
+                <>
+                  <Link href={message.content}>
+                    <label
+                      style={{
+                        border: '1px solid gray',
+                        fontSize: '15px',
+                        padding: '0px 5px',
+                        borderRadius: '3px',
+                        color: 'gray',
+                        cursor: 'pointer',
+                      }}
+                      htmlFor="messageFile"
+                    >
+                      Download file here
+                    </label>
+                  </Link>
+                  <input
+                    style={{ display: 'none' }}
+                    id="messageFile"
+                    value={message.content}
+                  />
+                </>
+              )}
             </Flex>
           )}
           {isSender && (

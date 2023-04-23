@@ -5,6 +5,7 @@ enum RoleConversationEnum {
 
 export type Conversation = {
   _id: string;
+  id?: string;
   users: string[];
   chatName: string;
   isGroup: boolean;

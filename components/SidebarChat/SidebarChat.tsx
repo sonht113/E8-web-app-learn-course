@@ -1,15 +1,17 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Box,
   Flex,
-  Skeleton,
   Tooltip,
   useDisclosure,
   Text,
+  Spinner,
+  Center,
 } from '@chakra-ui/react';
 import { AiOutlineUsergroupAdd, AiOutlineHome } from 'react-icons/ai';
-import Search from '../Search';
+import { useQueryClient } from '@tanstack/react-query';
+import SearchFC from '../Search';
 import RoomChat from '../RoomChat/RoomChat';
 import { ChatContext } from 'context/ChatContext';
 import ModalFC from '../ModalFC';
@@ -17,9 +19,15 @@ import FormCreateConversation from '../FormCreateConversation';
 import { Conversation } from 'types/converation.type';
 import { AuthenContext } from 'context/AuthenContext';
 import { TypeUser } from 'types/user.type';
+import useDebounce from 'hook/useDebounce';
+import { searchConversationApi } from 'api/chat.api';
 
 const SidebarChat = () => {
+  const [valueSearchConversation, setValueSearchConversation] =
+    useState<string>('');
+
   const { onOpen, onClose, isOpen } = useDisclosure();
+  const queryClient = useQueryClient();
   const {
     showMessage,
     setShowMessage,
@@ -27,10 +35,32 @@ const SidebarChat = () => {
     selectRoom,
     roomActive,
     conversations,
+    setConversations,
   } = useContext(ChatContext);
+  const valueSearchConversationDebounce = useDebounce(
+    valueSearchConversation,
+    1000
+  );
+
   const { user } = useContext(AuthenContext);
 
   const isTeacher = useMemo(() => user.typeUser === TypeUser.TEACHER, [user]);
+
+  const searchConversationQuery = (value: string) => {
+    return queryClient.prefetchQuery(['searchConversation', value], {
+      queryFn: () =>
+        searchConversationApi(value)
+          .then((res) => {
+            setConversations(res.data.results);
+            return res;
+          })
+          .catch((err) => console.log(err)),
+    });
+  };
+
+  useEffect(() => {
+    searchConversationQuery(valueSearchConversationDebounce);
+  }, [valueSearchConversationDebounce]);
 
   return (
     <React.Fragment>
@@ -45,7 +75,12 @@ const SidebarChat = () => {
         display={showMessage && 'none'}
         pt={2}
       >
-        <HeaderSidebarChat click={() => onOpen()} isTeacher={isTeacher} />
+        <HeaderSidebarChat
+          valueSearchConversation={valueSearchConversation}
+          setValueSearchConversation={setValueSearchConversation}
+          click={() => onOpen()}
+          isTeacher={isTeacher}
+        />
         <Box
           h={'50px'}
           display={'flex'}
@@ -72,10 +107,11 @@ const SidebarChat = () => {
           alignItems={conversations?.length === 0 && 'center'}
           bg={'gray.300'}
         >
-          {!conversations &&
-            [{ id: 1 }, { id: 2 }, { id: 3 }].map((item, _index) => (
-              <Skeleton height={'100px'} mb={3} bg={'green'} />
-            ))}
+          {!conversations && (
+            <Center mt={5}>
+              <Spinner />
+            </Center>
+          )}
 
           {conversations?.length === 0 && (
             <Text fontSize={'sm'} fontWeight={'medium'} color={'gray.500'}>
@@ -109,11 +145,15 @@ const SidebarChat = () => {
 type IHeaderSidebarChatProps = {
   click?: () => void;
   isTeacher?: boolean;
+  setValueSearchConversation: React.Dispatch<React.SetStateAction<string>>;
+  valueSearchConversation: string;
 };
 
 const HeaderSidebarChat: React.FC<IHeaderSidebarChatProps> = ({
   click,
   isTeacher,
+  setValueSearchConversation,
+  valueSearchConversation,
 }) => {
   return (
     <Flex
@@ -132,11 +172,13 @@ const HeaderSidebarChat: React.FC<IHeaderSidebarChatProps> = ({
           </Link>
         </Box>
       </Tooltip>
-      <Search
+      <SearchFC
         sizeInput={'sm'}
         sizeIcon={'sm'}
         radius={'lg'}
         placeholder={'Tìm kiếm'}
+        value={valueSearchConversation}
+        setValue={setValueSearchConversation}
       />
       {isTeacher && (
         <Tooltip label={'Tạo nhóm chat'} hasArrow placement="bottom">

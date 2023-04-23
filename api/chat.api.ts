@@ -4,7 +4,8 @@ import {
   ConversationCreate,
   ConversationUpdate,
 } from 'types/converation.type';
-import { Message, MessageCreateType } from 'types/message.type';
+import { MessageCreateType } from 'types/message.type';
+import { ConversationsPaginate } from 'types/paignate.type';
 import { UserPaginate } from 'types/user-paginate.type';
 import http from 'utils/http';
 
@@ -64,6 +65,16 @@ export const searchUserWantAddJoinClassRoom = async (
   return await http.get('/users/paginate', {
     params: {
       email: body,
+    },
+  });
+};
+
+export const searchConversationApi = async (
+  chatName: string
+): Promise<AxiosResponse<ConversationsPaginate, any>> => {
+  return await http.get('/conversations/paginate', {
+    params: {
+      chatName: `/^${chatName}/`,
     },
   });
 };
