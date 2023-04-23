@@ -13,7 +13,7 @@ const Teacher: React.FC<ITeacherProps> = ({
   fullName,
 }) => {
   return (
-    <Link href={`/teacher/${idUserDetail}`}>
+    <Link href={`/profile/${idUserDetail}`}>
       <Box
         w={['30vw', '30vw', 'full', 'full']}
         display={'flex'}
@@ -28,7 +28,11 @@ const Teacher: React.FC<ITeacherProps> = ({
         <Avatar
           size={['lg', 'xl']}
           src={profilePicture}
-          name="Dan Abrahmov"
+          name={fullName
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/đ/g, 'd')
+            .replace(/Đ/g, 'D')}
           mb={2}
         />
         <Text

@@ -2,7 +2,14 @@ import { AxiosResponse } from 'axios';
 import { User } from 'types/user.type';
 import http from 'utils/http';
 
-export const getMe = async (populate: string, fields: string) => {
+export const getUsers = async (): Promise<AxiosResponse<User[], any>> => {
+  return http.get('/users');
+};
+
+export const getMe = async (
+  populate: string,
+  fields: string
+): Promise<AxiosResponse<User, any>> => {
   return await http.get<User>('/users/me', {
     params: {
       populate: populate,

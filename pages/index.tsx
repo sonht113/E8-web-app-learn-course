@@ -13,6 +13,8 @@ import { getBanners } from 'api/banner.api';
 import { getCourses } from 'api/course.api';
 
 import { blogs, teachers } from '_mock/data';
+import { getUsers } from 'api/user.api';
+import { TypeUser, User } from 'types/user.type';
 
 const Home: NextPageWithLayout = () => {
   const queryBanners = useQuery({
@@ -25,6 +27,13 @@ const Home: NextPageWithLayout = () => {
   const queryCourses = useQuery({
     queryKey: ['courses'],
     queryFn: () => getCourses(),
+    keepPreviousData: true,
+    staleTime: 5 * 1000,
+  });
+
+  const queryTeachers = useQuery({
+    queryKey: ['teachers'],
+    queryFn: () => getUsers(),
     keepPreviousData: true,
     staleTime: 5 * 1000,
   });
@@ -47,7 +56,14 @@ const Home: NextPageWithLayout = () => {
         )}
       />
       <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
-      <ListTeacher title={'Giảng viên nổi bật'} teachers={teachers} />
+      <ListTeacher
+        title={'Giảng viên nổi bật'}
+        teachers={queryTeachers.data?.data.filter(
+          (teacher: User) =>
+            teacher.myCourses.length > 5 &&
+            teacher.typeUser === TypeUser.TEACHER
+        )}
+      />
     </Container>
   );
 };

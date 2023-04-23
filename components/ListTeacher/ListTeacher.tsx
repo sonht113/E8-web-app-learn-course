@@ -1,7 +1,8 @@
 import { ArrowForwardIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { Box, Flex, Text, Grid } from '@chakra-ui/react';
+import { Box, Flex, Text, Grid, Skeleton } from '@chakra-ui/react';
 import React from 'react';
 import { TeacherViewHome } from 'types/teacher.type';
+import { User } from 'types/user.type';
 import Teacher from '../Teacher';
 
 type IListTeacherProps = {
@@ -63,6 +64,11 @@ const ListTeacher: React.FC<IListTeacherProps> = ({
         )}
       </Box>
 
+      {teachers?.length === 0 && (
+        <Text fontSize={'sm'} fontWeight={'medium'} color={'gray.500'}>
+          Không có giảng viên nào
+        </Text>
+      )}
       <Grid
         overflowX={['scroll', 'scroll', 'scroll', 'hidden']}
         templateColumns={[
@@ -74,11 +80,20 @@ const ListTeacher: React.FC<IListTeacherProps> = ({
         gap={[5]}
         pb={5}
       >
-        {teachers.map((teacher: TeacherViewHome) => (
+        {!teachers &&
+          [1, 2, 3, 4, 5].map((_item, index) => (
+            <Skeleton
+              key={index}
+              w={['60vw', '30vw', '30vw', 'full']}
+              h={'150px'}
+              rounded={'xl'}
+            />
+          ))}
+        {teachers?.map((teacher: User) => (
           <Teacher
-            key={teacher.idUserDetail}
-            idUserDetail={teacher.idUserDetail}
-            profilePicture={teacher.profilePicture}
+            key={teacher._id}
+            idUserDetail={teacher._id}
+            profilePicture={teacher.avatar}
             fullName={teacher.fullName}
             phone={teacher.phone}
             email={teacher.email}

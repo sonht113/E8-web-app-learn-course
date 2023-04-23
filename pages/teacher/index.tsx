@@ -6,6 +6,9 @@ import TitlePage from '@/components/TitlePage';
 import ListTeacher from '@/components/ListTeacher';
 import { teachers } from '_mock/data';
 import IntroLearningPath from '@/components/IntroLearningPath';
+import { useQuery } from '@tanstack/react-query';
+import { getUsers } from 'api/user.api';
+import { TypeUser, User } from 'types/user.type';
 
 const introLearningPath = {
   title:
@@ -17,6 +20,12 @@ const introLearningPath = {
 };
 
 const Teacher = () => {
+  const teachersQuery = useQuery({
+    queryKey: ['teachers'],
+    queryFn: () => getUsers(),
+    keepPreviousData: true,
+  });
+
   return (
     <Container className={'teacher'}>
       <TitlePage
@@ -25,8 +34,20 @@ const Teacher = () => {
           'Các giảng viên giỏi ở các lĩnh vực khác nhau sẽ giúp bạn nâng cao vốn kiến thức qua từng khoá học.'
         }
       />
-      <ListTeacher teachers={teachers} title={'Giảng viên nổi bật'} />
-      <ListTeacher teachers={teachers} title={'Tất cả các giảng viên'} />
+      <ListTeacher
+        teachers={teachersQuery.data?.data.filter(
+          (teacher: User) =>
+            teacher.myCourses.length > 5 &&
+            teacher.typeUser === TypeUser.TEACHER
+        )}
+        title={'Giảng viên nổi bật'}
+      />
+      <ListTeacher
+        teachers={teachersQuery.data?.data.filter(
+          (teacher: User) => teacher.typeUser === TypeUser.TEACHER
+        )}
+        title={'Tất cả các giảng viên'}
+      />
       <IntroLearningPath data={introLearningPath} />
     </Container>
   );
