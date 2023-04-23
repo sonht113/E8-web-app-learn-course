@@ -63,7 +63,7 @@ const RoomChat: React.FC<IRoomChatProps> = ({
           {data?.latestMessage && (
             <Text
               w={['220px', '100px', '100px', '100px', '200px']}
-              fontSize={['sm', 'sm', 'sm', 'md']}
+              fontSize={['sm']}
               overflow={'hidden'}
               whiteSpace={'nowrap'}
               color={isActive ? 'white' : 'gray.400'}
