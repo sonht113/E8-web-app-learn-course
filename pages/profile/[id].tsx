@@ -10,7 +10,6 @@ import {
   ListIcon,
   Center,
   SkeletonCircle,
-  SkeletonText,
   Skeleton,
 } from '@chakra-ui/react';
 import { MdCheckCircle } from 'react-icons/md';
@@ -19,7 +18,7 @@ import CoverImage from '../../public/static/images/cover-image.jpg';
 import React, { ReactElement, useContext, useMemo } from 'react';
 import Course from '@/components/Course';
 import { CourseType } from 'types/course.type';
-import { TypeUser } from 'types/user.type';
+import { MyLearningCourses, TypeUser } from 'types/user.type';
 import { ProfileContext } from 'context/ProfileContext';
 import ListSkeleton from '@/components/ListSkeleton';
 import { WarningTwoIcon } from '@chakra-ui/icons';
@@ -199,18 +198,24 @@ const Profile = () => {
             <Text fontSize={['md', 'lg']} mb={5} fontWeight={'bold'}>
               {isTeacher ? 'Lớp học online' : 'Các khoá học đã tham gia'}
             </Text>
-            {user?.myLearningCourses.length === 0 && <EmptyCourse />}
-            <Flex flexDirection={'column'} gap={5}>
-              {user?.myLearningCourses.length !== 0 &&
-                user?.myLearningCourses.map((course: CourseType) => (
-                  <Course
-                    id={course._id}
-                    thumbnail={course.thumbnail}
-                    title={course.title}
-                    desc={course.desc}
-                  />
-                ))}
-            </Flex>
+            {!isTeacher && (
+              <>
+                {user?.myLearningCourses?.length === 0 && <EmptyCourse />}
+                <Flex flexDirection={'column'} gap={5}>
+                  {user?.myLearningCourses?.length !== 0 &&
+                    user?.myLearningCourses.map(
+                      (myCourse: MyLearningCourses) => (
+                        <Course
+                          id={myCourse._id}
+                          thumbnail={myCourse.idCourse.thumbnail}
+                          title={myCourse.idCourse.title}
+                          desc={myCourse.idCourse.desc}
+                        />
+                      )
+                    )}
+                </Flex>
+              </>
+            )}
           </Box>
           {isTeacher && (
             <>

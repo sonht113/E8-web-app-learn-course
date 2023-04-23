@@ -2,7 +2,7 @@ import { Box, Text, Image, Flex } from '@chakra-ui/react';
 import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { HiUserGroup } from 'react-icons/hi';
 import ButtonFC from '../Button/Button';
 
@@ -30,6 +30,8 @@ const Course: React.FC<ICourseProps> = ({
   const router = useRouter();
   const { isAuthenticated } = useContext(AuthenContext);
 
+  const isProfile = useMemo(() => router.pathname.includes('/profile'), []);
+
   return (
     <Link
       href={
@@ -44,15 +46,8 @@ const Course: React.FC<ICourseProps> = ({
     >
       <Box
         position={'relative'}
-        className={router.pathname.includes('/profile') && 'Course'}
-        w={
-          !router.pathname.includes('/profile') && [
-            '60vw',
-            '30vw',
-            '30vw',
-            'full',
-          ]
-        }
+        className={isProfile && 'Course'}
+        w={!isProfile && ['60vw', '30vw', '30vw', 'full']}
       >
         <Box
           position={'relative'}
@@ -87,10 +82,10 @@ const Course: React.FC<ICourseProps> = ({
               <ButtonFC
                 title={
                   !isFree
-                    ? router.pathname.includes('/profile')
+                    ? isProfile
                       ? 'Tiếp tục học'
                       : 'Mua khóa học'
-                    : router.pathname.includes('/profile')
+                    : isProfile
                     ? 'Tiếp tục học'
                     : 'Xem khoá học'
                 }
@@ -112,9 +107,7 @@ const Course: React.FC<ICourseProps> = ({
             alt={'course'}
           />
         )}
-        <Box
-          className={router.pathname.includes('/profile') && 'contentCourse'}
-        >
+        <Box className={isProfile && 'contentCourse'}>
           <Text
             my={2}
             fontSize={['md', 'md', 'md']}
@@ -146,9 +139,7 @@ const Course: React.FC<ICourseProps> = ({
               </Flex>
             </Box>
           )}
-          {router.pathname.includes('/profile') && (
-            <Text fontSize={'sm'}>{desc}</Text>
-          )}
+          {isProfile && <Text fontSize={'sm'}>{desc}</Text>}
         </Box>
       </Box>
     </Link>

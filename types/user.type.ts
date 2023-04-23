@@ -28,6 +28,17 @@ type GroupDetail = {
   idGroupDetail: string;
 };
 
+interface IDCourse extends CourseType {
+  classesJoined: string[];
+  usersJoined: string[];
+}
+
+export type MyLearningCourses = {
+  _id: string;
+  currentLesson: number;
+  idCourse: IDCourse;
+};
+
 export type User = {
   favoriteCourses?: CourseType[];
   myCourses?: CourseType[];
@@ -48,7 +59,7 @@ export type User = {
   groups?: Group[];
   _id: string;
   groupDetails?: GroupDetail[];
-  myLearningCourses?: CourseType[];
+  myLearningCourses?: MyLearningCourses[];
   createdAt?: string;
   updatedAt?: string;
   typeUser?: TypeUser.STUDENT | TypeUser.TEACHER;
