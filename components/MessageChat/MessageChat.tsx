@@ -8,12 +8,13 @@ import React, {
 } from 'react';
 import { Box, Flex, Avatar, Text } from '@chakra-ui/react';
 import { DownloadIcon } from '@chakra-ui/icons';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import ListImage from '../ListImage/ListImage';
 import { DataModal } from 'pages/chat';
 import { FileType, Message } from 'types/message.type';
 import { AuthenContext } from 'context/AuthenContext';
-import Link from 'next/link';
 
 type IMessageChatProps = {
   handleOpenModalPreview?: () => void;
@@ -28,6 +29,7 @@ const MessageChat: React.FC<IMessageChatProps> = ({
 }) => {
   const { user } = useContext(AuthenContext);
   const ref = useRef<any>();
+  const router = useRouter();
 
   const isSender = useMemo(
     () => message.sender._id === user._id,
@@ -123,21 +125,20 @@ const MessageChat: React.FC<IMessageChatProps> = ({
                 message.content.includes('.xlsx') ||
                 message.content.includes('.pptx')) && (
                 <>
-                  <Link href={message.content}>
-                    <label
-                      style={{
-                        border: '1px solid gray',
-                        fontSize: '15px',
-                        padding: '0px 5px',
-                        borderRadius: '3px',
-                        color: 'gray',
-                        cursor: 'pointer',
-                      }}
-                      htmlFor="messageFile"
-                    >
-                      Download file here
-                    </label>
-                  </Link>
+                  <label
+                    onClick={() => router.push(message.content)}
+                    style={{
+                      border: '1px solid gray',
+                      fontSize: '15px',
+                      padding: '0px 5px',
+                      borderRadius: '3px',
+                      color: 'gray',
+                      cursor: 'pointer',
+                    }}
+                    htmlFor="messageFile"
+                  >
+                    Download file here
+                  </label>
                   <input
                     style={{ display: 'none' }}
                     id="messageFile"
