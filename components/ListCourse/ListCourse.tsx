@@ -1,16 +1,23 @@
 import { ArrowForwardIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { Box, Text, Grid, Flex, Skeleton, Center } from '@chakra-ui/react';
 import React from 'react';
-import { CourseViewHome } from 'types/course.type';
+import { CourseType, CourseViewHome } from 'types/course.type';
+import { User } from 'types/user.type';
 import Course from '../Course';
 
 type IListCourseProps = {
   courses: CourseViewHome[];
-  title: string;
+  title?: string;
   isPro: boolean;
+  user?: User;
 };
 
-const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
+const ListCourse: React.FC<IListCourseProps> = ({
+  courses,
+  title,
+  isPro,
+  user,
+}) => {
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box
@@ -25,7 +32,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
               {title}
             </Text>
           </Box>
-          {!isPro && (
+          {!isPro && title && (
             <Box
               h={5}
               w={5}
@@ -40,7 +47,7 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
             </Box>
           )}
         </Flex>
-        {!isPro && (
+        {!isPro && title && (
           <Flex
             className="linkLearningPath"
             alignItems={'center'}
@@ -91,15 +98,16 @@ const ListCourse: React.FC<IListCourseProps> = ({ courses, title, isPro }) => {
             Không có khoá học nào
           </Text>
         )}
-        {courses?.map((course: CourseViewHome, index: number) => (
+        {courses?.map((course: CourseType, _index: number) => (
           <Course
-            key={index}
+            key={course._id}
             id={course._id}
             title={course.title}
             price={course.price}
             isFree={!course.isPrivate}
             thumbnail={course.thumbnail}
             totalViews={course.totalViews}
+            isJoined={course.userJoined?.includes(user._id)}
           />
         ))}
       </Grid>

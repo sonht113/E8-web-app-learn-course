@@ -8,13 +8,17 @@ import {
   Heading,
   useDisclosure,
   Image,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
+import { getUser } from 'api/user.api';
 import { AuthenContext } from 'context/AuthenContext';
 import Link from 'next/link';
 import React, { useContext, useMemo } from 'react';
 import { GiUpgrade } from 'react-icons/gi';
-import { CourseViewPopUp } from 'types/course.type';
-import { TypeUser } from 'types/user.type';
+import { CoursePaginate } from 'types/paignate.type';
+import { MyLearningCourses, TypeUser } from 'types/user.type';
 
 const UserAvatar = () => {
   const { user } = useContext(AuthenContext);
@@ -214,12 +218,20 @@ const PopupAvatar = () => {
 };
 
 const PopupMyCourse = () => {
-  const { myCourses } = useContext(AuthenContext);
+  const { user } = useContext(AuthenContext);
+
+  const learningCourseQuery = useQuery({
+    queryKey: ['my-learning-courses', user._id, 'myLearningCourses.idCourse'],
+    queryFn: () => getUser(user._id, 'myLearningCourses.idCourse'),
+  });
+
+  const myLearningCourses = learningCourseQuery.data?.data?.myLearningCourses;
+
   return (
     <Box pb={5}>
       <Flex justifyContent={'space-between'} alignItems={'center'}>
         <Text fontWeight={'bold'}>Khoá học của tôi</Text>
-        <Link href={'/my-course'}>
+        <Link href={'/my-courses'}>
           <Text
             fontSize={'sm'}
             color={'gray.500'}
@@ -232,12 +244,17 @@ const PopupMyCourse = () => {
         </Link>
       </Flex>
       <Box mt={5}>
-        {myCourses?.length === 0 && (
+        {!myLearningCourses && (
+          <Center>
+            <Spinner />
+          </Center>
+        )}
+        {myLearningCourses?.length === 0 && (
           <Text fontSize={'sm'}>Bạn chưa đăng ký khóa học nào</Text>
         )}
-        {myCourses?.length !== 0 &&
-          myCourses?.map((item: CourseViewPopUp) => (
-            <Link href={`/learning/${item?._id}`}>
+        {myLearningCourses?.length !== 0 &&
+          myLearningCourses?.map((item: MyLearningCourses) => (
+            <Link href={`/learning/${item?.idCourse?._id}`}>
               <Flex
                 key={item?._id}
                 alignItems={'center'}
@@ -248,28 +265,32 @@ const PopupMyCourse = () => {
                 p={2}
                 rounded={'md'}
               >
-                <Image w={'50px'} objectFit={'cover'} src={item?.thumbnail} />
+                <Image
+                  w={'70px'}
+                  objectFit={'cover'}
+                  src={item?.idCourse.thumbnail}
+                />
                 <Box>
                   <Text
                     whiteSpace={'nowrap'}
-                    width={'160px'}
+                    width={'130px'}
                     overflow={'hidden'}
                     textOverflow={'ellipsis'}
                     fontSize={'sm'}
                     fontWeight={'bold'}
                     color={'gray.600'}
                   >
-                    {item?.title}
+                    {item?.idCourse.title}
                   </Text>
                   <Text
                     whiteSpace={'nowrap'}
-                    width={'160px'}
+                    width={'130px'}
                     overflow={'hidden'}
                     textOverflow={'ellipsis'}
                     fontSize={'sm'}
                     color={'gray.400'}
                   >
-                    {item?.desc}
+                    {item?.idCourse.desc}
                   </Text>
                 </Box>
               </Flex>

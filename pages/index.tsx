@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useCallback, useContext } from 'react';
 import { Container } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -15,8 +15,11 @@ import { getCourses } from 'api/course.api';
 import { blogs, teachers } from '_mock/data';
 import { getUsers } from 'api/user.api';
 import { TypeUser, User } from 'types/user.type';
+import { AuthenContext } from 'context/AuthenContext';
 
 const Home: NextPageWithLayout = () => {
+  const { user } = useContext(AuthenContext);
+
   const queryBanners = useQuery({
     queryKey: ['banners'],
     queryFn: () => getBanners(),
@@ -47,6 +50,7 @@ const Home: NextPageWithLayout = () => {
         courses={queryCourses.data?.data.filter(
           (course: CourseType) => course.isPrivate
         )}
+        user={user}
       />
       <ListCourse
         isPro={false}
@@ -54,6 +58,7 @@ const Home: NextPageWithLayout = () => {
         courses={queryCourses.data?.data.filter(
           (course: CourseType) => !course.isPrivate
         )}
+        user={user}
       />
       <ListBlog title={'Bài viết nổi bật'} blogs={blogs} />
       <ListTeacher

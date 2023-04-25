@@ -1,7 +1,8 @@
 .home,
 .course,
 .teacher,
-.blog {
+.blog,
+.my-courses {
   width: 90% !important;
   max-width: 90% !important;
 }
@@ -18,8 +19,10 @@
 @media screen and (min-width: 992px) {
   .home,
   .course,
-  .teacher .blog,
-  .chat {
+  .teacher,
+  .blog,
+  .chat,
+  .my-courses {
     height: calc(100vh - 64px);
     overflow-y: scroll;
   }
@@ -27,7 +30,8 @@
   .course::-webkit-scrollbar,
   .teacher::-webkit-scrollbar,
   .blog::-webkit-scrollbar,
-  .chat::-webkit-scrollbar {
+  .chat::-webkit-scrollbar,
+  .my-courses::-webkit-scrollbar {
     display: none;
   }
 }
@@ -36,7 +40,8 @@
   .home,
   .course,
   .teacher,
-  .blog {
+  .blog,
+  .my-courses {
     max-width: 100% !important;
   }
 }

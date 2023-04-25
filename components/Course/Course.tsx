@@ -31,17 +31,18 @@ const Course: React.FC<ICourseProps> = ({
   const { isAuthenticated } = useContext(AuthenContext);
 
   const isProfile = useMemo(() => router.pathname.includes('/profile'), []);
+  const isMyCourse = useMemo(() => router.pathname.includes('/my-courses'), []);
 
   return (
     <Link
       href={
-        !isFree
-          ? isAuthenticated
-            ? isJoined
-              ? `/course/${id}`
-              : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
-            : '/login'
-          : `/course/${id}`
+        isFree
+          ? `/course/${id}`
+          : !isAuthenticated
+          ? '/login'
+          : isJoined || isProfile || isMyCourse
+          ? `/learning/${id}`
+          : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
       }
     >
       <Box
@@ -81,13 +82,24 @@ const Course: React.FC<ICourseProps> = ({
             >
               <ButtonFC
                 title={
-                  !isFree
-                    ? isProfile
-                      ? 'Tiếp tục học'
-                      : 'Mua khóa học'
-                    : isProfile
+                  isFree
+                    ? 'Tham gia khoá học'
+                    : !isAuthenticated
+                    ? 'Mua khoá học'
+                    : isJoined || isProfile || isMyCourse
                     ? 'Tiếp tục học'
-                    : 'Xem khoá học'
+                    : 'Mua khoá học'
+                }
+                onClick={() =>
+                  router.push(
+                    isFree
+                      ? `/course/${id}`
+                      : !isAuthenticated
+                      ? '/login'
+                      : isJoined || isProfile || isMyCourse
+                      ? `/learning/${id}`
+                      : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
+                  )
                 }
                 color="cyan"
                 radius={'full'}
