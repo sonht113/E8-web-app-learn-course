@@ -120,7 +120,10 @@ const SidebarChat = () => {
           )}
 
           {conversations
-            ?.sort(
+            ?.filter((conversation: Conversation) =>
+              conversation.users.includes(user._id)
+            )
+            .sort(
               (a: Conversation, b: Conversation) =>
                 new Date(b.updatedAt).getTime() -
                 new Date(a.updatedAt).getTime()
