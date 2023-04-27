@@ -12,7 +12,7 @@ import ListTeacher from '@/components/ListTeacher';
 import { getBanners } from 'api/banner.api';
 import { getCourses } from 'api/course.api';
 
-import { blogs, teachers } from '_mock/data';
+import { blogs } from '_mock/data';
 import { getUsers } from 'api/user.api';
 import { TypeUser, User } from 'types/user.type';
 import { AuthenContext } from 'context/AuthenContext';

@@ -4,7 +4,6 @@ import { Container } from '@chakra-ui/react';
 
 import TitlePage from '@/components/TitlePage';
 import ListTeacher from '@/components/ListTeacher';
-import { teachers } from '_mock/data';
 import IntroLearningPath from '@/components/IntroLearningPath';
 import { useQuery } from '@tanstack/react-query';
 import { getUsers } from 'api/user.api';
