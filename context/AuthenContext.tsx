@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
+import { useRouter } from 'next/router';
 
 import { DataLoginRegister } from 'types/auth.type';
 import { login, sendOtpEmail, sendOtpPhone, signUp } from 'api/auth.api';
 import { User } from 'types/user.type';
-import { useRouter } from 'next/router';
 import { getMe } from 'api/user.api';
 import useToastify from 'hook/useToastify';
 import { CourseViewPopUp } from 'types/course.type';
+import { auth, providerFacebook, providerGoogle } from '../firebase';
 
 declare global {
   type unknow = any;
@@ -18,6 +24,8 @@ type IAuthenContext = {
   user: User | null;
   setUser: (_v: any) => void;
   loginUser: (body: DataLoginRegister) => void;
+  loginGoogle: () => void;
+  loginFacebook: () => void;
   error: string;
   loading: boolean;
   setError?: (_v: string) => void;
@@ -38,6 +46,8 @@ export const AuthenContext = React.createContext<IAuthenContext>({
   setError: (_v: string) => {},
   isAuthenticated: false,
   loginUser: (body: DataLoginRegister) => {},
+  loginFacebook: () => {},
+  loginGoogle: () => {},
   signUpUser: (body: DataLoginRegister) => {},
   signOutUser: () => {},
   sendOTPEmail: (email: string) => {},
@@ -99,6 +109,59 @@ export const AuthenContextProvider = ({ children }) => {
         );
       },
     });
+  };
+
+  const loginGoogle = () => {
+    signInWithPopup(auth, providerGoogle)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        console.log(token);
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        console.log(error);
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
+  const loginFacebook = () => {
+    signInWithPopup(auth, providerFacebook)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user);
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential.accessToken;
+
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        console.log(error);
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = FacebookAuthProvider.credentialFromError(error);
+
+        // ...
+      });
   };
 
   const signUpUser = (body: DataLoginRegister) => {
@@ -188,6 +251,8 @@ export const AuthenContextProvider = ({ children }) => {
         loading,
         setUser,
         loginUser,
+        loginFacebook,
+        loginGoogle,
         error,
         signUpUser,
         signOutUser,

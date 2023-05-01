@@ -32,7 +32,7 @@ const dataForm = {
 };
 
 const Login: React.FC = () => {
-  const { loginUser } = useContext(AuthenContext);
+  const { loginUser, loginFacebook, loginGoogle } = useContext(AuthenContext);
 
   return (
     <Box
@@ -43,7 +43,12 @@ const Login: React.FC = () => {
       justifyContent={'center'}
       alignItems={'center'}
     >
-      <FormAuthen dataForm={dataForm} loginUser={loginUser} />
+      <FormAuthen
+        dataForm={dataForm}
+        loginUser={loginUser}
+        onLoginFacebook={loginFacebook}
+        onLoginGoogle={loginGoogle}
+      />
     </Box>
   );
 };

@@ -8,6 +8,12 @@ export const login = async (
   return await http.post<Auth>('/auth/signin', body);
 };
 
+export const loginWithSocial = async (
+  tokenLogin: string
+): Promise<AxiosResponse<Auth, any>> => {
+  return await http.post<Auth>('/auth/signin-with-social', tokenLogin);
+};
+
 export const signUp = async (
   body: DataLoginRegister
 ): Promise<AxiosResponse<any, any>> => {
