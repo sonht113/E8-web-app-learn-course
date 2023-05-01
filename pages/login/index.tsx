@@ -28,11 +28,6 @@ const dataForm = {
       icon: <AiFillFacebook size={'20px'} color={'#0159b6'} />,
       name: 'Tiếp tục với Facebook',
     },
-    {
-      id: 4,
-      icon: <AiFillGithub size={'20px'} />,
-      name: 'Tiếp tục với Github',
-    },
   ],
 };
 

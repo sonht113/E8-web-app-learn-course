@@ -2,9 +2,11 @@ import { ChevronLeftIcon } from '@chakra-ui/icons';
 import { Box, Center, Flex, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import React, { ReactElement, useState } from 'react';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { DataLoginRegister } from 'types/auth.type';
 import ButtonOutline from '../ButtonOutline';
 import FormLoginRegisterDetail from '../FormLoginRegisterDetail';
+import { auth, provider } from '../../firebase';
 
 export type IFormAuthen = {
   dataForm: {
@@ -25,6 +27,32 @@ const FormAuthen: React.FC<IFormAuthen> = ({
   signUpUser,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const handleLoginGoogle = () =>
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        console.log(token);
+        // The signed-in user info.
+        const user = result.user;
+        console.log(user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      })
+      .catch((error) => {
+        console.log(error);
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+
   return (
     <Box
       w={['90%', '90%', '50%', '40%']}
@@ -69,7 +97,10 @@ const FormAuthen: React.FC<IFormAuthen> = ({
               index: number
             ) => (
               <ButtonOutline
-                click={() => button.id === 1 && setOpen(true)}
+                click={() => {
+                  button.id === 1 && setOpen(true);
+                  button.id === 2 && handleLoginGoogle();
+                }}
                 key={index}
                 icon={button.icon}
                 name={button.name}
