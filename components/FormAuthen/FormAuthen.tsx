@@ -17,8 +17,8 @@ export type IFormAuthen = {
   };
   loginUser?: (body: DataLoginRegister) => void;
   signUpUser?: (body: DataLoginRegister) => void;
-  onLoginGoogle: () => void;
-  onLoginFacebook: () => void;
+  onLoginGoogle?: () => void;
+  onLoginFacebook?: () => void;
 };
 
 const FormAuthen: React.FC<IFormAuthen> = ({
