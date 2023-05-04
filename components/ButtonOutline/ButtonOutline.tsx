@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react';
 type IButtonOutlineProps = {
   icon?: ReactElement;
   name: string;
-  click: () => void;
+  click?: () => void;
 };
 
 const ButtonOutline: React.FC<IButtonOutlineProps> = ({
@@ -26,7 +26,7 @@ const ButtonOutline: React.FC<IButtonOutlineProps> = ({
       rounded={'full'}
       onClick={click}
     >
-      <Box ml={3}>{icon}</Box>
+      {icon && <Box ml={3}>{icon}</Box>}
       {/* <ArrowBackIcon fontSize={'lg'} ml={3} /> */}
       <Center
         fontSize={'md'}
