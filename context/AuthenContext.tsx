@@ -8,8 +8,14 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'next/router';
 
-import { DataLoginRegister } from 'types/auth.type';
-import { login, sendOtpEmail, sendOtpPhone, signUp } from 'api/auth.api';
+import { DataLoginRegister, DataLoginSocial } from 'types/auth.type';
+import {
+  login,
+  loginWithSocial,
+  sendOtpEmail,
+  sendOtpPhone,
+  signUp,
+} from 'api/auth.api';
 import { User } from 'types/user.type';
 import { getMe } from 'api/user.api';
 import useToastify from 'hook/useToastify';
@@ -75,6 +81,10 @@ export const AuthenContextProvider = ({ children }) => {
     mutationFn: (body: DataLoginRegister) => login(body),
   });
 
+  const loginSocialMutate = useMutation({
+    mutationFn: (body: DataLoginSocial) => loginWithSocial(body),
+  });
+
   const signUpMutate = useMutation({
     mutationFn: (body: DataLoginRegister) => signUp(body),
   });
@@ -111,29 +121,46 @@ export const AuthenContextProvider = ({ children }) => {
     });
   };
 
+  const loginSocialUser = (body: DataLoginSocial) => {
+    loginSocialMutate.mutate(body, {
+      onSuccess: (res) => {
+        Cookies.set('access_token', res.data.accessToken);
+        Cookies.set('refresh_token', res.data.refreshToken);
+        localStorage.setItem('user_data', JSON.stringify(res.data.user));
+        toast.handleOpenToastify(
+          'success',
+          'Đăng nhập thành công',
+          DURATION_TOAST
+        );
+        setUser(res.data.user);
+        router.push('/');
+      },
+      onError(error: any) {
+        setError(error.response.data.errors[0].detail);
+        toast.handleOpenToastify(
+          'error',
+          error.response.data.errors[0].detail,
+          DURATION_TOAST
+        );
+      },
+    });
+  };
+
   const loginGoogle = () => {
     signInWithPopup(auth, providerGoogle)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log(token);
-        // The signed-in user info.
         const user = result.user;
         console.log(user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        loginSocialUser({
+          fullName: user.displayName,
+          email: user.email,
+          tokenLogin: user.uid,
+          avatar: user.photoURL,
+        });
       })
       .catch((error) => {
-        console.log(error);
-        // Handle Errors here.
-        const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        toast.handleOpenToastify('error', errorMessage, DURATION_TOAST);
       });
   };
 

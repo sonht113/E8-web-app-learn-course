@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Auth, DataLoginRegister } from 'types/auth.type';
+import { Auth, DataLoginRegister, DataLoginSocial } from 'types/auth.type';
 import http from 'utils/http';
 
 export const login = async (
@@ -9,9 +9,9 @@ export const login = async (
 };
 
 export const loginWithSocial = async (
-  tokenLogin: string
+  body: DataLoginSocial
 ): Promise<AxiosResponse<Auth, any>> => {
-  return await http.post<Auth>('/auth/signin-with-social', tokenLogin);
+  return await http.post<Auth>('/auth/signin-with-social', body);
 };
 
 export const signUp = async (

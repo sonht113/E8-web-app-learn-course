@@ -8,6 +8,13 @@ export type DataLoginRegister = {
   password?: string;
 };
 
+export type DataLoginSocial = {
+  fullName: string;
+  email?: string;
+  tokenLogin: string;
+  avatar: string;
+};
+
 export type Auth = {
   accessToken: string;
   refreshToken: string;
