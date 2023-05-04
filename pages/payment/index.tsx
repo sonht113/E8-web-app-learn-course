@@ -25,7 +25,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCourse } from 'api/course.api';
 import { FaAward } from 'react-icons/fa';
 import logo from 'public/static/images/icon.png';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CourseType } from 'types/course.type';
 
@@ -67,8 +67,19 @@ const optionsUpgradeTeacher: { icon: ReactElement; text: string }[] = [
   },
 ];
 
+enum TypePayment {
+  UPGRADE_TO_TEACHER = 'UPGRADE_TO_TEACHER',
+  COURSE_PAYMENT = 'COURSE_PAYMENT',
+}
+
 const Payment = () => {
+  const CURRENT_PRICE_UPGRADE_TEACHER = '50';
   const router = useRouter();
+
+  const isUpgradeTeacher = useMemo(
+    () => router.query.type === TypePayment.UPGRADE_TO_TEACHER,
+    [router]
+  );
 
   const { idCourse } = router.query;
 
@@ -188,16 +199,19 @@ const Payment = () => {
                   </Text>
                   <Spacer />
                   <Text fontSize="20px" fontWeight={500} color="green">
-                    {courseData?.price && `${courseData?.price}đ`}
+                    {isUpgradeTeacher && CURRENT_PRICE_UPGRADE_TEACHER + '$'}
+                    {!isUpgradeTeacher &&
+                      courseData?.price &&
+                      `${courseData?.price}đ`}
                   </Text>
                 </Flex>
               </Box>
-              {!courseData && (
+              {!courseData && !isUpgradeTeacher && (
                 <Center>
                   <Spinner />
                 </Center>
               )}
-              {courseData && (
+              {(courseData || isUpgradeTeacher) && (
                 <PayPalButtons
                   style={{ layout: 'vertical' }}
                   createOrder={(data, actions) => {
@@ -205,7 +219,9 @@ const Payment = () => {
                       purchase_units: [
                         {
                           amount: {
-                            value: String(courseData.price),
+                            value: isUpgradeTeacher
+                              ? CURRENT_PRICE_UPGRADE_TEACHER
+                              : String(courseData.price),
                           },
                         },
                       ],
