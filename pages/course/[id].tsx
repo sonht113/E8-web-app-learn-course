@@ -15,7 +15,7 @@ const CourseDetail: NextPageWithLayout = () => {
 
   const queryCourse = useQuery({
     queryKey: ['course'],
-    queryFn: () => getCourse(id),
+    queryFn: () => getCourse(String(id)),
     keepPreviousData: true,
   });
 

@@ -9,7 +9,7 @@ export type CourseType = {
   totalLectures?: string | number;
   totalTime?: number | string;
   requirements?: Requirement[];
-  desc?: number | string;
+  desc?: string;
   isFree?: boolean;
   price?: number | string;
   promotionPrice?: string | number;
