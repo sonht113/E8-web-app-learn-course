@@ -21,13 +21,16 @@ import {
 import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { GiInfinity } from 'react-icons/gi';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
-import { getCourse } from 'api/course.api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getCourse, updateCourse } from 'api/course.api';
 import { FaAward } from 'react-icons/fa';
 import logo from 'public/static/images/icon.png';
 import React, { ReactElement, useMemo } from 'react';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CourseType } from 'types/course.type';
+import useToastify from 'hook/useToastify';
+import { User } from 'types/user.type';
+import { updateUser } from 'api/user.api';
 
 const optionsCoursePro: { icon: ReactElement; text: string }[] = [
   {
@@ -73,8 +76,9 @@ enum TypePayment {
 }
 
 const Payment = () => {
-  const CURRENT_PRICE_UPGRADE_TEACHER = '50';
+  const CURRENT_PRICE_UPGRADE_TEACHER = '500000';
   const router = useRouter();
+  const toast = useToastify();
 
   const isUpgradeTeacher = useMemo(
     () => router.query.type === TypePayment.UPGRADE_TO_TEACHER,
@@ -84,16 +88,47 @@ const Payment = () => {
   const { idCourse } = router.query;
 
   let courseData: CourseType;
-  let price: number;
   if (idCourse) {
     const queryCourse = useQuery({
       queryKey: ['course', idCourse],
-      queryFn: () => getCourse(idCourse),
+      queryFn: () => getCourse(String(idCourse)),
       keepPreviousData: true,
     });
     courseData = queryCourse.data?.data;
-    price = queryCourse.data?.data.price;
   }
+
+  const updateCourseMutate = useMutation({
+    mutationFn: (data: { id: string; body: CourseType }) => updateCourse(data),
+  });
+
+  const updateUserMutate = useMutation({
+    mutationFn: (data: { id: string; body: User }) => updateUser(data),
+  });
+
+  const updateCourseAfterTransaction = (data: {
+    id: string;
+    body: CourseType;
+  }) => {
+    updateCourseMutate.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+  };
+
+  const updateUserAfterTransation = (data: { id: string; body: User }) => {
+    updateUserMutate.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+  };
 
   return (
     <PayPalScriptProvider
@@ -199,7 +234,7 @@ const Payment = () => {
                   </Text>
                   <Spacer />
                   <Text fontSize="20px" fontWeight={500} color="green">
-                    {isUpgradeTeacher && CURRENT_PRICE_UPGRADE_TEACHER + '$'}
+                    {isUpgradeTeacher && CURRENT_PRICE_UPGRADE_TEACHER + 'đ'}
                     {!isUpgradeTeacher &&
                       courseData?.price &&
                       `${courseData?.price}đ`}
@@ -220,8 +255,10 @@ const Payment = () => {
                         {
                           amount: {
                             value: isUpgradeTeacher
-                              ? CURRENT_PRICE_UPGRADE_TEACHER
-                              : String(courseData.price),
+                              ? String(
+                                  Number(CURRENT_PRICE_UPGRADE_TEACHER) / 25000
+                                )
+                              : String(Number(courseData.price) / 25000),
                           },
                         },
                       ],
@@ -229,9 +266,21 @@ const Payment = () => {
                   }}
                   onApprove={(data, actions) => {
                     return actions.order.capture().then((details) => {
-                      const name = details.payer.name.given_name;
-                      alert(`Transaction completed by ${name}`);
+                      //const name = details.payer.name.given_name;
+                      toast.handleOpenToastify(
+                        'success',
+                        'Thanh toán thành công',
+                        3000
+                      );
                     });
+                  }}
+                  onError={(err) => {
+                    console.log(err);
+                    toast.handleOpenToastify(
+                      'error',
+                      'Thanh toán thất bại',
+                      3000
+                    );
                   }}
                 />
               )}

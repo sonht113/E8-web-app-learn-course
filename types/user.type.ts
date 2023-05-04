@@ -34,7 +34,7 @@ interface IDCourse extends CourseType {
 }
 
 export type MyLearningCourses = {
-  _id: string;
+  _id?: string;
   currentLesson: number;
   idCourse: IDCourse;
 };

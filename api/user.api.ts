@@ -31,3 +31,6 @@ export const getUser = async (
   }
   return await http.get(`/users/${idUser}`);
 };
+
+export const updateUser = async (data: { id: string; body: User }) =>
+  await http.put(`/user/${data.id}`, data.body);

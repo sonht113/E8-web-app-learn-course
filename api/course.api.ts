@@ -1,10 +1,14 @@
 import { AxiosResponse } from 'axios';
+import { CourseType } from 'types/course.type';
 import { CoursePaginate } from 'types/paignate.type';
 import http from 'utils/http';
 
-export const getCourses = () => http.get('/courses');
+export const getCourses = async (): Promise<AxiosResponse<CourseType[], any>> =>
+  await http.get('/courses');
 
-export const getCourse = (id) => http.get(`/courses/${id}`);
+export const getCourse = async (
+  id: string
+): Promise<AxiosResponse<CourseType, any>> => await http.get(`/courses/${id}`);
 
 export const searchCourse = async (
   title: string
@@ -15,3 +19,9 @@ export const searchCourse = async (
     },
   });
 };
+
+export const updateCourse = async (data: {
+  id: string;
+  body: CourseType;
+}): Promise<AxiosResponse<any, any>> =>
+  await http.put(`/course/${data.id}`, data.body);
