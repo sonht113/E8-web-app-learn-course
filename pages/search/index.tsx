@@ -77,7 +77,7 @@ const Search = () => {
                 thumbnail={course?.thumbnail}
                 totalViews={course?.totalViews}
                 price={course?.price}
-                isJoined={course?.userJoined?.includes(user?._id)}
+                isJoined={course?.usersJoined?.includes(user?._id)}
               />
             ))}
           </>
