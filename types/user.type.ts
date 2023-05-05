@@ -29,7 +29,7 @@ type GroupDetail = {
 };
 
 interface IDCourse extends CourseType {
-  classesJoined: string[];
+  classesJoined?: string[];
   usersJoined: string[];
 }
 
@@ -37,6 +37,33 @@ export type MyLearningCourses = {
   _id?: string;
   currentLesson: number;
   idCourse: IDCourse;
+};
+
+export type UserDetail = {
+  favoriteCourses?: CourseType[];
+  myCourses?: CourseType[];
+  receivedNotificationTypes?: Notification[];
+  isDeleted?: boolean;
+  deviceID?: string;
+  isEnableFCM?: string;
+  dateOfBirth?: string | number;
+  gender?: string;
+  avatar?: string;
+  street?: string;
+  email?: string;
+  phone?: string;
+  fullName?: string;
+  role?: string;
+  groupAPIDenines?: APIDenie[];
+  groupAPIAccesses?: APIAccess[];
+  groups?: Group[];
+  _id?: string;
+  groupDetails?: GroupDetail[];
+  myLearningCourses?: MyLearningCourses[];
+  createdAt?: string;
+  updatedAt?: string;
+  typeUser?: TypeUser.STUDENT | TypeUser.TEACHER;
+  slug?: string;
 };
 
 export type User = {
@@ -52,14 +79,18 @@ export type User = {
   street?: string;
   email?: string;
   phone?: string;
-  fullName: string;
+  fullName?: string;
   role?: string;
   groupAPIDenines?: APIDenie[];
   groupAPIAccesses?: APIAccess[];
   groups?: Group[];
-  _id: string;
+  _id?: string;
   groupDetails?: GroupDetail[];
-  myLearningCourses?: MyLearningCourses[];
+  myLearningCourses?: {
+    _id?: string;
+    currentLesson: number;
+    idCourse: string;
+  }[];
   createdAt?: string;
   updatedAt?: string;
   typeUser?: TypeUser.STUDENT | TypeUser.TEACHER;

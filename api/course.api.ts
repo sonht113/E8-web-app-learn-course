@@ -24,4 +24,4 @@ export const updateCourse = async (data: {
   id: string;
   body: CourseType;
 }): Promise<AxiosResponse<any, any>> =>
-  await http.put(`/course/${data.id}`, data.body);
+  await http.put(`/courses/${data.id}`, data.body);

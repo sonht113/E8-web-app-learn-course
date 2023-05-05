@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from 'api/user.api';
 import { useRouter } from 'next/router';
-import React, { use, useState } from 'react';
-import { User } from 'types/user.type';
+import React from 'react';
+import { User, UserDetail } from 'types/user.type';
 
-type IProfileContext = { user: User };
+type IProfileContext = { user: UserDetail };
 
 export const ProfileContext = React.createContext<IProfileContext>({
   user: { _id: '', gender: '', fullName: '', myCourses: [] },

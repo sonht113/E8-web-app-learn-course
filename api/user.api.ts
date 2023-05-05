@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { User } from 'types/user.type';
+import { User, UserDetail } from 'types/user.type';
 import http from 'utils/http';
 
 export const getUsers = async (): Promise<AxiosResponse<User[], any>> => {
@@ -21,7 +21,7 @@ export const getMe = async (
 export const getUser = async (
   idUser: string,
   populate?: string
-): Promise<AxiosResponse<User, any>> => {
+): Promise<AxiosResponse<UserDetail, any>> => {
   if (populate) {
     return await http.get(`/users/${idUser}`, {
       params: {
@@ -33,4 +33,4 @@ export const getUser = async (
 };
 
 export const updateUser = async (data: { id: string; body: User }) =>
-  await http.put(`/user/${data.id}`, data.body);
+  await http.put(`/users/${data.id}`, data.body);

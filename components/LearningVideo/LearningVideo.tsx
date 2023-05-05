@@ -3,14 +3,12 @@ import React from 'react';
 import { LectureType } from 'types/chapter.type';
 
 type ILearningVideoProps = {
-  linkVideo: string;
   lecture: LectureType;
 };
 
-const LearningVideo: React.FC<ILearningVideoProps> = ({
-  linkVideo,
-  lecture,
-}) => {
+const LearningVideo: React.FC<ILearningVideoProps> = ({ lecture }) => {
+  console.log(lecture);
+
   return (
     <Box overflowY="scroll" height="100vh" className="scroll-custom">
       <Box
@@ -19,7 +17,10 @@ const LearningVideo: React.FC<ILearningVideoProps> = ({
         paddingX={{ base: 5, md: 20 }}
       >
         <AspectRatio maxW="100%" height={{ base: '99%' }} ratio={1}>
-          <iframe title="course" src={linkVideo} allowFullScreen />
+          {/* <iframe title="course" src={lecture?.url} allowFullScreen /> */}
+          <video controls>
+            <source src={lecture?.url} type="video"></source>
+          </video>
         </AspectRatio>
       </Box>
       <Box paddingX={{ base: 5, md: 20 }}>

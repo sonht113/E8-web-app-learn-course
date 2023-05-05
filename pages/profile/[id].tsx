@@ -27,6 +27,8 @@ const Profile = () => {
   const { user } = useContext(ProfileContext);
   const isTeacher = useMemo(() => user?.typeUser === TypeUser.TEACHER, [user]);
 
+  console.log(user);
+
   const proMyCourses = useMemo(
     () => user?.myCourses.filter((course: CourseType) => course.isPrivate),
     [user]
@@ -210,6 +212,7 @@ const Profile = () => {
                           thumbnail={myCourse.idCourse.thumbnail}
                           title={myCourse.idCourse.title}
                           desc={myCourse.idCourse.desc}
+                          isFree={myCourse.idCourse.price === 0}
                         />
                       )
                     )}

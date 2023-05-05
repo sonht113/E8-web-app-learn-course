@@ -48,10 +48,7 @@ const LearnedCourse: NextPageWithLayout = () => {
         position="relative"
       >
         <GridItem colSpan={!toggle ? { base: 1, md: 3 } : { base: 1, md: 4 }}>
-          <LearningVideo
-            linkVideo={'https://www.youtube.com/embed/QhBnZ6NPOY0'}
-            {...{ lecture }}
-          />
+          <LearningVideo {...{ lecture }} />
         </GridItem>
         {!toggle && (
           <GridItem colSpan={{ base: 1, md: 1 }}>

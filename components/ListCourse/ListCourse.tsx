@@ -106,8 +106,8 @@ const ListCourse: React.FC<IListCourseProps> = ({
             price={course.price}
             isFree={!course.isPrivate}
             thumbnail={course.thumbnail}
-            totalViews={course.totalViews}
-            isJoined={course.userJoined?.includes(user._id)}
+            totalViews={course.usersJoined?.length}
+            isJoined={course.usersJoined?.includes(user._id)}
           />
         ))}
       </Grid>

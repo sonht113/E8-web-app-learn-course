@@ -7,6 +7,7 @@ import {
   Text,
   Flex,
   Skeleton,
+  Spinner,
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -20,12 +21,19 @@ import { CourseType } from 'types/course.type';
 type IVideoIntroProps = {
   chapters: ChapterType[];
   courseData: CourseType;
+  click: () => void;
+  isJoined?: boolean;
 };
 
-const VideoIntro: React.FC<IVideoIntroProps> = ({ chapters, courseData }) => {
+const VideoIntro: React.FC<IVideoIntroProps> = ({
+  chapters,
+  courseData,
+  click,
+  isJoined,
+}) => {
   const chapter = chapters?.map((chapter) => chapter.lectures);
   const lecture = chapter?.map((lecture) => lecture?.[0]);
-  const urlVideo = lecture?.find((lecture) => lecture?.[0])?.url;
+  const urlVideo = lecture && lecture[0]?.url;
 
   return (
     <Box>
@@ -39,7 +47,6 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({ chapters, courseData }) => {
         {urlVideo ? (
           <AspectRatio width="100%" height="100%" ratio={1} borderRadius={8}>
             <iframe
-              title="naruto"
               src={urlVideo}
               allowFullScreen
               style={{ borderRadius: 'inherit' }}
@@ -51,13 +58,24 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({ chapters, courseData }) => {
       </Box>
       <VStack border={{ base: '1px', md: '0' }} borderColor={'gray.200'}>
         <Center>
-          <Text fontSize={'32px'} color={'#f05123'}>
+          <Text fontSize={'32px'} color={'#1a9405'}>
             Miễn phí
           </Text>
         </Center>
         <Center>
-          <Button colorScheme="orange" borderRadius={40} paddingX={12}>
-            ĐĂNG KÝ HỌC
+          <Button
+            onClick={click}
+            colorScheme="green"
+            borderRadius={40}
+            paddingX={12}
+          >
+            {!courseData ? (
+              <Spinner fontSize={'sm'} />
+            ) : isJoined ? (
+              'TIẾP TỤC HỌC'
+            ) : (
+              'ĐĂNG KÝ HỌC'
+            )}
           </Button>
         </Center>
         <Box paddingTop={2}>

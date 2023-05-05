@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import {
   Box,
   Flex,
@@ -36,6 +36,7 @@ import { useQuery } from '@tanstack/react-query';
 import { searchCourse } from 'api/course.api';
 import { CourseType } from 'types/course.type';
 import Course from '../Course';
+import { useRouter } from 'next/router';
 
 interface INavbarProps {
   onOpen?: () => void;
@@ -65,6 +66,7 @@ const Navbar: React.FC<INavbarProps> = () => {
   const [openPopupSearch, setOpenPopupSearch] = useState<boolean>(false);
   const { onOpen } = useContext(NavbarMobileContext);
   const { isAuthenticated, user } = useContext(AuthenContext);
+  const router = useRouter();
 
   const debounceValue = useDebounce(keywordSearch, 1000);
 
@@ -72,6 +74,10 @@ const Navbar: React.FC<INavbarProps> = () => {
     queryKey: ['search', debounceValue],
     queryFn: () => searchCourse(debounceValue),
   });
+
+  const isProfile = useMemo(() => {
+    return router.pathname.includes('/profile');
+  }, [router.pathname]);
 
   return (
     <Grid
@@ -100,16 +106,19 @@ const Navbar: React.FC<INavbarProps> = () => {
         </Flex>
       </GridItem>
       <GridItem position={'relative'}>
-        <SearchFC
-          display={['none', 'block']}
-          radius={'full'}
-          width={['full']}
-          placeholder="Tìm kiếm khoá học, bài viết, video, ..."
-          value={keywordSearch}
-          setValue={setKeyWordSearch}
-          focus={() => setOpenPopupSearch(true)}
-        />
-        {openPopupSearch && (
+        {!isProfile && (
+          <SearchFC
+            display={['none', 'block']}
+            radius={'full'}
+            width={['full']}
+            placeholder="Tìm kiếm khoá học, bài viết, video, ..."
+            value={keywordSearch}
+            setValue={setKeyWordSearch}
+            focus={() => setOpenPopupSearch(true)}
+          />
+        )}
+
+        {openPopupSearch && !isProfile && (
           <PopupSearch
             close={() => {
               setOpenPopupSearch(false);
@@ -158,7 +167,7 @@ const Navbar: React.FC<INavbarProps> = () => {
                       price={course?.price}
                       id={course?._id}
                       totalViews={course?.totalViews}
-                      isJoined={course?.userJoined?.includes(user._id)}
+                      isJoined={course?.usersJoined?.includes(user._id)}
                     />
                   ))}
                 </Flex>

@@ -19,7 +19,7 @@ export type CourseType = {
   totalDislikes?: string | number;
   tags?: string[];
   isPrivate?: boolean;
-  userJoined?: string[]; // [idUser]
+  usersJoined?: string[]; // [idUser]
   classesJoined?: string[]; // [idClasses]
 };
 
