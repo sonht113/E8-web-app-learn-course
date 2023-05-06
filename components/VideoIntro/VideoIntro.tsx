@@ -46,11 +46,9 @@ const VideoIntro: React.FC<IVideoIntroProps> = ({
       >
         {urlVideo ? (
           <AspectRatio width="100%" height="100%" ratio={1} borderRadius={8}>
-            <iframe
-              src={urlVideo}
-              allowFullScreen
-              style={{ borderRadius: 'inherit' }}
-            />
+            <video controls>
+              <source src={urlVideo} type="video"></source>
+            </video>
           </AspectRatio>
         ) : (
           <Skeleton height="250px" rounded={'xl'} />

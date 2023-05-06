@@ -7,8 +7,6 @@ type ILearningVideoProps = {
 };
 
 const LearningVideo: React.FC<ILearningVideoProps> = ({ lecture }) => {
-  console.log(lecture);
-
   return (
     <Box overflowY="scroll" height="100vh" className="scroll-custom">
       <Box
@@ -19,7 +17,7 @@ const LearningVideo: React.FC<ILearningVideoProps> = ({ lecture }) => {
         <AspectRatio maxW="100%" height={{ base: '99%' }} ratio={1}>
           {/* <iframe title="course" src={lecture?.url} allowFullScreen /> */}
           <video controls>
-            <source src={lecture?.url} type="video"></source>
+            <source src={lecture.url} type="video" />
           </video>
         </AspectRatio>
       </Box>
