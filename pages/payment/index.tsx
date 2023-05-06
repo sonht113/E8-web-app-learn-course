@@ -22,15 +22,20 @@ import { RiQuestionAnswerLine } from 'react-icons/ri';
 import { GiInfinity } from 'react-icons/gi';
 import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getCourse, updateCourse } from 'api/course.api';
+import { getCourse } from 'api/course.api';
 import { FaAward } from 'react-icons/fa';
 import logo from 'public/static/images/icon.png';
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useContext, useMemo } from 'react';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { CourseType } from 'types/course.type';
 import useToastify from 'hook/useToastify';
-import { User } from 'types/user.type';
-import { updateUser } from 'api/user.api';
+import { Transaction, TransactionStatusEnum } from 'types/transaction.type';
+import {
+  buyCourseAPI,
+  registerForClassOnlineAPI,
+  upgradeToTeacherAPI,
+} from 'api/transaction.api';
+import { AuthenContext } from 'context/AuthenContext';
 
 const optionsCoursePro: { icon: ReactElement; text: string }[] = [
   {
@@ -73,6 +78,7 @@ const optionsUpgradeTeacher: { icon: ReactElement; text: string }[] = [
 enum TypePayment {
   UPGRADE_TO_TEACHER = 'UPGRADE_TO_TEACHER',
   COURSE_PAYMENT = 'COURSE_PAYMENT',
+  JOINS_CLASS = 'JOINS_CLASS',
 }
 
 const Payment = () => {
@@ -80,12 +86,23 @@ const Payment = () => {
   const router = useRouter();
   const toast = useToastify();
 
+  const { user } = useContext(AuthenContext);
+
+  const isBuyCourse = useMemo(() => {
+    return router.query.type === TypePayment.COURSE_PAYMENT;
+  }, [router.query]);
+
   const isUpgradeTeacher = useMemo(
     () => router.query.type === TypePayment.UPGRADE_TO_TEACHER,
-    [router]
+    [router.query]
   );
 
+  const isJoinClassOnline = useMemo(() => {
+    return router.query.type === TypePayment.JOINS_CLASS;
+  }, [router.query]);
+
   const { idCourse } = router.query;
+  const { idClass } = router.query;
 
   let courseData: CourseType;
   if (idCourse) {
@@ -97,21 +114,22 @@ const Payment = () => {
     courseData = queryCourse.data?.data;
   }
 
-  const updateCourseMutate = useMutation({
-    mutationFn: (data: { id: string; body: CourseType }) => updateCourse(data),
+  const buyCourseMutate = useMutation({
+    mutationFn: (body: Transaction) => buyCourseAPI(body),
   });
 
-  const updateUserMutate = useMutation({
-    mutationFn: (data: { id: string; body: User }) => updateUser(data),
+  const upgradeTeacherMutate = useMutation({
+    mutationFn: (body: Transaction) => upgradeToTeacherAPI(body),
   });
 
-  const updateCourseAfterTransaction = (data: {
-    id: string;
-    body: CourseType;
-  }) => {
-    updateCourseMutate.mutate(data, {
-      onSuccess: (data) => {
-        console.log(data);
+  const joinClassOnlineMutate = useMutation({
+    mutationFn: (body: Transaction) => registerForClassOnlineAPI(body),
+  });
+
+  const buyCourse = (body: Transaction) => {
+    buyCourseMutate.mutate(body, {
+      onSuccess: (res) => {
+        console.log(res);
       },
       onError: (err) => {
         console.log(err);
@@ -119,15 +137,36 @@ const Payment = () => {
     });
   };
 
-  const updateUserAfterTransation = (data: { id: string; body: User }) => {
-    updateUserMutate.mutate(data, {
-      onSuccess: (data) => {
-        console.log(data);
+  const upgradeToTeacher = (body: Transaction) => {
+    upgradeTeacherMutate.mutate(body, {
+      onSuccess: (res) => {
+        console.log(res);
       },
       onError: (err) => {
         console.log(err);
       },
     });
+  };
+
+  const joinClassOnline = (body: Transaction) => {
+    joinClassOnlineMutate.mutate(body, {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+      onError: (err) => {
+        console.log(err);
+      },
+    });
+  };
+
+  const handleTransaction = (body: Transaction) => {
+    if (isBuyCourse) {
+      return buyCourse(body);
+    } else if (isUpgradeTeacher) {
+      return upgradeToTeacher(body);
+    } else {
+      return joinClassOnline(body);
+    }
   };
 
   return (
@@ -168,9 +207,9 @@ const Payment = () => {
             color="black"
             my={8}
           >
-            {courseData?.title
-              ? 'Mở khóa toàn bộ khóa học'
-              : 'Mở toàn bộ đặc quyền của teacher'}
+            {isBuyCourse && 'Mở khóa toàn bộ khóa học'}
+            {isUpgradeTeacher && 'Mở toàn bộ đặc quyền của teacher'}
+            {isJoinClassOnline && 'Tham gia khoá học online'}
           </Text>
           <Grid
             templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
@@ -272,6 +311,14 @@ const Payment = () => {
                         'Thanh toán thành công',
                         3000
                       );
+                      handleTransaction({
+                        idUser: user._id,
+                        idCourse: idCourse && String(idCourse),
+                        idClassRoom: idClass && String(idClass),
+                        status: TransactionStatusEnum.SUCCESS,
+                        email: user.email,
+                        phone: user.phone,
+                      });
                     });
                   }}
                   onError={(err) => {
