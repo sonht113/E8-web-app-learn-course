@@ -1,0 +1,7 @@
+.detailClass {
+  display: none;
+}
+
+.thumbnailClass:hover .detailClass {
+  display: block;
+}

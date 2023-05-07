@@ -18,6 +18,7 @@ const ListCourse: React.FC<IListCourseProps> = ({
   isPro,
   user,
 }) => {
+  console.log(courses);
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box
@@ -107,7 +108,7 @@ const ListCourse: React.FC<IListCourseProps> = ({
             isFree={!course.isPrivate}
             thumbnail={course.thumbnail}
             totalViews={course.usersJoined?.length}
-            isJoined={course.usersJoined?.includes(user._id)}
+            isJoined={course.usersJoined?.includes(user?._id)}
           />
         ))}
       </Grid>

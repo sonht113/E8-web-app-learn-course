@@ -33,15 +33,17 @@ const Course: React.FC<ICourseProps> = ({
   const isProfile = useMemo(() => router.pathname.includes('/profile'), []);
   const isMyCourse = useMemo(() => router.pathname.includes('/my-courses'), []);
 
+  console.log(isJoined);
+
   return (
     <Link
       href={
-        isFree
+        isJoined
+          ? `/learning/${id}`
+          : isFree
           ? `/course/${id}`
           : !isAuthenticated
           ? '/login'
-          : isJoined || isProfile || isMyCourse
-          ? `/learning/${id}`
           : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
       }
     >
@@ -82,12 +84,10 @@ const Course: React.FC<ICourseProps> = ({
             >
               <ButtonFC
                 title={
-                  isFree
-                    ? 'Tham gia khoá học'
-                    : !isAuthenticated
-                    ? 'Mua khoá học'
-                    : isJoined || isProfile || isMyCourse
+                  isJoined
                     ? 'Tiếp tục học'
+                    : isFree
+                    ? 'Tham gia khoá học'
                     : 'Mua khoá học'
                 }
                 onClick={() =>

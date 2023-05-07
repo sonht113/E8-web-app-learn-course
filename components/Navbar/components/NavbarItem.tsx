@@ -173,7 +173,7 @@ const PopupAvatar = () => {
             )}
             {!item.link && !item.icon && (
               <Text
-                key={index}
+                key={item.title}
                 onClick={() => signOutUser()}
                 fontSize={'15px'}
                 color={'gray.500'}
@@ -189,6 +189,7 @@ const PopupAvatar = () => {
             )}
             {item.icon && user.typeUser === TypeUser.STUDENT && (
               <Flex
+                key={item.title}
                 borderBottom={item.border && '1px'}
                 borderBottomColor={'gray.100'}
                 alignItems="center"
@@ -254,9 +255,8 @@ const PopupMyCourse = () => {
         )}
         {myLearningCourses?.length !== 0 &&
           myLearningCourses?.map((item: MyLearningCourses) => (
-            <Link href={`/learning/${item?.idCourse?._id}`}>
+            <Link key={item?._id} href={`/learning/${item?.idCourse?._id}`}>
               <Flex
-                key={item?._id}
                 alignItems={'center'}
                 gap={2}
                 border={'1px'}

@@ -35,7 +35,7 @@ const MyCourses = () => {
   return (
     <Container className="my-courses">
       <TitlePage title={ContentTitlePage.title} />
-      <ListCourse courses={myLearningCourses} isPro={true} />
+      <ListCourse courses={myLearningCourses} isPro={true} user={user} />
     </Container>
   );
 };

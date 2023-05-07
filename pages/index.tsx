@@ -16,9 +16,12 @@ import { blogs } from '_mock/data';
 import { getUsers } from 'api/user.api';
 import { TypeUser, User } from 'types/user.type';
 import { AuthenContext } from 'context/AuthenContext';
+import ListClassRoomOnline from '@/components/ListClassRoomOnline';
 
 const Home: NextPageWithLayout = () => {
   const { user } = useContext(AuthenContext);
+
+  console.log(user);
 
   const queryBanners = useQuery({
     queryKey: ['banners'],
@@ -44,6 +47,7 @@ const Home: NextPageWithLayout = () => {
   return (
     <Container className="home">
       <Banner banners={queryBanners.data?.data} />
+      <ListClassRoomOnline title={'Lớp học online'} classes={[]} />
       <ListCourse
         isPro={true}
         title={'Khoá học Pro'}

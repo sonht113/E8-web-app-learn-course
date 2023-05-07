@@ -129,7 +129,8 @@ const Payment = () => {
   const buyCourse = (body: Transaction) => {
     buyCourseMutate.mutate(body, {
       onSuccess: (res) => {
-        console.log(res);
+        router.push('/my-courses');
+        return res;
       },
       onError: (err) => {
         console.log(err);
@@ -140,7 +141,8 @@ const Payment = () => {
   const upgradeToTeacher = (body: Transaction) => {
     upgradeTeacherMutate.mutate(body, {
       onSuccess: (res) => {
-        console.log(res);
+        router.push(`/profile/${user?._id}`);
+        return res;
       },
       onError: (err) => {
         console.log(err);

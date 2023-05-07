@@ -26,8 +26,7 @@ import { WarningTwoIcon } from '@chakra-ui/icons';
 const Profile = () => {
   const { user } = useContext(ProfileContext);
   const isTeacher = useMemo(() => user?.typeUser === TypeUser.TEACHER, [user]);
-
-  console.log(user);
+  console.log(isTeacher);
 
   const proMyCourses = useMemo(
     () => user?.myCourses.filter((course: CourseType) => course.isPrivate),
@@ -213,6 +212,7 @@ const Profile = () => {
                           title={myCourse.idCourse.title}
                           desc={myCourse.idCourse.desc}
                           isFree={myCourse.idCourse.price === 0}
+                          isJoined={true}
                         />
                       )
                     )}
