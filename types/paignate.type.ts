@@ -1,4 +1,4 @@
-import { Class } from './class.type';
+import { Class, ClassDetail } from './class.type';
 import { Conversation } from './converation.type';
 import { CourseType } from './course.type';
 
@@ -29,7 +29,7 @@ export type ConversationsPaginate = {
 };
 
 export type ClassPaginate = {
-  results: Class[];
+  results: ClassDetail[];
   totalResults: number | string;
   limit: number | string;
   totalPages: string | number;

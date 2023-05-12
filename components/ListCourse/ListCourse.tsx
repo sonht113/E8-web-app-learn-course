@@ -18,7 +18,7 @@ const ListCourse: React.FC<IListCourseProps> = ({
   isPro,
   user,
 }) => {
-  console.log(courses);
+  //console.log(courses);
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box

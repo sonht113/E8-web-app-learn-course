@@ -36,6 +36,8 @@ import {
   upgradeToTeacherAPI,
 } from 'api/transaction.api';
 import { AuthenContext } from 'context/AuthenContext';
+import { getClassDetailApi } from 'api/class.api';
+import { ClassDetail } from 'types/class.type';
 
 const optionsCoursePro: { icon: ReactElement; text: string }[] = [
   {
@@ -114,6 +116,15 @@ const Payment = () => {
     courseData = queryCourse.data?.data;
   }
 
+  let classData: ClassDetail;
+  if (idClass) {
+    const queryClass = useQuery({
+      queryKey: ['class-detail', idClass],
+      queryFn: () => getClassDetailApi(String(idClass), 'teacher'),
+    });
+    classData = queryClass.data?.data;
+  }
+
   const buyCourseMutate = useMutation({
     mutationFn: (body: Transaction) => buyCourseAPI(body),
   });
@@ -153,7 +164,8 @@ const Payment = () => {
   const joinClassOnline = (body: Transaction) => {
     joinClassOnlineMutate.mutate(body, {
       onSuccess: (res) => {
-        console.log(res);
+        router.push('chat');
+        return res;
       },
       onError: (err) => {
         console.log(err);
@@ -276,18 +288,19 @@ const Payment = () => {
                   <Spacer />
                   <Text fontSize="20px" fontWeight={500} color="green">
                     {isUpgradeTeacher && CURRENT_PRICE_UPGRADE_TEACHER + 'đ'}
+                    {isJoinClassOnline && '4444444 đ'}
                     {!isUpgradeTeacher &&
                       courseData?.price &&
                       `${courseData?.price}đ`}
                   </Text>
                 </Flex>
               </Box>
-              {!courseData && !isUpgradeTeacher && (
+              {!courseData && !isUpgradeTeacher && !isJoinClassOnline && (
                 <Center>
                   <Spinner />
                 </Center>
               )}
-              {(courseData || isUpgradeTeacher) && (
+              {(courseData || isUpgradeTeacher || isJoinClassOnline) && (
                 <PayPalButtons
                   style={{ layout: 'vertical' }}
                   createOrder={(data, actions) => {
@@ -299,6 +312,8 @@ const Payment = () => {
                               ? String(
                                   Number(CURRENT_PRICE_UPGRADE_TEACHER) / 25000
                                 )
+                              : isJoinClassOnline
+                              ? String(4)
                               : String(Number(courseData.price) / 25000),
                           },
                         },

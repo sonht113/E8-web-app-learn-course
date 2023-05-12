@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useContext } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Container } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -17,11 +17,17 @@ import { getUsers } from 'api/user.api';
 import { TypeUser, User } from 'types/user.type';
 import { AuthenContext } from 'context/AuthenContext';
 import ListClassRoomOnline from '@/components/ListClassRoomOnline';
+import { getClassesApi } from 'api/class.api';
 
 const Home: NextPageWithLayout = () => {
   const { user } = useContext(AuthenContext);
 
-  console.log(user);
+  const queryClassOnline = useQuery({
+    queryKey: ['class-online'],
+    queryFn: () => getClassesApi(),
+    keepPreviousData: true,
+    staleTime: 10 * 1000,
+  });
 
   const queryBanners = useQuery({
     queryKey: ['banners'],
@@ -47,7 +53,10 @@ const Home: NextPageWithLayout = () => {
   return (
     <Container className="home">
       <Banner banners={queryBanners.data?.data} />
-      <ListClassRoomOnline title={'Lớp học online'} classes={[]} />
+      <ListClassRoomOnline
+        title={'Lớp học online'}
+        classes={queryClassOnline?.data?.data?.results}
+      />
       <ListCourse
         isPro={true}
         title={'Khoá học Pro'}

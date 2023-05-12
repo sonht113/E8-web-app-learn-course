@@ -13,6 +13,7 @@ type IClassRoomProps = {
   desc?: string;
   teacher?: string;
   totalViews?: number;
+  startTime?: string;
   isJoined?: boolean;
   isAuthenticated?: boolean;
 };
@@ -25,16 +26,22 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
   desc,
   teacher,
   totalViews,
+  startTime,
   isJoined,
   isAuthenticated,
 }) => {
   const router = useRouter();
 
   const isProfile = useMemo(() => router.pathname.includes('/profile'), []);
-  const isMyCourse = useMemo(() => router.pathname.includes('/my-courses'), []);
   return (
     <Link
-      href={isJoined ? '/chat' : !isAuthenticated ? '/login' : `/class/${id}`}
+      href={
+        isJoined
+          ? '/chat'
+          : !isAuthenticated
+          ? '/login'
+          : `/payment?type=JOINS_CLASS&&idClass=${id}`
+      }
     >
       <Box
         mt={5}
@@ -49,7 +56,7 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
           <Image
             maxW={'full'}
             src={thumbnail}
-            alt={'course'}
+            alt={'class'}
             objectFit={'cover'}
             rounded={'xl'}
           />
@@ -80,7 +87,7 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
                       ? '/chat'
                       : !isAuthenticated
                       ? '/login'
-                      : `/class/${id}`
+                      : `/payment?type=JOINS_CLASS&&idClass=${id}`
                   )
                 }
                 color="cyan"
@@ -106,6 +113,9 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
           </Text>
           <Text fontSize={['sm', 'sm']} fontWeight={'medium'} color={'#3f3f3f'}>
             Giảng viên: {teacher}
+          </Text>
+          <Text fontSize={['sm', 'sm']} fontWeight={'medium'} color={'#3f3f3f'}>
+            Ngày bắt đầu: {startTime}
           </Text>
           <Text fontSize={['sm', 'sm']} fontWeight={'medium'} color={'#3f3f3f'}>
             Giá: {price} vnđ

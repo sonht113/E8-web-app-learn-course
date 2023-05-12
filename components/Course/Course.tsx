@@ -33,8 +33,6 @@ const Course: React.FC<ICourseProps> = ({
   const isProfile = useMemo(() => router.pathname.includes('/profile'), []);
   const isMyCourse = useMemo(() => router.pathname.includes('/my-courses'), []);
 
-  console.log(isJoined);
-
   return (
     <Link
       href={
@@ -96,7 +94,7 @@ const Course: React.FC<ICourseProps> = ({
                       ? `/course/${id}`
                       : !isAuthenticated
                       ? '/login'
-                      : isJoined || isProfile || isMyCourse
+                      : isJoined
                       ? `/learning/${id}`
                       : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
                   )
