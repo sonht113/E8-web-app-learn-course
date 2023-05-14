@@ -26,6 +26,7 @@ const Home: NextPageWithLayout = () => {
     queryKey: ['class-online'],
     queryFn: () => getClassesApi(),
     keepPreviousData: true,
+    cacheTime: 10 * 1000,
     staleTime: 10 * 1000,
   });
 
@@ -33,6 +34,7 @@ const Home: NextPageWithLayout = () => {
     queryKey: ['banners'],
     queryFn: () => getBanners(),
     keepPreviousData: true,
+    cacheTime: 10 * 1000,
     staleTime: 100 * 1000,
   });
 
@@ -40,6 +42,7 @@ const Home: NextPageWithLayout = () => {
     queryKey: ['courses'],
     queryFn: () => getCourses(),
     keepPreviousData: true,
+    cacheTime: 10 * 1000,
     staleTime: 5 * 1000,
   });
 
@@ -47,6 +50,7 @@ const Home: NextPageWithLayout = () => {
     queryKey: ['teachers'],
     queryFn: () => getUsers(),
     keepPreviousData: true,
+    cacheTime: 10 * 1000,
     staleTime: 5 * 1000,
   });
 

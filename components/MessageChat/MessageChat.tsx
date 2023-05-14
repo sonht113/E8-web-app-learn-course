@@ -32,7 +32,7 @@ const MessageChat: React.FC<IMessageChatProps> = ({
   const router = useRouter();
 
   const isSender = useMemo(
-    () => message.sender._id === user._id,
+    () => message.sender?._id === user._id,
     [message, user]
   );
 

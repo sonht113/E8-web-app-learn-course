@@ -16,9 +16,7 @@ const LearningVideo: React.FC<ILearningVideoProps> = ({ lecture }) => {
       >
         <AspectRatio maxW="100%" height={{ base: '99%' }} ratio={1}>
           {/* <iframe title="course" src={lecture?.url} allowFullScreen /> */}
-          <video controls>
-            <source src={lecture.url} type="video" />
-          </video>
+          <video controls src={lecture.url}></video>
         </AspectRatio>
       </Box>
       <Box paddingX={{ base: 5, md: 20 }}>

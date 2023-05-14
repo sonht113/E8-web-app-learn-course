@@ -128,7 +128,7 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
               </Text>
             </Flex>
           </Box>
-          <Text fontSize={'sm'}>{desc}</Text>
+          {/* <Text fontSize={'sm'}>{desc}</Text> */}
         </Box>
       </Box>
     </Link>

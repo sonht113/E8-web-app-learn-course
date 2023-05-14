@@ -36,12 +36,12 @@ const Course: React.FC<ICourseProps> = ({
   return (
     <Link
       href={
-        isJoined
-          ? `/learning/${id}`
-          : isFree
+        isFree
           ? `/course/${id}`
           : !isAuthenticated
           ? '/login'
+          : isJoined
+          ? `/learning/${id}`
           : `/payment?type=COURSE_PAYMENT&idCourse=${id}`
       }
     >
