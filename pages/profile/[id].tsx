@@ -90,7 +90,13 @@ const Profile = () => {
                 .replace(/Đ/g, 'D')}
               src={user?.avatar}
             />
-            <Text fontSize={'2xl'} fontWeight={'bold'} pb={[0, 7]} ml={[0, 5]}>
+            <Text
+              fontSize={'2xl'}
+              textAlign={'center'}
+              fontWeight={'bold'}
+              pb={[0, 7]}
+              ml={[0, 5]}
+            >
               {user.fullName} {isTeacher && '(Teacher)'}
             </Text>
           </Box>
@@ -191,7 +197,7 @@ const Profile = () => {
               <ListCourseProfile
                 title="Lớp học online của bạn"
                 isAuthenticated={isAuthenticated}
-                classes={user?.myLearningClassRooms}
+                classes={user?.myClassRooms}
               />
               <ListCourseProfile
                 title="Khoá học pro của bạn"

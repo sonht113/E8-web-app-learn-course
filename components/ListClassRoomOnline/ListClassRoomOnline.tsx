@@ -42,7 +42,7 @@ const ListClassRoomOnline: React.FC<IListClassRoomOnline> = ({
         }
       >
         {!classes &&
-          [1, 2, 3, 4, 5].map((_item, index) => (
+          [1, 2, 3, 4].map((_item, index) => (
             <Skeleton
               key={index}
               w={['60vw', '30vw', '30vw', 'full']}
@@ -60,7 +60,7 @@ const ListClassRoomOnline: React.FC<IListClassRoomOnline> = ({
             id={cla?._id}
             title={cla?.name}
             startTime={getTime(cla?.startTime)}
-            price={4444}
+            price={100000}
             desc={cla?.desc}
             thumbnail={cla?.thumbnail}
             totalViews={cla?.members?.length}

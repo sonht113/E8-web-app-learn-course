@@ -106,7 +106,7 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
             fontWeight={'medium'}
             color={'#3e3e3e'}
             whiteSpace={'nowrap'}
-            width={'180px'}
+            width={'200px'}
             overflow={'hidden'}
             textOverflow={'ellipsis'}
           >
@@ -139,7 +139,7 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
               Giá: {price} vnđ
             </Text>
           )}
-          {totalViews && (
+          {totalViews !== 0 && (
             <Box>
               <Flex alignItems={'center'} gap={2}>
                 <HiUserGroup />
