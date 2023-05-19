@@ -32,5 +32,8 @@ export const getUser = async (
   return await http.get(`/users/${idUser}`);
 };
 
-export const updateUser = async (data: { id: string; body: User }) =>
+export const updateUser = async (data: {
+  id: string;
+  body: User;
+}): Promise<AxiosResponse<User, any>> =>
   await http.put(`/users/${data.id}`, data.body);

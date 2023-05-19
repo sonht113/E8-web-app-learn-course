@@ -221,7 +221,11 @@ const MenuItem: React.FC<IMenuItem> = ({
     <Flex
       justifyContent={'space-between'}
       w={'full'}
-      bg={menuItem.id !== 6 && menuItem.link === activeMenu && 'gray.200'}
+      bg={
+        menuItem.id !== 6 &&
+        (menuItem.link === activeMenu || menuItem.link.includes(activeMenu)) &&
+        'gray.200'
+      }
       py={2}
       px={3}
       roundedBottomLeft={10}

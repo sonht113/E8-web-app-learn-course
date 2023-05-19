@@ -160,7 +160,7 @@ const SidebarItem: React.FC<ISidebarItemProps> = ({
         transition: 'all',
         transitionDuration: '0.7s',
       }}
-      bg={itemActive && 'gray.100'}
+      bg={itemActive && 'gray.300'}
       rounded={15}
       cursor={'pointer'}
       mb={2}

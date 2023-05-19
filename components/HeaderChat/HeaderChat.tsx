@@ -47,6 +47,8 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
 
   const isTeacher = useMemo(() => user.typeUser === TypeUser.TEACHER, [user]);
 
+  console.log(conversationDetail);
+
   return (
     <Flex
       position={isMobile ? 'fixed' : 'absolute'}
@@ -73,6 +75,11 @@ const HeaderChat: React.FC<IHeaderChatProps> = ({
           <Box border={'2px'} borderColor={'green.500'} rounded={'full'}>
             <Avatar
               className="avatar-group-chat"
+              name={conversationDetail?.chatName
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'D')}
               src={conversationDetail?.avatar}
             />
           </Box>

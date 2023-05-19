@@ -150,7 +150,6 @@ export const AuthenContextProvider = ({ children }) => {
     signInWithPopup(auth, providerGoogle)
       .then((result) => {
         const user = result.user;
-        console.log(user);
         loginSocialUser({
           fullName: user.displayName,
           email: user.email,

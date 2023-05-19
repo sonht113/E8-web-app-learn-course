@@ -8,7 +8,7 @@ import Image from 'next/image';
 const infoE8: string[] = [
   'Điện thoại: 0246.329.1102',
   'Email: contact@fullstack.edu.vn',
-  'Địa chỉ: Số 26 Dương Đình Nghệ, Phường Yên Hòa, Quận Cầu Giấy, TP. Hà Nội',
+  'Địa chỉ: Số 524 đường 2/9, phường Hoà Cường Nam, quận Hải Châu, TP. Đà Nẵng',
 ];
 
 const aboutE8Items: { link: string; title: string }[] = [
@@ -25,7 +25,7 @@ const aboutE8Items: { link: string; title: string }[] = [
     title: 'Điều khoản',
   },
   {
-    link: '/privacy',
+    link: '/settings/security',
     title: 'Bảo mật',
   },
 ];
@@ -33,7 +33,7 @@ const aboutE8Items: { link: string; title: string }[] = [
 const infoCompany: string[] = [
   'Mã số thuế: 0109922901',
   'Ngày thành lập: 04/03/2022',
-  'Lĩnh vực: Công nghệ, giáo dục, lập trình. F8 xây dựng và phát triển những sản phẩm mang lại giá trị cho cộng đồng.',
+  'Lĩnh vực: Tiếng anh, giáo dục. E8 xây dựng và phát triển những kiến thức, bài học tiếng anh mang lại giá trị cho cộng đồng.',
 ];
 
 const Footer = () => {

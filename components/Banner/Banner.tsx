@@ -41,9 +41,7 @@ const Banner: React.FC<IBannerProps> = ({ banners }) => {
             <Box
               w="100%"
               h="270px"
-              bgGradient={
-                'linear(to-r, rgb(104, 40, 250), rgb(255, 186, 164) )'
-              }
+              bgGradient={'linear(to-r, rgb(31, 119, 41), rgb(101, 221, 99))'}
               rounded={'xl'}
             >
               <Flex

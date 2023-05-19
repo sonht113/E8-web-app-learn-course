@@ -1,5 +1,5 @@
 import ChatLayout from 'layouts/chatLayout';
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { ReactElement, useContext, useMemo, useState } from 'react';
 import { Box, Image, Flex, useDisclosure } from '@chakra-ui/react';
 import { NextPageWithLayout } from 'types/layout.type';
 import { ChatContext } from 'context/ChatContext';
@@ -105,6 +105,20 @@ const Chat: NextPageWithLayout = () => {
     setMessage({ value: '', type: FileType.TEXT });
   };
 
+  const listMessage = useMemo(() => {
+    let result;
+    if (messages?.length === 0) {
+      result = null;
+      const handleMessages = setTimeout(() => {
+        result = [];
+      }, 5000);
+      //clearTimeout(handleMessages);
+    } else {
+      result = messages;
+    }
+    return result;
+  }, [messages]);
+
   return (
     <React.Fragment>
       <ModalFC
@@ -158,19 +172,18 @@ const Chat: NextPageWithLayout = () => {
           mt={'61px'}
           bg={'gray.300'}
         >
-          {!messages && <MessageSkeleton />}
-          {messages &&
-            messages?.map((item: Message, index) => (
-              <MessageChat
-                key={index}
-                handleOpenModalPreview={() => {
-                  setTypeShowModal('show-file');
-                  onOpen();
-                }}
-                setDataModal={setDataModal}
-                message={item}
-              />
-            ))}
+          {listMessage === null && <MessageSkeleton />}
+          {listMessage?.map((item: Message, index) => (
+            <MessageChat
+              key={index}
+              handleOpenModalPreview={() => {
+                setTypeShowModal('show-file');
+                onOpen();
+              }}
+              setDataModal={setDataModal}
+              message={item}
+            />
+          ))}
         </Box>
         <InputChat
           isMobile={isMobile}

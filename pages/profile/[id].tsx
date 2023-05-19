@@ -22,9 +22,27 @@ import { MyLearningCourses, TypeUser } from 'types/user.type';
 import { ProfileContext } from 'context/ProfileContext';
 import ListSkeleton from '@/components/ListSkeleton';
 import { WarningTwoIcon } from '@chakra-ui/icons';
+import { Class } from 'types/class.type';
+import ClassRoom from '@/components/ClassRoom';
+import { AuthenContext } from 'context/AuthenContext';
+import { getTime } from 'utils/getTime';
+
+type IListCourseProfileProps = {
+  classes?: Class[];
+  myLearningCourses?: MyLearningCourses[];
+  myLearningClasses?: Class[];
+  courses?: CourseType[];
+  title: string;
+  isAuthenticated?: boolean;
+};
+
+type IEmptyCourseProps = {
+  content: string;
+};
 
 const Profile = () => {
   const { user } = useContext(ProfileContext);
+  const { isAuthenticated } = useContext(AuthenContext);
   const isTeacher = useMemo(() => user?.typeUser === TypeUser.TEACHER, [user]);
 
   const proMyCourses = useMemo(
@@ -161,90 +179,48 @@ const Profile = () => {
               </List>
             )}
           </Box>
+          {!user && (
+            <Box display={'flex'} flexDirection={'column'} gap={3}>
+              <Skeleton height={'50px'} />
+              <Skeleton height={'50px'} />
+              <Skeleton height={'50px'} />
+            </Box>
+          )}
           {isTeacher && (
-            <Box
-              border={'1px'}
-              borderColor={'gray.300'}
-              borderRadius={'md'}
-              p={3}
-            >
-              <Text fontSize={['md', 'lg']} fontWeight={'bold'} mb={5}>
-                Khoá học pro
-              </Text>
-              {proMyCourses.length === 0 && <EmptyCourse />}
-              <Flex flexDirection={'column'} gap={5}>
-                {proMyCourses.length !== 0 &&
-                  proMyCourses.map((course: CourseType) => (
-                    <Course
-                      id={course._id}
-                      isFree={true}
-                      thumbnail={course.thumbnail}
-                      price={course.price}
-                      title={course.title}
-                      desc={course.desc}
-                    />
-                  ))}
-              </Flex>
+            <Box display={'flex'} flexDirection={'column'} gap={3}>
+              <ListCourseProfile
+                title="Lớp học online của bạn"
+                isAuthenticated={isAuthenticated}
+                classes={user?.myLearningClassRooms}
+              />
+              <ListCourseProfile
+                title="Khoá học pro của bạn"
+                courses={proMyCourses}
+              />
+              <ListCourseProfile
+                title="Khoá học miễn phí của bạn"
+                courses={freeMyCourses}
+              />
             </Box>
           )}
         </Box>
         <Box display={'flex'} flexDirection={'column'} gap={3}>
-          <Box
-            border={'1px'}
-            borderColor={'gray.300'}
-            borderRadius={'md'}
-            p={3}
-          >
-            <Text fontSize={['md', 'lg']} mb={5} fontWeight={'bold'}>
-              {isTeacher ? 'Lớp học online' : 'Các khoá học đã tham gia'}
-            </Text>
-            {!isTeacher && (
-              <>
-                {user?.myLearningCourses?.length === 0 && <EmptyCourse />}
-                <Flex flexDirection={'column'} gap={5}>
-                  {user?.myLearningCourses?.length !== 0 &&
-                    user?.myLearningCourses.map(
-                      (myCourse: MyLearningCourses) => (
-                        <Course
-                          id={myCourse._id}
-                          thumbnail={myCourse.idCourse.thumbnail}
-                          title={myCourse.idCourse.title}
-                          desc={myCourse.idCourse.desc}
-                          isFree={myCourse.idCourse.price === 0}
-                          isJoined={true}
-                        />
-                      )
-                    )}
-                </Flex>
-              </>
-            )}
-          </Box>
-          {isTeacher && (
+          {!user ? (
             <>
-              <Box
-                border={'1px'}
-                borderColor={'gray.300'}
-                borderRadius={'md'}
-                p={3}
-              >
-                <Text fontSize={['md', 'lg']} fontWeight={'bold'} mb={5}>
-                  Khoá học free
-                </Text>
-                {freeMyCourses.length === 0 && <EmptyCourse />}
-                <Flex flexDirection={'column'} gap={5}>
-                  {freeMyCourses.length !== 0 &&
-                    freeMyCourses.map((course: CourseType) => (
-                      <Course
-                        id={course._id}
-                        isFree={false}
-                        totalViews={course.totalViews}
-                        thumbnail={course.thumbnail}
-                        title={course.title}
-                        desc={course.desc}
-                      />
-                    ))}
-                </Flex>
-              </Box>
+              <Skeleton height={'100px'} />
+              <Skeleton height={'100px'} />
+            </>
+          ) : (
+            <>
+              <ListCourseProfile
+                title="Lớp học online bạn đã tham gia"
+                myLearningClasses={user?.myLearningClassRooms}
+                isAuthenticated={isAuthenticated}
+              />
+              <ListCourseProfile
+                title="Khoá học bạn đã tham gia"
+                myLearningCourses={user?.myLearningCourses}
+              />
             </>
           )}
         </Box>
@@ -253,13 +229,100 @@ const Profile = () => {
   );
 };
 
-const EmptyCourse = () => {
+const EmptyCourse: React.FC<IEmptyCourseProps> = ({ content }) => {
   return (
     <Center>
       <Text fontSize={'sm'} fontWeight={'medium'} color={'gray.500'}>
-        Không có khoá học nào ở đây
+        {content}
       </Text>
     </Center>
+  );
+};
+
+const ListCourseProfile: React.FC<IListCourseProfileProps> = ({
+  courses,
+  myLearningCourses,
+  classes,
+  myLearningClasses,
+  title,
+  isAuthenticated,
+}) => {
+  return (
+    <Box border={'1px'} borderColor={'gray.300'} borderRadius={'md'} p={3}>
+      <Text fontSize={['md', 'lg']} mb={5} fontWeight={'bold'}>
+        {title}
+      </Text>
+      {myLearningCourses && myLearningCourses.length === 0 && (
+        <EmptyCourse content="Bạn chưa tham gia khoá học nào ở đây" />
+      )}
+      {myLearningClasses && myLearningClasses.length === 0 && (
+        <EmptyCourse content="Bạn chưa tham gia lớp học online nào ở đây" />
+      )}
+      {courses && courses.length === 0 && (
+        <EmptyCourse content="Không có khoá học nào ở đây" />
+      )}
+      {classes && classes.length === 0 && (
+        <EmptyCourse content="Không có lớp học online nào ở đây" />
+      )}
+      <Flex
+        flexDirection={'column'}
+        gap={5}
+        maxHeight={'500px'}
+        overflowY={'scroll'}
+      >
+        {courses &&
+          courses.map((course: CourseType) => (
+            <Course
+              key={course?._id}
+              id={course?._id}
+              thumbnail={course?.thumbnail}
+              title={course?.title}
+              desc={course?.desc}
+              totalViews={course?.usersJoined.length}
+              isFree={course?.price === 0}
+              isJoined={true}
+            />
+          ))}
+        {myLearningCourses &&
+          myLearningCourses.map((myCourse: MyLearningCourses) => (
+            <Course
+              key={myCourse?._id}
+              id={myCourse?._id}
+              thumbnail={myCourse?.idCourse.thumbnail}
+              title={myCourse?.idCourse.title}
+              desc={myCourse?.idCourse.desc}
+              totalViews={myCourse?.idCourse.usersJoined.length}
+              isFree={myCourse?.idCourse.price === 0}
+              isJoined={true}
+            />
+          ))}
+        {classes &&
+          classes.map((cls: Class) => (
+            <ClassRoom
+              key={cls?._id}
+              id={cls?._id}
+              title={cls?.name}
+              isAuthenticated={isAuthenticated}
+              thumbnail={cls?.thumbnail}
+              totalViews={cls?.members.length}
+              startTime={getTime(cls?.startTime)}
+            />
+          ))}
+        {myLearningClasses &&
+          myLearningClasses.map((cls: Class) => (
+            <ClassRoom
+              key={cls?._id}
+              id={cls?._id}
+              title={cls?.name}
+              isAuthenticated={isAuthenticated}
+              thumbnail={cls?.thumbnail}
+              totalViews={cls?.members.length}
+              startTime={getTime(cls?.startTime)}
+              isJoined={true}
+            />
+          ))}
+      </Flex>
+    </Box>
   );
 };
 

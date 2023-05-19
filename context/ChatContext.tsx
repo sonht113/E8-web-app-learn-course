@@ -11,7 +11,7 @@ import { io } from 'socket.io-client';
 import { confirmUploadAPI, uploadFilesAPI } from 'api/upload.api';
 import useToastify from 'hook/useToastify';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import {
   Conversation,
   ConversationCreate,
@@ -37,7 +37,7 @@ type IChatContext = {
   setAvatarClassRoom: (v: any) => void;
   conversationDetail: Conversation | null;
   setConversationDetail: React.Dispatch<React.SetStateAction<Conversation>>;
-  messages: Message[] | null;
+  messages: Message[];
   createConversation: (nameChat: string, callback: () => void) => void;
   sendMessage: (v: DataMessage) => void;
   setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
@@ -55,11 +55,13 @@ export const ChatContext = React.createContext<IChatContext>({
   setAvatarClassRoom: (_v: any) => {},
   conversationDetail: null,
   setConversationDetail: (v: Conversation | null) => {},
-  messages: null,
+  messages: [],
   createConversation: (v: string, callback) => {},
   sendMessage: (v: DataMessage) => {},
   setConversations: () => {},
 });
+
+const DURATION_TOAST = 3000;
 
 export const ChatContextProvider = ({ children }) => {
   const { user } = useContext(AuthenContext);
@@ -72,7 +74,7 @@ export const ChatContextProvider = ({ children }) => {
   const [roomActive, setRoomActive] = useState<string>('');
   const [conversationDetail, setConversationDetail] =
     useState<Conversation | null>(null);
-  const [messages, setMessages] = useState<Message[] | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [fileUploaded, setFileUploaded] = useState<string>('');
 
@@ -83,13 +85,21 @@ export const ChatContextProvider = ({ children }) => {
     autoConnect: true,
   });
   const toast = useToastify();
-  const DURATION_TOAST = 3000;
+
+  socket.on('received_message', (message) => {
+    let arr: Message[] = messages;
+    if (message) {
+      arr = [...arr, { ...message }];
+    }
+    setMessages([...arr]);
+    setFileUploaded('');
+  });
 
   const selectRoom = (roomId: string) => {
     setRoomActive(roomId);
     router.push(`/chat?room=${roomId}`);
     conversationDetailQuery(roomId);
-    setMessages(null);
+    setMessages([]);
     messagesQuery(roomId);
   };
 
@@ -136,7 +146,10 @@ export const ChatContextProvider = ({ children }) => {
             );
             for (const message of results) {
               arr.push({
-                ...message,
+                content: message.content,
+                fileType: message.fileType,
+                idConversation: message.idConversation,
+                readers: message.readers,
                 sender: {
                   _id: message.sender._id,
                   avatar: message.sender.avatar,
@@ -273,32 +286,26 @@ export const ChatContextProvider = ({ children }) => {
       updateConversation({
         id: roomActive,
         data: {
-          users: conversationDetail.users,
-          chatName: conversationDetail.chatName,
-          isGroup: conversationDetail.isGroup,
-          avatar: conversationDetail.avatar,
+          users: conversationDetail?.users,
+          chatName: conversationDetail?.chatName,
+          isGroup: conversationDetail?.isGroup,
+          avatar: conversationDetail?.avatar,
           latestMessage: {
             user: { idUser: user._id },
             text: message.value,
           },
         },
       });
-    }
-
-    if (message.type === FileType.IMAGE || message.type === FileType.FILE) {
+      socket.emit('send_message', body);
+      createMessage({ ...body, sender: user._id });
+    } else {
       formData.append('files', message.value);
-      return uploadFiles(formData, 'sendMessage');
+      uploadFiles(formData, 'sendMessage');
     }
-    socket.emit('message', body);
-    createMessage({ ...body, sender: user._id });
-    socket.on('message', (message) => {
-      const arr = [...messages, message];
-      setMessages(arr);
-    });
   };
 
   useEffect(() => {
-    if (fileUploaded) {
+    if (fileUploaded !== '') {
       const mess: Message = {
         idConversation: roomActive,
         sender: { _id: user._id, fullName: user.fullName, avatar: user.avatar },
@@ -308,13 +315,8 @@ export const ChatContextProvider = ({ children }) => {
           ? FileType.IMAGE
           : FileType.FILE,
       };
-      socket.emit('message', mess);
+      socket.emit('send_message', mess);
       createMessage({ ...mess, sender: user._id });
-      socket.on('message', (message) => {
-        const arr = [...messages, message];
-        setMessages(arr);
-        setFileUploaded('');
-      });
       updateConversation({
         id: roomActive,
         data: {

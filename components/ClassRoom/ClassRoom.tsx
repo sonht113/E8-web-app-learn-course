@@ -9,7 +9,7 @@ type IClassRoomProps = {
   id?: string;
   thumbnail?: string;
   title: string;
-  price: string | number;
+  price?: string | number;
   desc?: string;
   teacher?: string;
   totalViews?: number;
@@ -46,6 +46,7 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
       <Box
         mt={5}
         position={'relative'}
+        className={isProfile && 'Course'}
         w={!isProfile && ['60vw', '30vw', '30vw', 'full']}
       >
         <Box
@@ -111,23 +112,43 @@ const ClassRoom: React.FC<IClassRoomProps> = ({
           >
             {title}
           </Text>
-          <Text fontSize={['sm', 'sm']} fontWeight={'medium'} color={'#3f3f3f'}>
-            Giảng viên: {teacher}
-          </Text>
-          <Text fontSize={['sm', 'sm']} fontWeight={'medium'} color={'#3f3f3f'}>
-            Ngày bắt đầu: {startTime}
-          </Text>
-          <Text fontSize={['sm', 'sm']} fontWeight={'medium'} color={'#3f3f3f'}>
-            Giá: {price} vnđ
-          </Text>
-          <Box>
-            <Flex alignItems={'center'} gap={2}>
-              <HiUserGroup />
-              <Text fontSize={['sm']} fontWeight={'medium'} color={'#3f3f3f'}>
-                {totalViews}
-              </Text>
-            </Flex>
-          </Box>
+          {teacher && (
+            <Text
+              fontSize={['sm', 'sm']}
+              fontWeight={'medium'}
+              color={'#3f3f3f'}
+            >
+              Giảng viên: {teacher}
+            </Text>
+          )}
+          {startTime && (
+            <Text
+              fontSize={['sm', 'sm']}
+              fontWeight={'medium'}
+              color={'#3f3f3f'}
+            >
+              Ngày bắt đầu: {startTime}
+            </Text>
+          )}
+          {price && (
+            <Text
+              fontSize={['sm', 'sm']}
+              fontWeight={'medium'}
+              color={'#3f3f3f'}
+            >
+              Giá: {price} vnđ
+            </Text>
+          )}
+          {totalViews && (
+            <Box>
+              <Flex alignItems={'center'} gap={2}>
+                <HiUserGroup />
+                <Text fontSize={['sm']} fontWeight={'medium'} color={'#3f3f3f'}>
+                  {totalViews}
+                </Text>
+              </Flex>
+            </Box>
+          )}
           {/* <Text fontSize={'sm'}>{desc}</Text> */}
         </Box>
       </Box>

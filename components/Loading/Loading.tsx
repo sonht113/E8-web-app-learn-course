@@ -13,7 +13,7 @@ const Loading = () => {
       alignItems={'center'}
       w={'full'}
       h={'100vh'}
-      bg={'gray.300/0.3'}
+      bg={'rgba(0, 0, 0, 0.6)'}
     >
       <Spinner
         thickness="4px"

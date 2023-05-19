@@ -73,9 +73,9 @@ const ListCourse: React.FC<IListCourseProps> = ({
           courses?.length === 0
             ? '1fr'
             : [
-                'repeat(5, 1fr)',
-                'repeat(5, 1fr)',
-                'repeat(5, 1fr)',
+                `repeat(${courses?.length}, 1fr)`,
+                `repeat(${courses?.length}, 1fr)`,
+                `repeat(${courses?.length}, 1fr)`,
                 'repeat(4, 1fr)',
               ]
         }

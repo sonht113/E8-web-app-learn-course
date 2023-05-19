@@ -65,7 +65,7 @@ const MessageChat: React.FC<IMessageChatProps> = ({
                   .replace(/đ/g, 'd')
                   .replace(/Đ/g, 'D')
           }
-          src={isSender && user.avatar}
+          src={isSender ? user?.avatar : message.sender?.avatar}
         />
         <Box>
           {message.fileType === FileType.TEXT && (

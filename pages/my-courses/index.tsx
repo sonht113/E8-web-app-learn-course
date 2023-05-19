@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useContext } from 'react';
+import React, { ReactElement, useCallback, useContext, useMemo } from 'react';
 import DefaultLayout from 'layouts/defaultLayout';
 import { Container } from '@chakra-ui/react';
 import TitlePage from '@/components/TitlePage';
@@ -16,21 +16,24 @@ const ContentTitlePage = {
 const MyCourses = () => {
   const { user } = useContext(AuthenContext);
 
-  const queryMyLearningCourses = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['my-learning-course', user._id, 'myLearningCourses.idCourse'],
     queryFn: () => getUser(user._id, 'myLearningCourses.idCourse'),
   });
 
-  const myLearningCourses: CourseType[] = [];
-  const getMyLearningCourses = useCallback(() => {
-    queryMyLearningCourses.data?.data.myLearningCourses.forEach(
-      (item: MyLearningCourses) => {
-        myLearningCourses.push(item.idCourse);
-      }
-    );
-  }, [queryMyLearningCourses]);
+  let myLearningCourses: CourseType[] | undefined;
+  const getMyLearningCourses = () => {
+    const arr = [];
+    data?.data.myLearningCourses.forEach((item: MyLearningCourses) => {
+      arr.push(item.idCourse);
+    });
+    myLearningCourses = arr;
+    return myLearningCourses;
+  };
 
-  getMyLearningCourses();
+  useMemo(() => {
+    getMyLearningCourses();
+  }, [data]);
 
   return (
     <Container className="my-courses">

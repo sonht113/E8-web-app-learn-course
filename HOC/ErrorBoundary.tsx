@@ -34,11 +34,15 @@ class ErrorBoundary extends React.Component<Props, State> {
       return (
         <div>
           <h2>Oops, there is an error!</h2>
-          <Link href={'/'}>
-            <Button size={'sm'} colorScheme={'teal'}>
-              Quay về trang chủ
-            </Button>
-          </Link>
+          <Button
+            size={'sm'}
+            colorScheme={'teal'}
+            onClick={() => {
+              window.location.href = '/';
+            }}
+          >
+            Quay về trang chủ
+          </Button>
         </div>
       );
     }

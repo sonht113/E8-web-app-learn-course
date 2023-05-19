@@ -136,7 +136,7 @@ const Course: React.FC<ICourseProps> = ({
               fontWeight={'medium'}
               color={'#3f3f3f'}
             >
-              {price} vnđ
+              {price} {price && 'vnđ'}
             </Text>
           )}
           {isFree && (

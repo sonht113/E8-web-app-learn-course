@@ -37,7 +37,7 @@ http.interceptors.response.use(
     return response;
   },
   function (error) {
-    const statusCode = error?.message;
+    const statusCode = error?.response?.status;
     if (statusCode === '404') {
       window.location.href = '/not-found';
       return;
@@ -53,8 +53,8 @@ http.interceptors.response.use(
     }
 
     if (statusCode === '500') {
-      // show notification
-      console.log('error', error);
+      window.location.href = '/login';
+      return;
     }
 
     throw error;

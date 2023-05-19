@@ -1,3 +1,4 @@
+import { Class } from './class.type';
 import { CourseType } from './course.type';
 
 export enum TypeUser {
@@ -42,6 +43,8 @@ export type MyLearningCourses = {
 export type UserDetail = {
   favoriteCourses?: CourseType[];
   myCourses?: CourseType[];
+  myClassRooms?: Class[];
+  myLearningClassRooms?: Class[];
   receivedNotificationTypes?: Notification[];
   isDeleted?: boolean;
   deviceID?: string;

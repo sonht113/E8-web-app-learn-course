@@ -2,6 +2,7 @@ import { Box, Grid, Skeleton, Text } from '@chakra-ui/react';
 import { AuthenContext } from 'context/AuthenContext';
 import React, { useContext, useMemo } from 'react';
 import { ClassDetail } from 'types/class.type';
+import { getTime } from 'utils/getTime';
 import ClassRoom from '../ClassRoom';
 
 type IListClassRoomOnline = {
@@ -13,13 +14,7 @@ const ListClassRoomOnline: React.FC<IListClassRoomOnline> = ({
   classes,
 }) => {
   const { isAuthenticated, user } = useContext(AuthenContext);
-  const getTime = (time: number) =>
-    useMemo(() => {
-      const date = new Date(time).getDate();
-      const month = new Date(time).getMonth();
-      const year = new Date(time).getFullYear();
-      return `${date}-${month}-${year}`;
-    }, []);
+
   return (
     <Box mt={10} w={['100%', '95%']} mx={'auto'}>
       <Box>
@@ -29,7 +24,9 @@ const ListClassRoomOnline: React.FC<IListClassRoomOnline> = ({
       </Box>
       <Grid
         templateColumns={
-          classes?.length === 0
+          !classes
+            ? 'repeat(4, 1fr)'
+            : classes?.length === 0
             ? '1fr'
             : [
                 `repeat(${classes?.length}, 1fr)`,

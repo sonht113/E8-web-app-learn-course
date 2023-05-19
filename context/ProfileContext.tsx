@@ -16,7 +16,11 @@ export const ProfileContextProvider = ({ children }) => {
 
   const userQuery = useQuery({
     queryKey: ['userDetail', idUser],
-    queryFn: () => getUser(idUser, 'myLearningCourses.idCourse'),
+    queryFn: () =>
+      getUser(
+        idUser,
+        'myLearningCourses.idCourse,myClassRooms.idClassRoom,myCourses.idCourse,myLearningClassRooms.idClassRoom'
+      ),
     staleTime: 5000,
   });
 

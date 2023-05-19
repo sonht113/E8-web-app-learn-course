@@ -15,6 +15,7 @@ type ISectionInfoUserSetting = {
   title: string;
   desc?: string;
   value?: string;
+  setValue?: (v: any) => void;
   click?: () => void;
   isEdit?: boolean;
   userName?: string;
@@ -24,12 +25,12 @@ const SectionInfoUserSetting: React.FC<ISectionInfoUserSetting> = ({
   title,
   desc,
   value,
+  setValue,
   click,
   isEdit,
   userName,
 }) => {
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
-
   const isSectionForAvatar = useMemo(() => {
     return title === 'Avatar';
   }, [title]);
@@ -62,6 +63,7 @@ const SectionInfoUserSetting: React.FC<ISectionInfoUserSetting> = ({
               focusBorderColor={'gray.100'}
               mb={4}
               disabled={!isShowEdit}
+              onChange={(e) => setValue(e.target.value)}
             />
           )}
           <Text fontSize={'sm'} color={'gray.500'}>
@@ -127,6 +129,7 @@ const SectionInfoUserSetting: React.FC<ISectionInfoUserSetting> = ({
               id="avatarSetting"
               style={{ display: 'none' }}
               type={'file'}
+              onChange={(e) => setValue(e.target.files[0])}
               accept={'image/*'}
             />
           </Box>
@@ -153,6 +156,10 @@ const SectionInfoUserSetting: React.FC<ISectionInfoUserSetting> = ({
             fontSize={'xs'}
             color={'#02914e'}
             borderColor={'#02914e'}
+            onClick={() => {
+              click();
+              setIsShowEdit(false);
+            }}
           >
             Lưu
           </Button>

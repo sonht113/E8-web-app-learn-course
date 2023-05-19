@@ -156,7 +156,7 @@ const PopupAvatar = () => {
         {popupAvatarItems.map((item, index) => (
           <>
             {item.link && (
-              <Link key={item.link} href={item.link}>
+              <Link key={index} href={item.link}>
                 <Text
                   fontSize={'15px'}
                   color={'gray.500'}
@@ -221,12 +221,12 @@ const PopupAvatar = () => {
 const PopupMyCourse = () => {
   const { user } = useContext(AuthenContext);
 
-  const learningCourseQuery = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['my-learning-courses', user._id, 'myLearningCourses.idCourse'],
     queryFn: () => getUser(user._id, 'myLearningCourses.idCourse'),
   });
 
-  const myLearningCourses = learningCourseQuery.data?.data?.myLearningCourses;
+  const myLearningCourses = data?.data?.myLearningCourses;
 
   return (
     <Box pb={5}>
@@ -245,7 +245,7 @@ const PopupMyCourse = () => {
         </Link>
       </Flex>
       <Box mt={5}>
-        {!myLearningCourses && (
+        {isLoading && (
           <Center>
             <Spinner />
           </Center>
@@ -253,49 +253,48 @@ const PopupMyCourse = () => {
         {myLearningCourses?.length === 0 && (
           <Text fontSize={'sm'}>Bạn chưa đăng ký khóa học nào</Text>
         )}
-        {myLearningCourses?.length !== 0 &&
-          myLearningCourses?.map((item: MyLearningCourses) => (
-            <Link key={item?._id} href={`/learning/${item?.idCourse?._id}`}>
-              <Flex
-                alignItems={'center'}
-                gap={2}
-                border={'1px'}
-                borderColor={'gray.500'}
-                mt={3}
-                p={2}
-                rounded={'md'}
-              >
-                <Image
-                  w={'70px'}
-                  objectFit={'cover'}
-                  src={item?.idCourse.thumbnail}
-                />
-                <Box>
-                  <Text
-                    whiteSpace={'nowrap'}
-                    width={'130px'}
-                    overflow={'hidden'}
-                    textOverflow={'ellipsis'}
-                    fontSize={'sm'}
-                    fontWeight={'bold'}
-                    color={'gray.600'}
-                  >
-                    {item?.idCourse.title}
-                  </Text>
-                  <Text
-                    whiteSpace={'nowrap'}
-                    width={'130px'}
-                    overflow={'hidden'}
-                    textOverflow={'ellipsis'}
-                    fontSize={'sm'}
-                    color={'gray.400'}
-                  >
-                    {item?.idCourse.desc}
-                  </Text>
-                </Box>
-              </Flex>
-            </Link>
-          ))}
+        {myLearningCourses?.map((item: MyLearningCourses) => (
+          <Link key={item?._id} href={`/learning/${item?.idCourse?._id}`}>
+            <Flex
+              alignItems={'center'}
+              gap={2}
+              border={'1px'}
+              borderColor={'gray.500'}
+              mt={3}
+              p={2}
+              rounded={'md'}
+            >
+              <Image
+                w={'70px'}
+                objectFit={'cover'}
+                src={item?.idCourse.thumbnail}
+              />
+              <Box>
+                <Text
+                  whiteSpace={'nowrap'}
+                  width={'130px'}
+                  overflow={'hidden'}
+                  textOverflow={'ellipsis'}
+                  fontSize={'sm'}
+                  fontWeight={'bold'}
+                  color={'gray.600'}
+                >
+                  {item?.idCourse.title}
+                </Text>
+                <Text
+                  whiteSpace={'nowrap'}
+                  width={'130px'}
+                  overflow={'hidden'}
+                  textOverflow={'ellipsis'}
+                  fontSize={'sm'}
+                  color={'gray.400'}
+                >
+                  {item?.idCourse.desc}
+                </Text>
+              </Box>
+            </Flex>
+          </Link>
+        ))}
       </Box>
     </Box>
   );
